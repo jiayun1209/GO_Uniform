@@ -13,13 +13,13 @@ Class Users extends DBConnection {
 	public function save_users(){
 		extract($_POST);
 		$data = '';
-		$chk = $this->conn->query("SELECT * FROM `users` where username ='{$username}' ".($id>0? " and id!= '{$id}' " : ""))->num_rows;
+		$chk = $this->conn->query("SELECT * FROM `staff` where username ='{$username}' ".($staff_ID>0? " and staff_ID!= '{$staff_ID}' " : ""))->num_rows;
 		if($chk > 0){
 			return 3;
 			exit;
 		}
 		foreach($_POST as $k => $v){
-			if(!in_array($k,array('id','password'))){
+			if(!in_array($k,array('staff_ID','password'))){
 				if(!empty($data)) $data .=" , ";
 				$data .= " {$k} = '{$v}' ";
 			}
@@ -35,12 +35,12 @@ Class Users extends DBConnection {
 				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
 				if($move){
 					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']) && $_SESSION['userdata']['id'] == $id)
+					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']) && $_SESSION['userdata']['staff_ID'] == $staff_ID)
 						unlink('../'.$_SESSION['userdata']['avatar']);
 				}
 		}
-		if(empty($id)){
-			$qry = $this->conn->query("INSERT INTO users set {$data}");
+		if(empty($staff_ID)){
+			$qry = $this->conn->query("INSERT INTO staff set {$data}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully saved.');
 				return 1;
@@ -49,11 +49,11 @@ Class Users extends DBConnection {
 			}
 
 		}else{
-			$qry = $this->conn->query("UPDATE users set $data where id = {$id}");
+			$qry = $this->conn->query("UPDATE staff set $data where staff_ID = {$staff_ID}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully updated.');
 				foreach($_POST as $k => $v){
-					if($k != 'id'){
+					if($k != 'staff_ID'){
 						if(!empty($data)) $data .=" , ";
 						$this->settings->set_userdata($k,$v);
 					}
@@ -63,7 +63,7 @@ Class Users extends DBConnection {
 
 				return 1;
 			}else{
-				return "UPDATE users set $data where id = {$id}";
+				return "UPDATE staff set $data where staff_ID = {$staff_ID}";
 			}
 			
 		}
