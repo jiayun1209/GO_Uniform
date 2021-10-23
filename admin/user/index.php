@@ -1,5 +1,5 @@
 <?php 
-$user = $conn->query("SELECT * FROM staff where staff_ID ='".$_settings->userdata('staff_ID')."'");
+$user = $conn->query("SELECT * FROM staff where id ='".$_settings->userdata('id')."'");
 foreach($user->fetch_array() as $k =>$v){
 	$meta[$k] = $v;
 }
@@ -14,7 +14,7 @@ foreach($user->fetch_array() as $k =>$v){
 		<div class="container-fluid">
 			<div id="msg"></div>
 			<form action="" id="manage-user">	
-				<input type="hidden" name="id" value="<?php echo $_settings->userdata('staff_ID') ?>">
+				<input type="hidden" name="id" value="<?php echo $_settings->userdata('id') ?>">
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['firstname']) ? $meta['firstname']: '' ?>" required>

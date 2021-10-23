@@ -13,13 +13,13 @@ Class Users extends DBConnection {
 	public function save_users(){
 		extract($_POST);
 		$data = '';
-		$chk = $this->conn->query("SELECT * FROM `staff` where username ='{$username}' ".($staff_ID>0? " and staff_ID!= '{$staff_ID}' " : ""))->num_rows;
+		$chk = $this->conn->query("SELECT * FROM `staff` where username ='{$username}' ".($id>0? " and id!= '{$id}' " : ""))->num_rows;
 		if($chk > 0){
 			return 3;
 			exit;
 		}
 		foreach($_POST as $k => $v){
-			if(!in_array($k,array('staff_ID','password'))){
+			if(!in_array($k,array('id','password'))){
 				if(!empty($data)) $data .=" , ";
 				$data .= " {$k} = '{$v}' ";
 			}
@@ -35,11 +35,11 @@ Class Users extends DBConnection {
 				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
 				if($move){
 					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']) && $_SESSION['userdata']['staff_ID'] == $staff_ID)
+					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']) && $_SESSION['userdata']['id'] == $id)
 						unlink('../'.$_SESSION['userdata']['avatar']);
 				}
 		}
-		if(empty($staff_ID)){
+		if(empty($id)){
 			$qry = $this->conn->query("INSERT INTO staff set {$data}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully saved.');
@@ -49,11 +49,11 @@ Class Users extends DBConnection {
 			}
 
 		}else{
-			$qry = $this->conn->query("UPDATE staff set $data where staff_ID = {$staff_ID}");
+			$qry = $this->conn->query("UPDATE staff set $data where id = {$id}");
 			if($qry){
 				$this->settings->set_flashdata('success','User Details successfully updated.');
 				foreach($_POST as $k => $v){
-					if($k != 'staff_ID'){
+					if($k != 'id'){
 						if(!empty($data)) $data .=" , ";
 						$this->settings->set_userdata($k,$v);
 					}
@@ -63,15 +63,15 @@ Class Users extends DBConnection {
 
 				return 1;
 			}else{
-				return "UPDATE staff set $data where staff_ID = {$staff_ID}";
+				return "UPDATE staff set $data where id = {$id}";
 			}
 			
 		}
 	}
 	public function delete_users(){
 		extract($_POST);
-		$avatar = $this->conn->query("SELECT avatar FROM users where id = '{$id}'")->fetch_array()['avatar'];
-		$qry = $this->conn->query("DELETE FROM users where id = $id");
+		$avatar = $this->conn->query("SELECT avatar FROM staff where id = '{$id}'")->fetch_array()['avatar'];
+		$qry = $this->conn->query("DELETE FROM staff where id = $id");
 		if($qry){
 			$this->settings->set_flashdata('success','User Details successfully deleted.');
 			if(is_file(base_app.$avatar))

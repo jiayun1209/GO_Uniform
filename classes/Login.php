@@ -18,7 +18,7 @@ class Login extends DBConnection {
 	public function login(){
 		extract($_POST);
 
-		$qry = $this->conn->query("SELECT * from staff where username = '$username' and password = '$password'");
+		$qry = $this->conn->query("SELECT * from staff where username = '$username' and password = md5('$password') ");
 		if($qry->num_rows > 0){
 			foreach($qry->fetch_array() as $k => $v){
 				if(!is_numeric($k) && $k != 'password'){
@@ -26,10 +26,10 @@ class Login extends DBConnection {
 				}
 
 			}
-			$this->settings->set_userdata('login_tyoe',1);
+			$this->settings->set_userdata('login_type',1);
 		return json_encode(array('status'=>'success'));
 		}else{
-		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from staff where username = '$username' and password = '$password' "));
+		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from staff where username = '$username' and password = md5('$password') "));
 		}
 	}
 	public function logout(){
