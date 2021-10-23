@@ -24,13 +24,13 @@ Class Master extends DBConnection {
 		extract($_POST);
 		$data = "";
 		foreach($_POST as $k =>$v){
-			if(!in_array($k,array('id'))){
+			if(!in_array($k,array('vendor_ID'))){
 				$v = addslashes(trim($v));
 				if(!empty($data)) $data .=",";
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		$check = $this->conn->query("SELECT * FROM `supplier_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' ".(!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -40,10 +40,10 @@ Class Master extends DBConnection {
 			exit;
 		}
 		if(empty($id)){
-			$sql = "INSERT INTO `supplier_list` set {$data} ";
+			$sql = "INSERT INTO `vendor` set {$data} ";
 			$save = $this->conn->query($sql);
 		}else{
-			$sql = "UPDATE `supplier_list` set {$data} where id = '{$id}' ";
+			$sql = "UPDATE `vendor` set {$data} where vendor_ID = '{$vendor_ID}' ";
 			$save = $this->conn->query($sql);
 		}
 		if($save){
@@ -60,10 +60,61 @@ Class Master extends DBConnection {
 	}
 	function delete_supplier(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `supplier_list` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `vendor` where vendor_ID = '{$ivendor_ID}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Supplier successfully deleted.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+
+	}
+        function save_rfq(){
+		extract($_POST);
+		$data = "";
+		foreach($_POST as $k =>$v){
+			if(!in_array($k,array('rfq_ID'))){
+				$v = addslashes(trim($v));
+				if(!empty($data)) $data .=",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		$check = $this->conn->query("SELECT * FROM `rfq` where `pr_ID` = '{$pr_ID}' ".(!empty($rfq_ID) ? " and rfq_ID != {$rfq_ID} " : "")." ")->num_rows;
+		if($this->capture_err())
+			return $this->capture_err();
+		if($check > 0){
+			$resp['status'] = 'failed';
+			$resp['msg'] = "RFQ already exist.";
+			return json_encode($resp);
+			exit;
+		}
+		if(empty($pr_ID)){
+			$sql = "INSERT INTO `rfq` set {$data} ";
+			$save = $this->conn->query($sql);
+		}else{
+			$sql = "UPDATE `rfq` set {$data} where rfq_ID = '{$rfq_ID}' ";
+			$save = $this->conn->query($sql);
+		}
+		if($save){
+			$resp['status'] = 'success';
+			if(empty($id))
+				$this->settings->set_flashdata('success',"New RFQ successfully saved.");
+			else
+				$this->settings->set_flashdata('success',"RFQ successfully updated.");
+		}else{
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error."[{$sql}]";
+		}
+		return json_encode($resp);
+	}
+	function delete_rfq(){
+		extract($_POST);
+		$del = $this->conn->query("DELETE FROM `rfq` where rfq_ID = '{$rfq_ID}'");
+		if($del){
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success',"RFQ successfully deleted.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;

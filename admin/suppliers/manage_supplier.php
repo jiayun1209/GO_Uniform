@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
-if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `supplier_list` where id = '{$_GET['id']}' ");
+if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0){
+    $qry = $conn->query("SELECT * from `vendor` where vendor_ID = '{$_GET['vendor_ID']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
@@ -21,34 +21,34 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     }
 </style>
 <form action="" id="supplier-form">
-     <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+     <input type="hidden" name="vendor_ID" value="<?php echo($vendor_ID) ? $vendor_ID :"" ?>" readonly>
     <div class="container-fluid">
         <div class="form-group">
             <label for="name" class="control-label">Supplier Name</label>
-            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
+            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="address" class="control-label">Address</label>
-            <textarea rows="3" name="address" id="address" class="form-control rounded-0" required><?php echo isset($address) ? $address :"" ?></textarea>
+            <label for="company_code" class="control-label">Company Code</label>
+            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" required><?php echo ($company_code) ? $company_code :"" ?></textarea>
         </div>
         <div class="form-group">
-            <label for="contact_person" class="control-label">Contact Person</label>
-            <input type="text" name="contact_person" id="contact_person" class="form-control rounded-0" value="<?php echo isset($contact_person) ? $contact_person :"" ?>" required>
+            <label for="status" class="control-label">Registration Status</label>
+            <select name="status" id="status" class="form-control rounded-0" required>
+                <option value="1" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "1" ?> >Approved</option>
+                <option value="0" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "0" ?>>Rejected</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="email" class="control-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo isset($email) ? $email :"" ?>" required>
+            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo ($email) ? $email :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="contact" class="control-label">Contact</label>
-            <input type="text" name="contact" id="contact" class="form-control rounded-0" value="<?php echo isset($contact) ? $contact :"" ?>" required>
+            <label for="product" class="control-label">Product</label>
+            <input type="text" name="product" id="product" class="form-control rounded-0" value="<?php echo ($product) ? $product :"" ?>" required>
         </div>
-        <div class="form-group">
-            <label for="status" class="control-label">Status</label>
-            <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status =="" ? "selected": "1" ?> >Active</option>
-                <option value="0" <?php echo isset($status) && $status =="" ? "selected": "0" ?>>Inactive</option>
-            </select>
+          <div class="form-group">
+            <label for="description" class="control-label">Description</label>
+            <input type="text" name="description" id="description" class="form-control rounded-0" value="<?php echo ($description) ? $description :"" ?>" required>
         </div>
     </div>
 </form>

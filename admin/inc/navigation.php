@@ -40,6 +40,14 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-comments-dollar"></i>
+                        <p>
+                        Request for Quotation   
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
                         <p>
