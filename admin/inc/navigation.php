@@ -39,6 +39,7 @@
                         </p>
                       </a>
                     </li>
+                     <?php if($_settings->userdata('type') == 2): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
                         <i class="nav-icon fas fa-comments-dollar"></i>
@@ -47,6 +48,7 @@
                         </p>
                       </a>
                     </li>
+                     <?php endif; ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
@@ -63,6 +65,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <?php if($_settings->userdata('type') == 1): ?>
                     <li class="nav-header">Maintenance</li>
                     <li class="nav-item dropdown">
@@ -70,6 +73,14 @@
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                           User List
+                        </p>
+                      </a>
+                    </li>
+                      <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-purchase_orders">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>
+                          Contract Management
                         </p>
                       </a>
                     </li>

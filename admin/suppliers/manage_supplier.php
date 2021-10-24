@@ -1,6 +1,6 @@
 <?php
 require_once('../../config.php');
-if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0){
+if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
     $qry = $conn->query("SELECT * from `vendor` where vendor_ID = '{$_GET['vendor_ID']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
@@ -25,22 +25,22 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0){
     <div class="container-fluid">
         <div class="form-group">
             <label for="name" class="control-label">Supplier Name</label>
-            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo($name) ? $name :"" ?>" required>
+            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo($name) ? $name :"" ?>" readonly>
         </div>
         <div class="form-group">
             <label for="company_code" class="control-label">Company Code</label>
-            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" required><?php echo ($company_code) ? $company_code :"" ?></textarea>
+            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" value="<?php echo ($company_code) ? $company_code :"" ?>"readonly>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Registration Status</label>
-            <select name="status" id="status" class="form-control rounded-0" required>
+            <label for="registration_status" class="control-label">Registration Status</label>
+            <select name="registration_status" id="registration_status" class="form-control rounded-0" required>
                 <option value="1" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "1" ?> >Approved</option>
                 <option value="0" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "0" ?>>Rejected</option>
             </select>
         </div>
         <div class="form-group">
             <label for="email" class="control-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo ($email) ? $email :"" ?>" required>
+            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo ($email) ? $email :"" ?>" readonly>
         </div>
         <div class="form-group">
             <label for="product" class="control-label">Product</label>
