@@ -81,6 +81,16 @@
                         </p>
                       </a>
                     </li>
+                    
+                    <li class="nav-header">Report</li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=report/report_list" class="nav-link nav-user_list">
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>
+                          Report List
+                        </p>
+                      </a>
+                    </li>
                     <?php endif; ?>
 
                   </ul>
