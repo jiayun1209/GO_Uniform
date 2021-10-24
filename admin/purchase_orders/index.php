@@ -90,7 +90,7 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this rent permanently?","delete_rent",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this PO permanently?","delete_rent",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
 			uni_modal("Reservaton Details","purchase_orders/view_details.php?id="+$(this).attr('data-id'),'mid-large')
