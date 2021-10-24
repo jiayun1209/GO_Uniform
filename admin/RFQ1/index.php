@@ -5,9 +5,10 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">List of Suppliers</h3>
+        <h3 class="card-title">List of RFQ</h3>
         <div class="card-tools">
-            <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New</a>
+            <a href="javascript:void(0)" id="create_new_withpr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New with PR</a>
         </div>
     </div>
     <div class="card-body">
@@ -26,37 +27,39 @@
                     <thead>
                         <tr class="bg-navy disabled">
                             <th>#</th>
-                            <th>Supplier ID</th>
-                            <th>Name</th>
-                            <th>Company Code</th>
-                            <th>Registration Status</th>
-                            <th>Email</th>
-                            <th>Product</th>
-                            <th>Description</th>
+                            <th>Date Created</th>
+                            <th>PR ID</th>
+                            <th>Vendor ID</th>
+                            <th>Material Details</th>
+                            <th>Deadline</th>
+                            <th>Vendor Address</th>
+                            <th>Quantity Request</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT * from `vendor` order by (`vendor_ID`) asc ");
+                        $qry = $conn->query("SELECT * from `rfq` order by (`rfq_ID`) asc ");
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
                                 <td class="text-center"><?php echo $i++; ?></td>
-                                <td><?php echo $row['vendor_ID'] ?></td>
-                                <td><?php echo $row['name'] ?></td>
-                                <td><?php echo $row['company_code'] ?></td>
+                                <td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
+                                <td><?php echo $row['pr_ID'] ?></td>
+                                 <td><?php echo $row['vendor_ID'] ?></td>
+                                <td><?php echo $row['material_details'] ?></td>
+                                <td><?php echo $row['deadline'] ?></td>
+                                <td class='truncate-3' title="<?php echo $row['vendor_address'] ?>"><?php echo $row['vendor_address'] ?></td>
+                                <td><?php echo $row['quantity_request'] ?></td>
                                 <td class="text-center">
-                                    <?php if ($row['registration_status'] == 1): ?>
-                                        <span class="badge badge-success">Approved</span>
+                                    <?php if ($row['status'] == 1): ?>
+                                        <span class="badge badge-success">Approve</span>
                                     <?php else: ?>
-                                        <span class="badge badge-secondary">Rejected</span>
+                                        <span class="badge badge-secondary">Pending</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $row['email'] ?></td>
-                                <td><?php echo $row['product'] ?></td>
-                                <td><?php echo $row['description'] ?></td>
 
                                 <td align="center">
                                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
@@ -64,11 +67,11 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['vendor_ID'] ?>"><span class="fa fa-info text-primary"></span> View</a>
+                                        <a class="dropdown-item view_data" href="javascript:void(0)" data-rfq_ID = "<?php echo $row['rfq_ID'] ?>"><span class="fa fa-info text-primary"></span> View</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['vendor_ID'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-rfq_ID = "<?php echo $row['rfq_ID'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['vendor_ID'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
+                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-rfq_ID="'<?php echo $row['rfq_ID'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -82,27 +85,29 @@
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {
-            _conf("Are you sure to delete this Supplier permanently?", "delete_supplier", [$(this).attr('data-id')])
+            _conf("Are you sure to delete this RFQ permanently?", "delete_rfq", [$(this).attr('data-rfq_ID')])
         })
         $('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "suppliers/manage_supplier.php")
+            uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/manage_rfq.php")
+        })
+        $('#create_new_withpr').click(function () {
+            uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/manage_rfq_pr.php")
         })
         $('.view_data').click(function () {
-            uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details", "suppliers/view_details.php?vendor_ID=" + $(this).attr('data-id'), "")
+            uni_modal("<i class='fa fa-info-circle'></i> RFQ's Details", "RFQ/view_details.php?rfq_ID=" + $(this).attr('data-rfq_ID'), "")
         })
         $('.edit_data').click(function () {
-            uni_modal("<i class='fa fa-edit'></i> Edit Supplier's Details", "suppliers/manage_supplier.php?vendor_ID=" + $(this).attr('data-id'))
+            uni_modal("<i class='fa fa-edit'></i> Edit RFQ's Details", "RFQ/manage_rfq.php?rfq_ID=" + $(this).attr('data-rfq_ID'))
         })
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
-    function delete_supplier($id) {
-    console.log($id);
+    function delete_rfq($rfq_ID) {
         start_loader();
         $.ajax({
-            url: _base_url_ + "classes/Master.php?f=delete_supplier",
+            url: _base_url_ + "classes/Master.php?f=delete_rfq",
             method: "POST",
-            data: {id: $id},
+            data: {rfq_ID: $rfq_ID},
             dataType: "json",
             error: err => {
                 console.log(err)

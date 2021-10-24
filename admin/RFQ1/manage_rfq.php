@@ -1,6 +1,6 @@
 <?php
-if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
-    $qry = $conn->query("SELECT * from `rfq` where rfq_ID = '{$_GET['rfq_ID']}' ");
+if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0){
+    $qry = $conn->query("SELECT * from `vendor` where vendor_ID = '{$_GET['vendor_ID']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=$v;
@@ -35,21 +35,21 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 </style>
 <div class="card card-outline card-info">
 	<div class="card-header">
-		<h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details": "New RFQ" ?> </h3>
+		<h3 class="card-title"><?php echo isset($rfq_ID) ? "Update RFQ Details": "New RFQ" ?> </h3>
 	</div>
 	<div class="card-body">
 		<form action="" id="po-form">
-			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input type="hidden" name ="rfq_ID" value="<?php echo isset($rfq_ID) ? $rfq_ID : '' ?>">
 			<div class="row">
 				<div class="col-md-6 form-group">
-				<label for="vendor_ID">Supplier</label>
-				<select name="vendor_ID" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
-						<?php  
-							$supplier_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
-							while($row = $supplier_qry->fetch_assoc()):
+				<label for="vendor_ID">Vendor ID</label>
+				<select name="vendor_ID" id="vendor_id" class="custom-select custom-select-sm rounded-0 select2">
+						<option value="" disabled <?php echo !isset($vendor_ID) ? "selected" :'' ?>></option>
+						<?php 
+							$rfq_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
+							while($row = $rfq_qry->fetch_assoc()):
 						?>
-						<option value="<?php echo $row['id'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+						<option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID== $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
 						<?php endwhile; ?>
 					</select>
 				</div>
@@ -74,49 +74,34 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 						<thead>
 							<tr class="bg-navy disabled">
 								<th class="px-1 py-1 text-center"></th>
-								<th class="px-1 py-1 text-center">Qty</th>
-								<th class="px-1 py-1 text-center">Unit</th>
-								<th class="px-1 py-1 text-center">Item</th>
-								<th class="px-1 py-1 text-center">Description</th>
-								<th class="px-1 py-1 text-center">Price</th>
-								<th class="px-1 py-1 text-center">Total</th>
+								<th class="px-1 py-1 text-center">Material Details</th>
+								<th class="px-1 py-1 text-center">Vendor Address</th>
+								<th class="px-1 py-1 text-center">Quantity</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php 
 							if(isset($id)):
-							$rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID  = '$id' ");
+							$rfq_qry = $conn->query("SELECT o.*,i.item_name, i.description FROM `purchase_order_details` o inner join item_code i on o.item_code = i.id where o.`po_id` = '$id' ");
 							echo $conn->error;
 							while($row = $rfq_qry->fetch_assoc()):
 							?>
-							<tr class="rfq-item" data-id="">
+							<tr class="po-item" data-id="">                                 
 								<td class="align-middle p-1 text-center">
 									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 								</td>
+                                                                     <td class="align-middle p-1">
+									<input type="text" class="text-center w-100 border-0" name="material_details[]" value="<?php echo $row['material_details'] ?>"/>
+								</td>
 								<td class="align-middle p-0 text-center">
-									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
+									<input type="address" class="text-center w-100 border-0" name="vendor_address[]" value="<?php echo $row['vendor_address'] ?>"/>
 								</td>
-								<td class="align-middle p-1">
-									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit_price'] ?>"/>
+                                                                <td class="align-middle p-0 text-center">
+									<input type="number" class="text-center w-100 border-0" name="quantity_request[]" value="<?php echo $row['quantity_request'] ?>"/>
 								</td>
-							
-								<td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
-							</tr>
+						
 							<?php endwhile;endif; ?>
 						</tbody>
-						<tfoot>
-							<tr class="bg-lightblue">
-								<tr>
-									<th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
-									<th class="p-1 text-right" id="sub_total">0</th>
-								</tr>
-								
-								<tr>
-									<th class="p-1 text-right" colspan="6">Total</th>
-									<th class="p-1 text-right" id="total">0</th>
-								</tr>
-							</tr>
-						</tfoot>
 					</table>
 					<div class="row">
 						<div class="col-md-6">
@@ -142,95 +127,31 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 	</div>
 </div>
 <table class="d-none" id="item-clone">
-	<tr class="rfq-item" data-id="">
+	<tr class="po-item" data-id="">
 		<td class="align-middle p-1 text-center">
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
 		<td class="align-middle p-0 text-center">
-			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+			<input type="text" class="text-center w-100 border-0" name="material_details[]"/>
+		</td>
+                <td class="align-middle p-0 text-center">
+			<input type="address" class="text-center w-100 border-0" name="vendor_address[]"/>
 		</td>
 		<td class="align-middle p-1">
-			<input type="text" class="text-center w-100 border-0" name="unit[]"/>
+			<input type="number" class="text-center w-100 border-0" name="quantity_request[]"/>
 		</td>
-		<td class="align-middle p-1">
-			<input type="hidden" name="item_code[]">
-			<input type="text" class="text-center w-100 border-0 item_code" required/>
-		</td>
-		<td class="align-middle p-1 item-description"></td>
-		<td class="align-middle p-1">
-			<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
-		</td>
-		<td class="align-middle p-1 text-right total-price">0</td>
 	</tr>
 </table>
 <script>
 	function rem_item(_this){
 		_this.closest('tr').remove()
 	}
-	function calculate(){
-		var _total = 0
-		$('.rfq-item').each(function(){
-			var qty = $(this).find("[name='qty[]']").val()
-			var unit_price = $(this).find("[name='unit_price[]']").val()
-			var row_total = 0;
-			if(qty > 0 && unit_price > 0){
-				row_total = parseFloat(qty) * parseFloat(unit_price)
-			}
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
-		})
-		$('.total-price').each(function(){
-			var _price = $(this).text()
-				_price = _price.replace(/\,/gi,'')
-				_total += parseFloat(_price)
-		})
-		/*var discount_perc = 0
-		if($('[name="discount_percentage"]').val() > 0){
-			discount_perc = $('[name="discount_percentage"]').val()
-		}
-		var discount_amount = _total * (discount_perc/100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-		var tax_perc = 0
-		if($('[name="tax_percentage"]').val() > 0){
-			tax_perc = $('[name="tax_percentage"]').val()
-		}
-		var tax_amount = _total * (tax_perc/100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))*/
-	}
-
-	/*function _autocomplete(_item){
-		_item.find('.item_code').autocomplete({
-			source:function(request, response){
-				$.ajax({
-					url:_base_url_+"classes/Master.php?f=search_items",
-					method:'POST',
-					data:{q:request.term},
-					dataType:'json',
-					error:err=>{
-						console.log(err)
-					},
-					success:function(resp){
-						response(resp)
-					}
-				})
-			},
-			select:function(event,ui){
-				console.log(ui)
-				_item.find('input[name="item_code[]"]').val(ui.item.id)
-				_item.find('.item-description').text(ui.item.description)
-			}
-		})
-	}*/
-	/*$(document).ready(function(){
+	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()
 			$('#item-list tbody').append(tr)
 			_autocomplete(tr)
-			tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-				calculate()
-			})
-			$('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
+			tr.find('[name="material_details",[name="unit_price[]"]').on('input keypress',function(e){
 				calculate()
 			})
 		})
@@ -297,5 +218,5 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 		})
 
         
-	})*/
+	})
 </script>
