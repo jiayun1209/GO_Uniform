@@ -248,7 +248,7 @@ Class Master extends DBConnection {
 	}
 	function delete_po(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `purchase_order` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `po_list` where unit_id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Purchase Order successfully deleted.");

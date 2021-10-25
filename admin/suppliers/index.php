@@ -85,7 +85,7 @@
             _conf("Are you sure to delete this Supplier permanently?", "delete_supplier", [$(this).attr('data-id')])
         })
         $('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "suppliers/manage_supplier.php")
+            uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "suppliers/create_supplier.php")
         })
         $('.view_data').click(function () {
             uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details", "suppliers/view_details.php?vendor_ID=" + $(this).attr('data-id'), "")
