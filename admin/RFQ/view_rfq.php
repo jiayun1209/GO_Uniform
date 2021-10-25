@@ -98,25 +98,27 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled" style="">
-                            <th class="bg-navy disabled text-light px-1 py-1 text-center">Qty</th>
+                            <th class="bg-navy disabled text-light px-1 py-1 text-center">Material</th>
+                            <th class="bg-navy disabled text-light px-1 py-1 text-center">Quantity</th>
                             <th class="bg-navy disabled text-light px-1 py-1 text-center">Price</th>
-                            <th class="bg-navy disabled text-light px-1 py-1 text-center">Total</th>
+                         
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                        if (isset($id)):
-                            $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID  = '$id' ");
-                            while ($row = $order_items_qry->fetch_assoc()):
-                                $sub_total += ($row['quantity_request'] * $row['unit_price']);
-                                ?>
-                                <tr class="po-item" data-id="">
-                                    <td class="align-middle p-0 text-center"><?php echo $row['quantity_request'] ?></td>
-                                    <td class="align-middle p-1"><?php echo number_format($row['unit_price']) ?></td>
-                                    <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
-                                </tr>
-                            <?php endwhile;
-                        endif; ?>
+                   <tbody>
+                        <?php 
+                        if(isset($id)):
+                        $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` q inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID where r.`rfq_ID` = '$id' ");
+                        $total = 0;
+                        while($row = $rfq_qry->fetch_assoc()):
+                            $total += ($row['quantity_request'] * $row['unit_price']);
+                        ?>
+                        <tr class="po-item" data-id="">
+                            <td class="align-middle p-1 item-description"><?php echo $row['material_details'] ?></td>
+                            <td class="align-middle p-0 text-center"><?php echo $row['quantity_request'] ?></td>                               
+                            <td class="align-middle p-1"><?php echo $row['unit_price'] ?></td>
+                            
+                        </tr>
+                        <?php endwhile;endif; ?>
                     </tbody>
                     <tfoot>                       
                         <tr>
@@ -154,14 +156,14 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     </div>
 </div>
 <table class="d-none" id="item-clone">
-    <tr class="po-item" data-id="">
+    <tr class="rfq-item" data-id="">
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-0 text-center">
             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
-   
+
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
