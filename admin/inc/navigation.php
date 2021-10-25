@@ -1,13 +1,13 @@
 </style>
 <!-- Main Sidebar Container -->
-      <aside class="main-sidebar sidebar-dark-primary bg-navy elevation-4 sidebar-no-expand">
+      <aside class="main-sidebar sidebar-dark-secondary bg-navy elevation-4 sidebar-no-expand">
         <!-- Brand Logo -->
-        <a href="<?php echo base_url ?>admin" class="brand-link bg-primary text-sm">
-        <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3" style="width: 1.7rem;height: 1.7rem;max-height: unset">
-        <span class="brand-text font-weight-light"><?php echo $_settings->info('short_name') ?></span>
+        <a href="<?php echo base_url ?>admin" class="brand-link bg-secondary text-sm">
+        <img src="<?php echo validate_image($_settings->info('logo'))?>" alt="Store Logo" class="brand-image img-circle elevation-3 bg-light" style="width: 1.75rem;height: 1.75rem;max-height: unset">
+        <span class="brand-text font-weight-normal"><?php echo $_settings->info('short_name') ?></span>
         </a>
         <!-- Sidebar -->
-        <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
+        <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden bg-dark">
           <div class="os-resize-observer-host observed">
             <div class="os-resize-observer" style="left: 0px; right: auto;"></div>
           </div>
