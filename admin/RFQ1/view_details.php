@@ -1,10 +1,5 @@
-<?php if($_settings->chk_flashdata('success')): ?>
-<script>
-	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
-</script>
-<?php endif;?>
 <?php
-if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
+if(isset($_GET['rfq_ID']) && $_GET['rfq_ID']> 0){
     $qry = $conn->query("SELECT * from `rfq` where rfq_ID = '{$_GET['rfq_ID']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
@@ -40,7 +35,7 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 		<h3 class="card-title"><?php echo isset($rfq_ID) ? "Update RFQ Details": "New RFQ" ?> </h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-		    <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&rfq_ID=<?php echo $id ?>">Edit</a>
+		    <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&rfq_ID=<?php echo $rfq_ID ?>">Edit</a>
 		    <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
         </div>
 	</div>
@@ -54,14 +49,14 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
         </div>
         <div class="col-6">
             <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-            <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+            <h2 class="text-center"><b>REQUEST FOR QUOTATION</b></h2>
         </div>
         </div>
         <div class="row mb-2">
             <div class="col-6">
                 <p class="m-0"><b>Vendor</b></p>
                 <?php 
-                $sup_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$vendor_ID}'");
+                $sup_qry = $conn->query("SELECT * FROM 'vendor' where vendor_ID = '{$vendor_ID}'");
                 $vendor = $sup_qry->fetch_array();
                 ?>
                 <div>

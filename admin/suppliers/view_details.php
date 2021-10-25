@@ -1,6 +1,6 @@
 <?php
 require_once('../../config.php');
-if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0) {
+if (isset($_GET['vendor_ID']) && $_GET['vendor_ID']!= '') {
     $qry = $conn->query("SELECT * from `vendor` where vendor_ID = '{$_GET['vendor_ID']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
@@ -18,11 +18,11 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0) {
     <callout class="callout-primary">
         <dl class="row">
             <dt class="col-md-4">Supplier Name</dt>
-            <dd class="col-md-8">:<?php echo $name ?></dd>
+            <dd class="col-md-8">: <?php echo $name ?></dd>
             <dt class="col-md-4">Company Code</dt>
-            <dd class="col-md-8">:<?php echo $company_code ?></dd> 
+            <dd class="col-md-8">: <?php echo $company_code ?></dd> 
             <dt class="col-md-4">Registration Status</dt>
-            <dd class="col-md-8">:&nbsp;
+            <dd class="col-md-8">: 
                 <?php if ($registration_status == 1): ?>
                     <span class="badge badge-success">Approved</span>
                 <?php else: ?>

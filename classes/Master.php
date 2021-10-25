@@ -30,7 +30,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		$check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' ".(!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "")." ")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' ".(!empty($vendor_ID) ? " and vendor_ID != '{$vendor_ID}' " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -39,7 +39,7 @@ Class Master extends DBConnection {
 			return json_encode($resp);
 			exit;
 		}
-		if(empty($id)){
+		if(empty($vendor_ID)){
 			$sql = "INSERT INTO `vendor` set {$data} ";
 			$save = $this->conn->query($sql);
 		}else{
@@ -48,7 +48,7 @@ Class Master extends DBConnection {
 		}
 		if($save){
 			$resp['status'] = 'success';
-			if(empty($id))
+			if(empty($vendor_ID))
 				$this->settings->set_flashdata('success',"New Supplier successfully saved.");
 			else
 				$this->settings->set_flashdata('success',"Supplier successfully updated.");
@@ -60,7 +60,7 @@ Class Master extends DBConnection {
 	}
 	function delete_supplier(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `vendor` where vendor_ID = '{$ivendor_ID}'");
+		$del = $this->conn->query("DELETE FROM `vendor` where vendor_ID = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Supplier successfully deleted.");
@@ -111,10 +111,10 @@ Class Master extends DBConnection {
 	}
 	function delete_rfq(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `rfq` where rfq_ID = '{$rfq_ID}'");
+		$del = $this->conn->query("DELETE FROM `rfq` where rfq_ID = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
-			$this->settings->set_flashdata('success',"RFQ successfully deleted.");
+			$this->settings->set_flashdata('success',"This RFQ successfully deleted.");
 		}else{
 			$resp['status'] = 'failed';
 			$resp['error'] = $this->conn->error;
@@ -392,6 +392,12 @@ switch ($action) {
 	break;
 	case 'delete_supplier':
 		echo $Master->delete_supplier();
+	break;
+    case 'save_rfq':
+		echo $Master->save_rfq();
+	break;
+	case 'delete_rfq':
+		echo $Master->delete_rfq();
 	break;
 	case 'save_item':
 		echo $Master->save_item();
