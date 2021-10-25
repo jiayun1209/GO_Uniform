@@ -42,14 +42,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 			<div class="row">
 				<div class="col-md-6 form-group">
-				<label for="supplier_id">Supplier</label>
-				<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
+				<label for="vendor_ID">Supplier</label>
+				<select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
+						<option value="" disabled <?php echo !isset($vendor_ID) ? "selected" :'' ?>></option>
 						<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `vendor` where registration_status!='0' order by `name` asc");
+							$supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
 							while($row = $supplier_qry->fetch_assoc()):
 						?>
-						<option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+						<option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
 						<?php endwhile; ?>
 					</select>
 				</div>
@@ -65,7 +65,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<colgroup>
 							<col width="5%">
 							<col width="5%">
-							<col width="10%">
 							<col width="20%">
 							<col width="30%">
 							<col width="15%">
@@ -75,7 +74,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 							<tr class="bg-navy disabled">
 								<th class="px-1 py-1 text-center"></th>
 								<th class="px-1 py-1 text-center">Qty</th>
-								<th class="px-1 py-1 text-center">Unit</th>
 								<th class="px-1 py-1 text-center">Item</th>
 								<th class="px-1 py-1 text-center">Description</th>
 								<th class="px-1 py-1 text-center">Price</th>
@@ -85,7 +83,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<tbody>
 							<?php 
 							if(isset($id)):
-							$order_items_qry = $conn->query("SELECT o.*,i.item_name, i.description FROM `purchase_order_details` o inner join item_code i on o.item_code = i.id where o.`po_id` = '$id' ");
+							$order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_order_details` o inner join inventory i on o.item_id = i.id where o.`po_id` = '$id' ");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 							?>
@@ -97,11 +95,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
-									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit'] ?>"/>
-								</td>
-								<td class="align-middle p-1">
-									<input type="hidden" name="item_code[]" value="<?php echo $row['item_code'] ?>">
-									<input type="text" class="text-center w-100 border-0 item_code" value="<?php echo $row['name'] ?>" required/>
+									<input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+									<input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
 								</td>
 								<td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
 								<td class="align-middle p-1">
@@ -114,23 +109,23 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 						<tfoot>
 							<tr class="bg-lightblue">
 								<tr>
-									<th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
+									<th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
 									<th class="p-1 text-right" id="sub_total">0</th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Discount (%)
+									<th class="p-1 text-right" colspan="5">Discount (%)
 									<input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($discount_amount) ? $discount_amount : 0 ?>" name="discount_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Tax Inclusive (%)
+									<th class="p-1 text-right" colspan="5">Tax Inclusive (%)
 									<input type="number" step="any" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
 									</th>
 									<th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
 								</tr>
 								<tr>
-									<th class="p-1 text-right" colspan="6">Total</th>
+									<th class="p-1 text-right" colspan="5">Total</th>
 									<th class="p-1 text-right" id="total">0</th>
 								</tr>
 							</tr>
@@ -138,15 +133,15 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					</table>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="notes" class="control-label">Remarks</label>
-							<textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+							<label for="remarks" class="control-label">Remarks</label>
+							<textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
 						</div>
 						<div class="col-md-6">
 							<label for="status" class="control-label">Status</label>
 							<select name="status" id="status" class="form-control form-control-sm rounded-0">
 								<option value="0" <?php echo isset($status) && $status == 0 ? 'selected': '' ?>>Pending</option>
 								<option value="1" <?php echo isset($status) && $status == 1 ? 'selected': '' ?>>Approved</option>
-								<option value="2" <?php echo isset($status) && $status == 2 ? 'selected': '' ?>>Denied</option>
+								<option value="2" <?php echo isset($status) && $status == 2 ? 'selected': '' ?>>Rejected</option>
 							</select>
 						</div>
 					</div>
@@ -168,11 +163,8 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
 		</td>
 		<td class="align-middle p-1">
-			<input type="text" class="text-center w-100 border-0" name="unit[]"/>
-		</td>
-		<td class="align-middle p-1">
-			<input type="hidden" name="item_code[]">
-			<input type="text" class="text-center w-100 border-0 item_code" required/>
+			<input type="hidden" name="item_id[]">
+			<input type="text" class="text-center w-100 border-0 item_id" required/>
 		</td>
 		<td class="align-middle p-1 item-description"></td>
 		<td class="align-middle p-1">
@@ -218,7 +210,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	}
 
 	function _autocomplete(_item){
-		_item.find('.item_code').autocomplete({
+		_item.find('.item_id').autocomplete({
 			source:function(request, response){
 				$.ajax({
 					url:_base_url_+"classes/Master.php?f=search_items",
@@ -235,7 +227,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			},
 			select:function(event,ui){
 				console.log(ui)
-				_item.find('input[name="item_code[]"]').val(ui.item.id)
+				_item.find('input[name="item_id[]"]').val(ui.item.id)
 				_item.find('.item-description').text(ui.item.description)
 			}
 		})
@@ -274,7 +266,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			$('.err-msg').remove();
 			$('[name="po_no"]').removeClass('border-danger')
 			if($('#item-list .po-item').length <= 0){
-				alert_toast(" Please add atleast 1 item on the list.",'warning')
+				alert_toast(" Please add at least 1 item on the list.",'warning')
 				return false;
 			}
 			start_loader();
