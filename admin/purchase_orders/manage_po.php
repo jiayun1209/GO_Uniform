@@ -46,10 +46,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 				<select name="supplier_id" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
 						<option value="" disabled <?php echo !isset($supplier_id) ? "selected" :'' ?>></option>
 						<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
+							$supplier_qry = $conn->query("SELECT * FROM `vendor` where registration_status!='0' order by `name` asc");
 							while($row = $supplier_qry->fetch_assoc()):
 						?>
-						<option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['id'] ? 'selected' : '' ?> <?php echo $row['status'] == 0? 'disabled' : '' ?>><?php echo $row['name'] ?></option>
+						<option value="<?php echo $row['id'] ?>" <?php echo isset($supplier_id) && $supplier_id == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
 						<?php endwhile; ?>
 					</select>
 				</div>
