@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Suppliers</h3>
         <div class="card-tools">
-            <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="javascript:void(0)" data-id = "" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
         </div>
     </div>
     <div class="card-body">
@@ -50,6 +50,8 @@
                                 <td class="text-center">
                                     <?php if ($row['registration_status'] == 1): ?>
                                         <span class="badge badge-success">Approved</span>
+                                        <?php elseif ($row['registration_status'] == 2): ?>
+                                        <span class="badge badge-success">Registered</span>
                                     <?php else: ?>
                                         <span class="badge badge-secondary">Rejected</span>
                                     <?php endif; ?>

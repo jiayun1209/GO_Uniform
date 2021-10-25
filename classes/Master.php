@@ -30,7 +30,7 @@ Class Master extends DBConnection {
 				$data .= " `{$k}`='{$v}' ";
 			}
 		}
-		$check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' ".(!empty($vendor_ID) ? " and vendor_ID != '{$vendor_ID}' " : "")." ")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' ".(!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -58,6 +58,7 @@ Class Master extends DBConnection {
 		}
 		return json_encode($resp);
 	}
+        
 	function delete_supplier(){
 		extract($_POST);
 		$del = $this->conn->query("DELETE FROM `vendor` where vendor_ID = '{$id}'");

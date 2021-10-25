@@ -21,15 +21,15 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
     }
 </style>
 <form action="" id="supplier-form">
-     <input type="hidden" name="vendor_ID" value="'<?php isset($vendor_ID) ? $vendor_ID :"" ?>'" required>
+     <input type="hidden" name="vendor_ID" value="" readonly>
     <div class="container-fluid">
         <div class="form-group">
             <label for="name" class="control-label">Supplier Name</label>
-            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php isset($name) ? $name :"" ?>" required>
+            <input type="text" name="name" id="name" class="form-control rounded-0" value=" " required>
         </div>
         <div class="form-group">
             <label for="company_code" class="control-label">Company Code</label>
-            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" value="<?php isset ($company_code) ? $company_code :"" ?>"required>
+            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" value=" "required>
         </div>
         <div class="form-group">
             <label for="registration_status" class="control-label">Registration Status</label>
@@ -40,15 +40,15 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
         </div>
         <div class="form-group">
             <label for="email" class="control-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php isset ($email) ? $email :"" ?>" required>
+            <input type="email" name="email" id="email" class="form-control rounded-0" value=" " required>
         </div>
         <div class="form-group">
             <label for="product" class="control-label">Product</label>
-            <input type="text" name="product" id="product" class="form-control rounded-0" value="<?php isset ($product) ? $product :"" ?>" required>
+            <input type="text" name="product" id="product" class="form-control rounded-0" value=" " required>
         </div>
           <div class="form-group">
             <label for="description" class="control-label">Description</label>
-            <input type="text" name="description" id="description" class="form-control rounded-0" value="<?php isset ($description) ? $description :"" ?>" required>
+            <input type="text" name="description" id="description" class="form-control rounded-0" value=" " required>
         </div>
     </div>
 </form>
