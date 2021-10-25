@@ -40,11 +40,10 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </style>
 <div class="card card-outline card-info">
 	<div class="card-header">
-		<h3 class="card-title"><?php echo isset($id) ? "test Update Purchase Order Details": "New Purchase Order" ?> </h3>
+		<h3 class="card-title"><?php echo isset($id) ? "Purchase Order Details": "Generate Purchase Order Details Report" ?> </h3>
         <div class="card-tools">
-            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-		    <a class="btn btn-sm btn-flat btn-primary" href="?page=purchase_orders/manage_po&id=<?php echo $id ?>">Edit</a>
-		    <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Back</a>
+            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Generate</button>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=report/report_list">Back</a>
         </div>
 	</div>
 	<div class="card-body" id="out_print">
@@ -63,17 +62,17 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         </div>
         <div class="row mb-2">
             <div class="col-6">
-                <p class="m-0"><b>Vendor</b></p>
+                <p class="m-0"><b>Vendor Informations</b></p>
                 <?php 
-                $sup_qry = $conn->query("SELECT * FROM supplier_list where id = '{$supplier_id}'");
+                $sup_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$supplier_id}'");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
-                    <p class="m-0"><?php echo $supplier['name'] ?></p>
-                    <p class="m-0"><?php echo $supplier['address'] ?></p>
-                    <p class="m-0"><?php echo $supplier['contact_person'] ?></p>
-                    <p class="m-0"><?php echo $supplier['contact'] ?></p>
-                    <p class="m-0"><?php echo $supplier['email'] ?></p>
+                    <p class="m-0"><?php echo $vendor['name'] ?></p>
+                    <p class="m-0"><?php echo $vendor['company_code'] ?></p>
+                    <p class="m-0"><?php echo $vendor['email'] ?></p>
+                    <p class="m-0"><?php echo $vendor['product'] ?></p>
+                    <p class="m-0"><?php echo $vendor['description'] ?></p>
                 </div>
             </div>
             <div class="col-6 row">

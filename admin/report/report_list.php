@@ -1,14 +1,14 @@
 <?php if($_settings->chk_flashdata('success')): ?>
-    <script>
-            alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
-    </script>
+<script>
+	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
+</script>
 <?php endif;?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">List of Reports</h3>
-        <div class="card-tools">
-                <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
-        </div>
+            <h3 class="card-title">List of Reports</h3>
+            <div class="card-tools">
+		<a href="?page=report/view_PO_details" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  test New</a>
+            </div>
     </div>
     <div class="card-body">
             <div class="container-fluid">
