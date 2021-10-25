@@ -26,19 +26,19 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 		}
 
 		/* Firefox */
-		input[type=number] {
+		/*input[type=number] {
 		-moz-appearance: textfield;
 		}
 		[name="tax_percentage"],[name="discount_percentage"]{
 			width:5vw;
-		}
+		}*/
 </style>
 <div class="card card-outline card-info">
 	<div class="card-header">
 		<h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details": "New RFQ" ?> </h3>
 	</div>
 	<div class="card-body">
-		<form action="" id="po-form">
+		<form action="" id="rfq-form">
 			<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 			<div class="row">
 				<div class="col-md-6 form-group">
@@ -49,7 +49,7 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 							$supplier_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
 							while($row = $supplier_qry->fetch_assoc()):
 						?>
-						<option value="<?php echo $row['id'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+						<option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
 						<?php endwhile; ?>
 					</select>
 				</div>
@@ -94,7 +94,7 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 									<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 								</td>
 								<td class="align-middle p-0 text-center">
-									<input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
+									<input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]" value="<?php echo $row['quantity_request'] ?>"/>
 								</td>
 								<td class="align-middle p-1">
 									<input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit_price'] ?>"/>
@@ -137,8 +137,8 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 		</form>
 	</div>
 	<div class="card-footer">
-		<button class="btn btn-flat btn-primary" form="po-form">Save</button>
-		<a class="btn btn-flat btn-default" href="?page=purchase_orders">Cancel</a>
+		<button class="btn btn-flat btn-primary" form="rfq-form">Save</button>
+		<a class="btn btn-flat btn-default" href="?page=rfq">Cancel</a>
 	</div>
 </div>
 <table class="d-none" id="item-clone">
@@ -147,7 +147,7 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
 		</td>
 		<td class="align-middle p-0 text-center">
-			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+			<input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]"/>
 		</td>
 		<td class="align-middle p-1">
 			<input type="text" class="text-center w-100 border-0" name="unit[]"/>
@@ -170,7 +170,7 @@ if(isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0){
 	function calculate(){
 		var _total = 0
 		$('.rfq-item').each(function(){
-			var qty = $(this).find("[name='qty[]']").val()
+			var qty = $(this).find("[name='quantity_request[]']").val()
 			var unit_price = $(this).find("[name='unit_price[]']").val()
 			var row_total = 0;
 			if(qty > 0 && unit_price > 0){

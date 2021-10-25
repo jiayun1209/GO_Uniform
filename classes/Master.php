@@ -393,6 +393,12 @@ switch ($action) {
 	case 'delete_supplier':
 		echo $Master->delete_supplier();
 	break;
+    case 'save_rfq':
+		echo $Master->save_rfq();
+	break;
+	case 'delete_rfq':
+		echo $Master->delete_rfq();
+	break;
 	case 'save_item':
 		echo $Master->save_item();
 	break;
