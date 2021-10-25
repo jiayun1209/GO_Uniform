@@ -42,7 +42,7 @@
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td><?php echo date("Y-m-d H:i",strtotime($row['item_code'])) ?></td>
-							<td><?php echo $row['name'] ?></td>
+							<td><?php echo $row['item_name'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>

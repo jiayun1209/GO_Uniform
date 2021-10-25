@@ -6,10 +6,8 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
 
-            <h3 class="card-title">List of Reports</h3>
-            <div class="card-tools">
-		<a href="?page=report/view_PO_details" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  test New</a>
-            </div>
+            <h3 class="card-title">Reporting</h3>
+
             
     </div>
     <div class="card-body">
@@ -36,17 +34,15 @@
                                                     <td class="text-center"><?php echo $i++; ?></td>
                                                     <td class="">Purchase Order Details Report</td>
                                                     <td align="center">
-                                                             <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+<!--                                                             <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                             Action
                                                 <span class="sr-only">Toggle Dropdown</span>
-                                              </button>
-                                              <div class="dropdown-menu" role="menu">
-                                                                    <a class="dropdown-item" href="?page=purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="?page=purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-                                                <div class="dropdown-divider"></div>
+                                              </button>-->
+<!--                                              <div class="dropdown-menu" role="menu">
+                                                <a class="dropdown-item" href="?page=report/view_PO_details"><span class="fa fa-eye text-primary"></span> View</a>
                                                 <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
-                                              </div>
+                                              </div>-->
+                                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_details_list">View</a>
                                                     </td>
                                             </tr>
 
