@@ -132,7 +132,7 @@
                     }
             })
             }
-    /*function renew_rent($id){
+    function renew_rent($id){
      start_loader();
      $.ajax({
      url:_base_url_+"classes/Master.php?f=renew_rent",
@@ -153,5 +153,5 @@
      }
      }
      })
-     }*/
+     }
 </script>

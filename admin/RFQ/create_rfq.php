@@ -26,21 +26,20 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     }
 
     /* Firefox */
-    input[type=number] {
-        -moz-appearance: textfield;
+    /*input[type=number] {
+    -moz-appearance: textfield;
     }
     [name="tax_percentage"],[name="discount_percentage"]{
-        width:5vw;
-    }
+            width:5vw;
+    }*/
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
         <h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?> </h3>
     </div>
     <div class="card-body">
-        <form action="" id="po-form">
+        <form action="" id="rfq-form">
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
-            <input type="hidden" name ="id" value="<?php echo isset($pr_ID) ? $pr_ID : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier</label>
@@ -50,115 +49,100 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                         $supplier_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $row['id'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
                     </select>
-                    <label for="pr_ID">PR ID</label>
-                        <select name="pr_ID" id="pr_ID" class="custom-select custom-select-sm rounded-0 select2">
-                            <option value="" disabled <?php echo!isset($pr_ID) ? "selected" : '' ?>></option>
-                            <?php
-                            $pr_qry = $conn->query("SELECT * FROM `purchase_requsition_details where pr_ID = '{$_GET['pr_ID']}'");
-                            while ($row = $pr_qry->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['pr_ID'] ?>" <?php echo isset($pr_ID) && $pr_ID == $row['pr_ID'] ? 'selected' : '' ?>></option>
-                            <?php endwhile; ?>
-                        </select>
-                        <small><i>Choose one of the <strong> PR ID </strong>. </i></small>
-                         <div class="col-md-6 form-group">
-                        <label for="rfq_ID">RFQ # <span class="po_err_msg text-danger"></span></label>
-                        <input type="text" class="form-control form-control-sm rounded-0" id="rfq_ID" name="rfq_ID" value="<?php echo isset($rfq_ID) ? $rfq_ID : '' ?>">
-                        <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
-
-                    </div>
-                    
-
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="rfq_ID">RFQ # <span class="po_err_msg text-danger"></span></label>
+                    <input type="text" class="form-control form-control-sm rounded-0" id="rfq_ID" name="rfq_ID" value="<?php echo isset($rfq_ID) ? $rfq_ID : '' ?>">
+                    <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
             </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped table-bordered" id="item-list">
-                <colgroup>
-                    <col width="5%">
-                    <col width="5%">
-                    <col width="10%">
-                    <col width="20%">
-                    <col width="30%">
-                    <col width="15%">
-                    <col width="15%">
-                </colgroup>
-                <thead>
-                    <tr class="bg-navy disabled">
-                        <th class="px-1 py-1 text-center"></th>
-                        <th class="px-1 py-1 text-center">Qty</th>
-                        <th class="px-1 py-1 text-center">Unit</th>
-                        <th class="px-1 py-1 text-center">Item</th>
-                        <th class="px-1 py-1 text-center">Description</th>
-                        <th class="px-1 py-1 text-center">Price</th>
-                        <th class="px-1 py-1 text-center">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (isset($id)):
-                        $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID  = '$id' ");
-                        echo $conn->error;
-                        while ($row = $rfq_qry->fetch_assoc()):
-                            ?>
-                            <tr class="rfq-item" data-id="">
-                                <td class="align-middle p-1 text-center">
-                                    <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-                                </td>
-                                <td class="align-middle p-0 text-center">
-                                    <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
-                                </td>
-                                <td class="align-middle p-1">
-                                    <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit_price'] ?>"/>
-                                </td>
-
-                                <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
-                            </tr>
-                        <?php
-                        endwhile;
-                    endif;
-                    ?>
-                </tbody>
-                <tfoot>
-                    <tr class="bg-lightblue">
-                    <tr>
-                        <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
-                        <th class="p-1 text-right" id="sub_total">0</th>
-                    </tr>
-
-                    <tr>
-                        <th class="p-1 text-right" colspan="6">Total</th>
-                        <th class="p-1 text-right" id="total">0</th>
-                    </tr>
-                    </tr>
-                </tfoot>
-            </table>
             <div class="row">
-                <div class="col-md-6">
-                    <label for="notes" class="control-label">Remarks</label>
-                    <textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="status" class="control-label">Status</label>
-                    <select name="status" id="status" class="form-control form-control-sm rounded-0">
-                        <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                        <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                        <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Denied</option>
-                    </select>
+                <div class="col-md-12">
+                    <table class="table table-striped table-bordered" id="item-list">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="20%">
+                            <col width="30%">
+                            <col width="15%">
+                            <col width="15%">
+                        </colgroup>
+                        <thead>
+                            <tr class="bg-navy disabled" style="">
+                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Material</th>
+                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Quantity</th>
+                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Price</th>
+                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Sub Total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (isset($rfq_ID)):
+                                $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID  = '$rfq_ID' ");
+                                echo $conn->error;
+                                while ($row = $rfq_qry->fetch_assoc()):
+                                    ?>
+                                    <tr class="rfq-item" data-id="">
+                                        <td class="align-middle p-1 text-center">
+                                            <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="material_details" value="<?php echo $row['material_details'] ?>"/>
+                                        </td>
+                                        <td class="align-middle p-1 text-center">
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]" value="<?php echo $row['quantity_request'] ?>"/>
+                                        </td>
+                                        <td class="align-middle p-1">
+                                            <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit_price'] ?>"/>
+                                        </td>
+
+                                        <td class="align-middle p-1 text-center total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
+                                    </tr>
+                                <?php endwhile;
+                            endif; ?>
+                        </tbody>
+                         
+                        <tfoot>
+                            <tr class="bg-lightblue">
+                            <tr>
+                                <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
+                           
+                            </tr>
+
+                            <tr>
+                                <th class="p-1 text-right" colspan="6">Total</th>
+                                <th class="p-1 text-right" id="total">0</th>
+                            </tr>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="notes" class="control-label">Remarks</label>
+                            <textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="status" class="control-label">Status</label>
+                            <select name="status" id="status" class="form-control form-control-sm rounded-0">
+                                <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
+                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
+                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Denied</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-</form>
-</div>
-<div class="card-footer">
-    <button class="btn btn-flat btn-primary" form="po-form">Save</button>
-    <a class="btn btn-flat btn-default" href="?page=purchase_orders">Cancel</a>
-</div>
+    <div class="card-footer">
+        <button class="btn btn-flat btn-primary" form="rfq-form">Save</button>
+        <a class="btn btn-flat btn-default" href="?page=rfq">Cancel</a>
+    </div>
 </div>
 <table class="d-none" id="item-clone">
     <tr class="rfq-item" data-id="">
@@ -166,7 +150,7 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-0 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+            <input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]"/>
         </td>
         <td class="align-middle p-1">
             <input type="text" class="text-center w-100 border-0" name="unit[]"/>
@@ -189,7 +173,7 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     function calculate() {
         var _total = 0
         $('.rfq-item').each(function () {
-            var qty = $(this).find("[name='qty[]']").val()
+            var qty = $(this).find("[name='quantity_request[]']").val()
             var unit_price = $(this).find("[name='unit_price[]']").val()
             var row_total = 0;
             if (qty > 0 && unit_price > 0) {
