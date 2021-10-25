@@ -16,20 +16,20 @@
                 <table class="table table-hover table-striped">
                     <colgroup>
                         <col width="5%">
-                        <col width="10%">
-                        <col width="20%">
-                        <col width="20%">
-                        <col width="20%">
+                        <col width="13%">
+                        <col width="12%">
                         <col width="10%">
                         <col width="15%">
+                        <col width="15%">
+                        <col width="20%">
+                        <col width="10%">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled">
-                            <th>#</th>
-                            <th>Supplier ID</th>
-                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Supplier</th>
                             <th>Company Code</th>
-                            <th>Registration Status</th>
+                            <th>Reg. Status</th>
                             <th>Email</th>
                             <th>Product</th>
                             <th>Description</th>
@@ -43,7 +43,6 @@
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
-                                <td class="text-center"><?php echo $i++; ?></td>
                                 <td><?php echo $row['vendor_ID'] ?></td>
                                 <td><?php echo $row['name'] ?></td>
                                 <td><?php echo $row['company_code'] ?></td>

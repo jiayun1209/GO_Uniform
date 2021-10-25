@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box">
-            <span class="info-box-icon bg-navy elevation-1"><i class="fas fa-truck-loading"></i></span>
+            <span class="info-box-icon bg-gradient-navy elevation-1"><i class="fas fa-truck-loading"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">Total Suppliers</span>
@@ -21,7 +21,7 @@
     </div>
     <div class="col-6 col-sm-4 col-md-3">
         <div class="info-box">
-            <span class="info-box-icon bg-navy elevation-1"><i class="fas fa-comments-dollar"></i></span>
+            <span class="info-box-icon bg-gradient-lightblue elevation-1"><i class="fas fa-comments-dollar"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">Total RFQ</span>
@@ -40,7 +40,7 @@
     <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-boxes"></i></span>
+            <span class="info-box-icon bg-gradient-success elevation-1"><i class="fas fa-boxes"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">Total Items</span>
@@ -59,14 +59,14 @@
     <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-file-invoice"></i></span>
+            <span class="info-box-icon bg-gradient-gray elevation-1"><i class="fas fa-file-invoice"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Approved PO</span>
+                <span class="info-box-text">Pending PO</span>
                 <span class="info-box-number">
                     <?php
-                    $po_appoved = $conn->query("SELECT * FROM purchase_order where `status` =1 ")->num_rows;
-                    echo number_format($po_appoved);
+                    $po_pending = $conn->query("SELECT * FROM purchase_order where `status` =0 ")->num_rows;
+                    echo number_format($po_pending);
                     ?>
                 </span>
             </div>
@@ -78,7 +78,26 @@
     <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-file-invoice"></i></span>
+            <span class="info-box-icon bg-gradient-primary elevation-1"><i class="fas fa-file-invoice"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Approved PO</span>
+                <span class="info-box-number">
+                    <?php
+                    $po_approved = $conn->query("SELECT * FROM purchase_order where `status` =1 ")->num_rows;
+                    echo number_format($po_approved);
+                    ?>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-gradient-danger elevation-1"><i class="fas fa-file-invoice"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">Rejected PO</span>
@@ -97,7 +116,7 @@
  <?php if($_settings->userdata('type') == 2): ?>
 <div class="col-12 col-sm-6 col-md-3">
     <div class="info-box mb-3">
-        <span class="info-box-icon bg-primary elevation-1"><i class="fas  fa-comments-dollar"></i></span>
+        <span class="info-box-icon bg-gradient-primary elevation-1"><i class="fas  fa-comments-dollar"></i></span>
 
         <div class="info-box-content">
             <span class="info-box-text">Approved RFQ</span>
@@ -114,7 +133,7 @@
 </div>
 <div class="col-12 col-sm-6 col-md-3">
     <div class="info-box mb-3">
-        <span class="info-box-icon bg-danger elevation-1"><i class="fas  fa-comments-dollar"></i></span>
+        <span class="info-box-icon bg-gradient-danger elevation-1"><i class="fas  fa-comments-dollar"></i></span>
 
         <div class="info-box-content">
             <span class="info-box-text">Rejected RFQ</span>
