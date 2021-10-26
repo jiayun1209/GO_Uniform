@@ -39,6 +39,25 @@
                         </p>
                       </a>
                     </li>
+                    <?php if($_settings->userdata('type') == 3): ?>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Create PR   
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Create MR  
+                        </p>
+                      </a>
+                    </li>
+                     <?php endif; ?>
+                    
                      <?php if($_settings->userdata('type') == 2): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
@@ -48,7 +67,25 @@
                         </p>
                       </a>
                     </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Approve PR  
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Approve MR  
+                        </p>
+                      </a>
+                    </li>
                      <?php endif; ?>
+                    
+                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
