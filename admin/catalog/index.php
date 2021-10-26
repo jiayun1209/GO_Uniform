@@ -19,49 +19,29 @@
 					<col width="15%">
 					<col width="15%">
 					<col width="15%">
-					<col width="15%">
-					<col width="5%">
-                                        <col width="10%">
-                                        <col width="10%">
-                                        <col width="15%">
+                                        <col width="25%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
 						<th>#</th>
-						<th>Date Created</th>
-						<th>Item Code</th>
-                                                <th>Catalog ID</th>
-                                                <th>Item Name</th>
+						<th>Catalog ID</th>
 						<th>Description</th>
-                                                <th>Qty</th>
-                                                <th>Price</th>
-						<th>Status</th>
+                                                <th>Vendor ID</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `inventory` order by (`name`) asc ");
+					$qry = $conn->query("SELECT * from `catalog`");
 					while($row = $qry->fetch_assoc()):
 						$row['description'] = html_entity_decode($row['description']);
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
-							<td><?php echo date("Y-m-d H:i",strtotime($row['date_created'])) ?></td>
-                                                        <td><?php echo $row['item_code'] ?></td>
                                                         <td><?php echo $row['catalog_ID'] ?></td>
-							<td><?php echo $row['name'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
-                                                        <td><?php echo $row['quantity'] ?></td>
-                                                        <td><?php echo $row['price'] ?></td>
-							<td class="text-center">
-								<?php if($row['status'] == 1): ?>
-									<span class="badge badge-success">Active</span>
-								<?php else: ?>
-									<span class="badge badge-secondary">Inactive</span>
-								<?php endif; ?>
-							</td>
+                                                        <td><?php echo $row['vendor_ID'] ?></td>
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
 				                  		Action
@@ -86,24 +66,24 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this Item permanently?","delete_item",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this Catalog permanently?","delete_catalog",[$(this).attr('data-id')])
 		})
 		$('#create_new').click(function(){
-			uni_modal("<i class='fa fa-plus'></i> Create New Item","items/manage_item.php")
+			uni_modal("<i class='fa fa-plus'></i> Create New Catalog","catalog/manage_catalog.php")
 		})
 		$('.view_data').click(function(){
-			uni_modal("<i class='fa fa-info-circle'></i> Item's Details","items/view_details.php?id="+$(this).attr('data-id'),"")
+			uni_modal("<i class='fa fa-info-circle'></i> Catalog's Details","catalog/view_details.php?id="+$(this).attr('data-id'),"")
 		})
 		$('.edit_data').click(function(){
-			uni_modal("<i class='fa fa-edit'></i> Edit Item's Details","items/manage_item.php?id="+$(this).attr('data-id'))
+			uni_modal("<i class='fa fa-edit'></i> Edit Catalog's Details","catalog/manage_catalog.php?id="+$(this).attr('data-id'))
 		})
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')
 		$('.table').dataTable();
 	})
-	function delete_item($id){
+	function delete_catalog($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_item",
+			url:_base_url_+"classes/Master.php?f=delete_catalog",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

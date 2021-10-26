@@ -83,7 +83,7 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                         <tbody>
                             <?php
                             if (isset($rfq_ID)):
-                                $rfq_qry = $conn->query("SELECT i.*,p.*,r.* FROM inventory i, purchase_requisiton_details p, rfq r where i.item_code = p.item_id AND p.pr_ID = r.pr_ID and p.`pr_ID` = '$pr_ID' ");
+                                $rfq_qry = $conn->query("SELECT i.*,p.*,r.* FROM inventory i, purchase_requisiton_details p, rfq r where i.item_code = p.item_id AND p.pr_ID = r.pr_ID AND r.`rfq_ID` = '$rfq_ID' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rfq_qry->fetch_assoc()):
@@ -114,15 +114,15 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     <div class="row">
                         <div class="col-md-6">
                             <label for="remarks" class="control-label">Remarks</label>
-                            <textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
+                            <textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remark) ? $remark : '' ?></textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0">
-                                <option value="0">Pending</option>
-                                <option value="1">Approved</option>
-                                <option value="2">Rejected</option>
-                            </select>
+								<option value="0" <?php echo isset($status) && $status == 0 ? 'selected': '' ?>>Pending</option>
+								<option value="1" <?php echo isset($status) && $status == 1 ? 'selected': '' ?>>Approved</option>
+								<option value="2" <?php echo isset($status) && $status == 2 ? 'selected': '' ?>>Rejected</option>
+							</select>
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             _price = _price.replace(/\,/gi, '')
             _total += parseFloat(_price)
         })
-        var discount_perc = 0
+        /*var discount_perc = 0
         if ($('[name="discount_percentage"]').val() > 0) {
             discount_perc = $('[name="discount_percentage"]').val()
         }
@@ -184,12 +184,12 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             tax_perc = $('[name="tax_percentage"]').val()
         }
         var tax_amount = _total * (tax_perc / 100);
-        $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
+        $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))*/
         $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
         $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
     }
 
-    /* function _autocomplete(_item) {
+     function _autocomplete(_item) {
      _item.find('.item_id').autocomplete({
      source: function (request, response) {
      $.ajax({
@@ -211,47 +211,43 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
      _item.find('.item-description').text(ui.item.description)
      }
      })
-     }*/
+     }
     $(document).ready(function () {
-        /* $('#add_row').click(function () {
+         $('#add_row').click(function () {
          var tr = $('#item-clone tr').clone()
          $('#item-list tbody').append(tr)
          _autocomplete(tr)
          tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
          calculate()
          })
-         $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
-         calculate()
+         
          })
-         })
-         if ($('#item-list .po-item').length == 0) {
-         $('#item-list .po-item').each(function () {
+         if ($('#item-list .po-item').length > 0) {
+         $('#item-list .po-item').each(function(){
          var tr = $(this)
          _autocomplete(tr)
          tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
          calculate()
          })
-         $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
-         calculate()
-         })
+         
          tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
-         })
-         } else {
+         }
+          else {
          $('#add_row').trigger('click')
-         }*/
+         }
         $('.select2').select2({placeholder: "Please Select here", width: "relative"})
         $('#po-form').submit(function (e) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();
             $('[name="rfq_ID"]').removeClass('border-danger')
-            /* if ($('#item-list .po-item').length <= 0) {
+             if ($('#item-list .po-item').length <= 0) {
              alert_toast(" Please add at least 1 item on the list.", 'warning')
              return false;
-             }*/
+             }
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=save_rfq",
+                url: base_url + "classes/Master.php?f=save_rfq",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -282,28 +278,4 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             })
         })
     })
-    /*success: function (resp) {
-     if (typeof resp == 'object' && resp.status == 'success') {
-     location.href = "./?page=RFQ/view_rfqrfq_ID=" + resp.id;
-     } else if ((resp.status == 'failed' || resp.status == 'rfq_failed') && !!resp.msg) {
-     var el = $('<div>')
-     el.addClass("alert alert-danger err-msg").text(resp.msg)
-     _this.prepend(el)
-     el.show('slow')
-     $("html, body").animate({scrollTop: 0}, "fast");
-     end_loader()
-     if (resp.status == 'rfq_failed') {
-     $('[name="rfq_ID"]').addClass('border-danger').focus()
-     }
-     } else {
-     alert_toast("An error occured", 'error');
-     end_loader();
-     console.log(resp)
-     }
-     }
-     })
-     })
-     
-     
-     })*/
 </script>

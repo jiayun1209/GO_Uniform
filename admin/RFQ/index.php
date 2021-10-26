@@ -5,7 +5,7 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">List of Request for Quotataion</h3>
+        <h3 class="card-title">List of Request for Quotation</h3>
         <div class="card-tools">
             <a href="?page=rfq/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New</a>
             <a href="?page=rfq/create_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New with PR</a>
@@ -43,7 +43,7 @@
                         <?php
                         $i = 1;
                         $qry = $conn->query("SELECT r.*, s.name as sname FROM `rfq` r inner join `vendor` s on r.vendor_ID  = s.vendor_ID");
-                        while ($row = $qry->fetch_assoc()):       
+                        while ($row = $qry->fetch_assoc()):
                             $row['total_amount'] = $conn->query("SELECT sum(quantity_request * unit_price) as total FROM rfq where rfq_ID = '{$row['rfq_ID']}'")->fetch_array()['total'];
                             ?>
                             <tr>
@@ -102,56 +102,57 @@
     uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/create_rfq_pr.php")
     })
             $('.view_data').click(function () {
-    uni_modal("<i class='fa fa-info-circle'></i> RFQ's Details", "RFQ/view_rfq.php?rfq_ID=" + $(this).attr('data-id'), "")
+    uni_modal("<i class='fa fa-info-circle'></i> RFQ's Details", "RFQ/view_rfq.php?id=" + $(this).attr('data-id'), "")
     })
             $('.edit_data').click(function () {
-    uni_modal("<i class='fa fa-edit'></i> Edit RFQ's Details", "RFQ/manage_rfq.php?rfq_ID=" + $(this).attr('data-id'))
+    uni_modal("<i class='fa fa-edit'></i> Edit RFQ's Details", "RFQ/manage_rfq.php?id=" + $(this).attr('data-id'))
     })
             $('.table th,.table td').addClass('px-1 py-0 align-middle')
             $('.table').dataTable();
     })
-            function delete_rfq($id){
-            start_loader();
-            $.ajax({
-            url:_base_url_ + "classes/Master.php?f=delete_rfq",
-                    method:"POST",
-                    data:{id: $id},
-                    dataType:"json",
-                    error:err => {
-                    console.log(err)
-                            alert_toast("An error occured.", 'error');
-                    end_loader();
-                    },
-                    success:function(resp){
-                    if (typeof resp == 'object' && resp.status == 'success'){
+            function delete_rfq($id) {
+    console.log($id);
+        start_loader();
+        $.ajax({
+            url: _base_url_ + "classes/Master.php?f=delete_rfq",
+            method: "POST",
+            data: {id: $id},
+            dataType: "json",
+            error: err => {
+                console.log(err)
+                alert_toast("An error occured.", 'error');
+                end_loader();
+            },
+            success: function (resp) {
+                if (typeof resp == 'object' && resp.status == 'success') {
                     location.reload();
-                    } else{
+                } else {
                     alert_toast("An error occured.", 'error');
                     end_loader();
-                    }
-                    }
-            })
+                }
             }
+        })
+    }
     function renew_rent($id){
-     start_loader();
-     $.ajax({
-     url:_base_url_+"classes/Master.php?f=renew_rent",
-     method:"POST",
-     data:{id: $id},
-     dataType:"json",
-     error:err=>{
-     console.log(err)
-     alert_toast("An error occured.",'error');
-     end_loader();
-     },
-     success:function(resp){
-     if(typeof resp== 'object' && resp.status == 'success'){
-     location.reload();
-     }else{
-     alert_toast("An error occured.",'error');
-     end_loader();
-     }
-     }
-     })
-     }
+    start_loader();
+    $.ajax({
+    url:_base_url_ + "classes/Master.php?f=renew_rent",
+            method:"POST",
+            data:{id: $id},
+            dataType:"json",
+            error:err => {
+            console.log(err)
+                    alert_toast("An error occured.", 'error');
+            end_loader();
+            },
+            success:function(resp){
+            if (typeof resp == 'object' && resp.status == 'success'){
+            location.reload();
+            } else{
+            alert_toast("An error occured.", 'error');
+            end_loader();
+            }
+            }
+    })
+    }
 </script>

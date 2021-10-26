@@ -4,8 +4,8 @@
     </script>
 <?php endif; ?>
 <?php
-if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
-    $qry = $conn->query("SELECT * from `rfq` where rfq_ID = '{$_GET['rfq_ID']}' ");
+if (isset($_GET['id']) && $_GET['id'] > 0) {
+    $qry = $conn->query("SELECT * from `rfq` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -39,41 +39,41 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     }*/
 </style>
 <div class="card card-outline card-info">
-    <div class="card-header">
-        <h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?> </h3>
+	<div class="card-header">
+		<h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details": "New RFQ" ?> </h3>
         <div class="card-tools">
-            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button> 
-            <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
+            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
+		    <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&id=<?php echo $id ?>">Edit</a>
+		    <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
         </div>
-    </div>
-    <div class="card-body" id="out_print">
+	</div>
+	<div class="card-body" id="out_print">
         <div class="row">
-            <div class="col-6 d-flex align-items-center">
-                <div>
-                    <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
-                    <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                    <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
-                </div>
+        <div class="col-6 d-flex align-items-center">
+            <div>
+                <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
+                <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
+                <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
             </div>
-            <div class="col-6">
-                <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-                <h2 class="text-center"><b>REQUEST FOR QUOTATION</b></h2>
-            </div>
+        </div>
+        <div class="col-6">
+            <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
+            <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+        </div>
         </div>
         <div class="row mb-2">
             <div class="col-6">
-                <br>
                 <p class="m-0"><b>Vendor</b></p>
-                <?php
-                $vendor_qry = $conn->query("SELECT v.*,r.* FROM `rfq` r inner join vendor v on r.vendor_ID = v.vendor_ID where r.vendor_ID = '{$vendor_ID}'");
-                $vendor = $vendor_qry->fetch_array();
+                <?php 
+                $sup_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$vendor_ID}'");
+                $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
-                    <p class="m-0"><?php echo $vendor['name'] ?></p>
-                    <p class="m-0"><?php echo $vendor['company_code'] ?></p>
-                    <p class="m-0"><?php echo $vendor['email'] ?></p>    
-                    <p class="m-0"><?php echo $vendor['vendor_address'] ?></p> 
+                    <p class="m-0"><?php echo $supplier['name'] ?></p>
+                    <p class="m-0"><?php echo $supplier['company_code'] ?></p>                   
+                    <p class="m-0"><?php echo $supplier['email'] ?></p>                   
                 </div>
+            </div>
             </div>
             <div class="col-6 row">
                 <div class="col-6">
@@ -84,11 +84,11 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     <p  class="m-0"><b>Date Created</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($date_created)) ?></b></p>
                 </div>
-                 <div class="col-6">
+                <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>
                 </div>
-                 <div class="col-6">
+                <div class="col-6">
                     <p  class="m-0"><b>Delivery Date</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($delivery_date)) ?></b></p>
                 </div>
@@ -98,11 +98,11 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
                     <colgroup>
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">
-                            <col width="20%">                 
-                            <col width="15%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="20%">                 
+                        <col width="15%">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled" style="">
@@ -115,20 +115,20 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     </thead>
                     <tbody>
                         <?php
-                        if (isset($rfq_ID)):
-                            $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID where r.`rfq_ID` = '$rfq_ID' ");
+                        if (isset($id)):
+                            $rfq_qry = $conn->query("SELECT r.,i. FROM `rfq` r inner join inventory i on r.item_code = i.id where r.`id` = '$id'");
                             $total = 0;
                             while ($row = $rfq_qry->fetch_assoc()):
                                 $total += ($row['quantity_request'] * $row['unit_price']);
                                 ?>
                                 <tr class=rfq-item" data-id="">
-                                    <td class="align-middle p-2 text-center"><?php echo $row['material_details'] ?></td>
+                                    <td class="align-middle p-2 text-center"><?php echo $row['name'] ?></td>
                                     <td class="align-middle p-2 text-center"><?php echo $row['quantity_request'] ?></td>                               
                                     <td class="align-middle p-2 text-center"><?php echo $row['unit_price'] ?></td>
                                     <td class="align-middle p-2 text-center total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
 
                                 </tr>
-                            <?php
+                                <?php
                             endwhile;
                         endif;
                         ?>

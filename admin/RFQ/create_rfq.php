@@ -1,4 +1,5 @@
 <?php
+require_once('../../config.php');
 if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     $qry = $conn->query("SELECT * from `rfq` where rfq_ID = '{$_GET['rfq_ID']}' ");
     if ($qry->num_rows > 0) {
