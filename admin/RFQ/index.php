@@ -7,8 +7,8 @@
     <div class="card-header">
         <h3 class="card-title">List of Request for Quotataion</h3>
         <div class="card-tools">
-            <a href="?page=rfq/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New</a>
-            <a href="?page=rfq/manage_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New with PR</a>
+            <a href="?page=rfq/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New</a>
+            <a href="?page=rfq/create_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>Create New with PR</a>
         </div>
     </div>
     <div class="card-body">
@@ -96,10 +96,10 @@
     _conf("Are you sure to delete this RFQ permanently?", "delete_rfq", [$(this).attr('data-id')])
     })
             $('#create_new').click(function () {
-    uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/manage_rfq.php")
+    uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/create_rfq.php")
     })
             $('#create_new_withpr').click(function () {
-    uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/manage_rfq_pr.php")
+    uni_modal("<i class='fa fa-plus'></i> Create New RFQ", "RFQ/create_rfq_pr.php")
     })
             $('.view_data').click(function () {
     uni_modal("<i class='fa fa-info-circle'></i> RFQ's Details", "RFQ/view_rfq.php?rfq_ID=" + $(this).attr('data-id'), "")

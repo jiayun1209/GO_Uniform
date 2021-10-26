@@ -26,30 +26,30 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     }
 
     /* Firefox */
-    /*input[type=number] {
-    -moz-appearance: textfield;
+    input[type=number] {
+        -moz-appearance: textfield;
     }
     [name="tax_percentage"],[name="discount_percentage"]{
-            width:5vw;
-    }*/
+        width:5vw;
+    }
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?> </h3>
+        <h3 class="card-title"><?php echo isset($id) ? "Create RFQ" : "New RFQ" ?> </h3>
     </div>
     <div class="card-body">
-        <form action="" id="rfq-form">
+        <form action="" id="po-form">
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier</label>
-                    <select name="vendor_ID" id="supplier_id" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($supplier_id) ? "selected" : '' ?>></option>
+                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
+                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
-                        $supplier_qry = $conn->query("SELECT * FROM `vendor` order by `name` asc");
+                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : ''?>><?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -65,57 +65,59 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                         <colgroup>
                             <col width="5%">
                             <col width="5%">
-                            <col width="10%">
                             <col width="20%">
                             <col width="30%">
                             <col width="15%">
                             <col width="15%">
                         </colgroup>
                         <thead>
-                            <tr class="bg-navy disabled" style="">
-                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Material</th>
-                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Quantity</th>
-                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Price</th>
-                                <th class="bg-navy disabled text-light px-1 py-1 text-center">Sub Total</th>
-
+                            <tr class="bg-navy disabled">
+                                <th class="px-1 py-1 text-center"></th>
+                                <th class="px-1 py-1 text-center">Quantity</th>
+                                <th class="px-1 py-1 text-center">Item Name</th>
+                                <th class="px-1 py-1 text-center">Description</th>
+                                <th class="px-1 py-1 text-center">Unit Price</th>
+                                <th class="px-1 py-1 text-center">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             if (isset($rfq_ID)):
-                                $rfq_qry = $conn->query("SELECT r.*,p.quantity_request FROM `rfq` r inner join purchase_requisiton_details p on r.pr_ID = p.pr_ID  = '$rfq_ID' ");
+                                $rfq_qry = $conn->query("SELECT i.*,p.*,r.* FROM inventory i, purchase_requisiton_details p, rfq r where i.item_code = p.item_id AND p.pr_ID = r.pr_ID and p.`pr_ID` = '$pr_ID' ");
                                 echo $conn->error;
+                                $total = 0;
                                 while ($row = $rfq_qry->fetch_assoc()):
+                                    $total += ($row['quantity_request'] * $row['unit_price']);
                                     ?>
-                                    <tr class="rfq-item" data-id="">
+                                    <tr class="po-item" data-id="">
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
-                                        <td class="align-middle p-1 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="material_details" value="<?php echo $row['material_details'] ?>"/>
-                                        </td>
-                                        <td class="align-middle p-1 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]" value="<?php echo $row['quantity_request'] ?>"/>
+                                        <td class="align-middle p-0 text-center">
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="text" class="text-center w-100 border-0" name="unit[]" value="<?php echo $row['unit_price'] ?>"/>
+                                            <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+                                            <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
                                         </td>
-
-                                        <td class="align-middle p-1 text-center total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
+                                        <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
+                                        <td class="align-middle p-1">
+                                            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
+                                        </td>
+                                        <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
                                     </tr>
                                 <?php endwhile;
                             endif; ?>
                         </tbody>
-                         
                         <tfoot>
                             <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
-                           
+                                <th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
+                                <th class="p-1 text-right" id="sub_total">0</th>
                             </tr>
-
+                          
                             <tr>
-                                <th class="p-1 text-right" colspan="6">Total</th>
+                                <th class="p-1 text-right" colspan="5">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
                             </tr>
@@ -123,15 +125,15 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     </table>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="notes" class="control-label">Remarks</label>
-                            <textarea name="notes" id="notes" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($notes) ? $notes : '' ?></textarea>
+                            <label for="remarks" class="control-label">Remarks</label>
+                            <textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
                                 <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Denied</option>
+                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
                             </select>
                         </div>
                     </div>
@@ -140,24 +142,21 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
         </form>
     </div>
     <div class="card-footer">
-        <button class="btn btn-flat btn-primary" form="rfq-form">Save</button>
-        <a class="btn btn-flat btn-default" href="?page=rfq">Cancel</a>
+        <button class="btn btn-flat btn-primary" form="po-form">Save</button>
+        <a class="btn btn-flat btn-default" href="?page=purchase_orders">Cancel</a>
     </div>
 </div>
 <table class="d-none" id="item-clone">
-    <tr class="rfq-item" data-id="">
+    <tr class="po-item" data-id="">
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-0 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="quantity_request[]"/>
+            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
         <td class="align-middle p-1">
-            <input type="text" class="text-center w-100 border-0" name="unit[]"/>
-        </td>
-        <td class="align-middle p-1">
-            <input type="hidden" name="item_code[]">
-            <input type="text" class="text-center w-100 border-0 item_code" required/>
+            <input type="hidden" name="item_id[]">
+            <input type="text" class="text-center w-100 border-0 item_id" required/>
         </td>
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
@@ -172,8 +171,8 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     }
     function calculate() {
         var _total = 0
-        $('.rfq-item').each(function () {
-            var qty = $(this).find("[name='quantity_request[]']").val()
+        $('.po-item').each(function () {
+            var qty = $(this).find("[name='qty[]']").val()
             var unit_price = $(this).find("[name='unit_price[]']").val()
             var row_total = 0;
             if (qty > 0 && unit_price > 0) {
@@ -186,119 +185,119 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
             _price = _price.replace(/\,/gi, '')
             _total += parseFloat(_price)
         })
-        /*var discount_perc = 0
-         if($('[name="discount_percentage"]').val() > 0){
-         discount_perc = $('[name="discount_percentage"]').val()
-         }
-         var discount_amount = _total * (discount_perc/100);
-         $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-         var tax_perc = 0
-         if($('[name="tax_percentage"]').val() > 0){
-         tax_perc = $('[name="tax_percentage"]').val()
-         }
-         var tax_amount = _total * (tax_perc/100);
-         $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-         $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-         $('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))*/
+        var discount_perc = 0
+        if ($('[name="discount_percentage"]').val() > 0) {
+            discount_perc = $('[name="discount_percentage"]').val()
+        }
+        var discount_amount = _total * (discount_perc / 100);
+        $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
+        var tax_perc = 0
+        if ($('[name="tax_percentage"]').val() > 0) {
+            tax_perc = $('[name="tax_percentage"]').val()
+        }
+        var tax_amount = _total * (tax_perc / 100);
+        $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
+        $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
+        $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
     }
 
-    /*function _autocomplete(_item){
-     _item.find('.item_code').autocomplete({
-     source:function(request, response){
-     $.ajax({
-     url:_base_url_+"classes/Master.php?f=search_items",
-     method:'POST',
-     data:{q:request.term},
-     dataType:'json',
-     error:err=>{
-     console.log(err)
-     },
-     success:function(resp){
-     response(resp)
-     }
-     })
-     },
-     select:function(event,ui){
-     console.log(ui)
-     _item.find('input[name="item_code[]"]').val(ui.item.id)
-     _item.find('.item-description').text(ui.item.description)
-     }
-     })
-     }*/
-    /*$(document).ready(function(){
-     $('#add_row').click(function(){
-     var tr = $('#item-clone tr').clone()
-     $('#item-list tbody').append(tr)
-     _autocomplete(tr)
-     tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-     calculate()
-     })
-     $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
-     calculate()
-     })
-     })
-     if($('#item-list .po-item').length > 0){
-     $('#item-list .po-item').each(function(){
-     var tr = $(this)
-     _autocomplete(tr)
-     tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress',function(e){
-     calculate()
-     })
-     $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress',function(e){
-     calculate()
-     })
-     tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
-     })
-     }else{
-     $('#add_row').trigger('click')
-     }
-     $('.select2').select2({placeholder:"Please Select here",width:"relative"})
-     $('#po-form').submit(function(e){
-     e.preventDefault();
-     var _this = $(this)
-     $('.err-msg').remove();
-     $('[name="po_no"]').removeClass('border-danger')
-     if($('#item-list .po-item').length <= 0){
-     alert_toast(" Please add atleast 1 item on the list.",'warning')
-     return false;
-     }
-     start_loader();
-     $.ajax({
-     url:_base_url_+"classes/Master.php?f=save_po",
-     data: new FormData($(this)[0]),
-     cache: false,
-     contentType: false,
-     processData: false,
-     method: 'POST',
-     type: 'POST',
-     dataType: 'json',
-     error:err=>{
-     console.log(err)
-     alert_toast("An error occured",'error');
-     end_loader();
-     },
-     success:function(resp){
-     if(typeof resp =='object' && resp.status == 'success'){
-     location.href = "./?page=purchase_orders/view_po&id="+resp.id;
-     }else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
-     var el = $('<div>')
-     el.addClass("alert alert-danger err-msg").text(resp.msg)
-     _this.prepend(el)
-     el.show('slow')
-     $("html, body").animate({ scrollTop: 0 }, "fast");
-     end_loader()
-     if(resp.status == 'po_failed'){
-     $('[name="po_no"]').addClass('border-danger').focus()
-     }
-     }else{
-     alert_toast("An error occured",'error');
-     end_loader();
-     console.log(resp)
-     }
-     }
-     })
-     })
-     
-     
-     })*/
+    function _autocomplete(_item) {
+        _item.find('.item_id').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: _base_url_ + "classes/Master.php?f=search_items",
+                    method: 'POST',
+                    data: {q: request.term},
+                    dataType: 'json',
+                    error: err => {
+                        console.log(err)
+                    },
+                    success: function (resp) {
+                        response(resp)
+                    }
+                })
+            },
+            select: function (event, ui) {
+                console.log(ui)
+                _item.find('input[name="item_id[]"]').val(ui.item.id)
+                _item.find('.item-description').text(ui.item.description)
+            }
+        })
+    }
+    $(document).ready(function () {
+        $('#add_row').click(function () {
+            var tr = $('#item-clone tr').clone()
+            $('#item-list tbody').append(tr)
+            _autocomplete(tr)
+            tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+                calculate()
+            })
+            $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
+                calculate()
+            })
+        })
+        if ($('#item-list .po-item').length > 0) {
+            $('#item-list .po-item').each(function () {
+                var tr = $(this)
+                _autocomplete(tr)
+                tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+                    calculate()
+                })
+                $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
+                    calculate()
+                })
+                tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
+            })
+        } else {
+            $('#add_row').trigger('click')
+        }
+        $('.select2').select2({placeholder: "Please Select here", width: "relative"})
+        $('#po-form').submit(function (e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            $('[name="rfq_ID"]').removeClass('border-danger')
+            if ($('#item-list .po-item').length <= 0) {
+                alert_toast(" Please add at least 1 item on the list.", 'warning')
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=save_rfq",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                }
+               /* success: function (resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        location.href = "./?page=RFQ/view_rfq&rfq_ID=" + resp.id;
+                    } else if ((resp.status == 'failed' || resp.status == 'rfq_failed') && !!resp.msg) {
+                        var el = $('<div>')
+                        el.addClass("alert alert-danger err-msg").text(resp.msg)
+                        _this.prepend(el)
+                        el.show('slow')
+                        $("html, body").animate({scrollTop: 0}, "fast");
+                        end_loader()
+                        if (resp.status == 'rfq_failed') {
+                            $('[name="rfq_ID"]').addClass('border-danger').focus()
+                        }
+                    } else {
+                        alert_toast("An error occured", 'error');
+                        end_loader();
+                        console.log(resp)
+                    }
+                }*/
+            })
+        })
+
+
+    })
 </script>
