@@ -206,7 +206,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _item.find('.item_id').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: base_url + "classes/Master.php?f=search_items",
+                    url: _base_url_ + "classes/Master.php?f=search_items",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -264,7 +264,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: base_url + "classes/Master.php?f=save_rfq",
+                url: _base_url_ + "classes/Master.php?f=save_rfq",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

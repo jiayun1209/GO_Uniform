@@ -104,7 +104,7 @@
 	function delete_rent($id){
 		start_loader();
 		$.ajax({
-			url:base_url+"classes/Master.php?f=delete_rfq",
+			url:_base_url_+"classes/Master.php?f=delete_rfq",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",
@@ -126,7 +126,7 @@
 	/*function renew_rent($id){
 		start_loader();
 		$.ajax({
-			url:base_url+"classes/Master.php?f=renew_rent",
+			url:_base_url_+"classes/Master.php?f=renew_rent",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

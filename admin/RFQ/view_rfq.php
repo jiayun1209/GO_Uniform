@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><b>Vendor</b></p>
                 <?php 
-                $sup_qry = $conn->query("SELECT r., s. FROM `quotation` r,`vendor` s where r.vendor_ID  = s.vendor_ID");
+                $sup_qry = $conn->query("SELECT r.*, s.* FROM `quotation` r,`vendor` s where r.vendor_ID  = s.vendor_ID");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
