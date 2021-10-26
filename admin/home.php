@@ -19,7 +19,7 @@
         </div>
         <!-- /.info-box -->
     </div>
-    <div class="col-6 col-sm-4 col-md-3">
+    <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box">
             <span class="info-box-icon bg-gradient-lightblue elevation-1"><i class="fas fa-comments-dollar"></i></span>
 
