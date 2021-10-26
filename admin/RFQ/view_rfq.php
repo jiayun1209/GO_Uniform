@@ -42,8 +42,7 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
     <div class="card-header">
         <h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?> </h3>
         <div class="card-tools">
-            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&rfq_ID=<?php echo $id ?>">Edit</a>
+            <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button> 
             <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
         </div>
     </div>
@@ -63,15 +62,17 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
         </div>
         <div class="row mb-2">
             <div class="col-6">
+                <br>
                 <p class="m-0"><b>Vendor</b></p>
                 <?php
-                $vendor_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$vendor_ID}'");
+                $vendor_qry = $conn->query("SELECT v.*,r.* FROM `rfq` r inner join vendor v on r.vendor_ID = v.vendor_ID where r.vendor_ID = '{$vendor_ID}'");
                 $vendor = $vendor_qry->fetch_array();
                 ?>
                 <div>
                     <p class="m-0"><?php echo $vendor['name'] ?></p>
                     <p class="m-0"><?php echo $vendor['company_code'] ?></p>
-                    <p class="m-0"><?php echo $vendor['email'] ?></p>                 
+                    <p class="m-0"><?php echo $vendor['email'] ?></p>    
+                    <p class="m-0"><?php echo $vendor['vendor_address'] ?></p> 
                 </div>
             </div>
             <div class="col-6 row">
@@ -83,18 +84,25 @@ if (isset($_GET['rfq_ID']) && $_GET['rfq_ID'] > 0) {
                     <p  class="m-0"><b>Date Created</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($date_created)) ?></b></p>
                 </div>
+                 <div class="col-6">
+                    <p  class="m-0"><b>Deadline</b></p>
+                    <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>
+                </div>
+                 <div class="col-6">
+                    <p  class="m-0"><b>Delivery Date</b></p>
+                    <p><b><?php echo date("Y-m-d", strtotime($delivery_date)) ?></b></p>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
                     <colgroup>
-                        <col width="10%">
-                        <col width="10%">
-                        <col width="20%">
-                        <col width="30%">
-                        <col width="15%">
-                        <col width="15%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="20%">                 
+                            <col width="15%">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled" style="">
