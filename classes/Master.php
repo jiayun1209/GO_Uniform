@@ -80,37 +80,115 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
-    function save_rfq() {
+    function save_con() {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('rfq_ID'))) {
+            if (!in_array($k, array('vendor_ID'))) {
                 $v = addslashes(trim($v));
                 if (!empty($data))
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `rfq` where `pr_ID` = '{$pr_ID}' " . (!empty($rfq_ID) ? " and rfq_ID != {$rfq_ID} " : "") . " ")->num_rows;
+        $check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' " . (!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "RFQ already exist.";
+            $resp['msg'] = "Supplier already exist.";
             return json_encode($resp);
             exit;
         }
-        if (empty($rfq_ID)) {
-            $sql = "INSERT INTO `rfq` set {$data} ";
+        if (empty($vendor_ID)) {
+            $sql = "INSERT INTO `vendor` set {$data} ";
             $save = $this->conn->query($sql);
         } else {
-            $sql = "UPDATE `rfq` set {$data} where rfq_ID = '{$rfq_ID}' ";
+            $sql = "UPDATE `vendor` set {$data} where vendor_ID = '{$vendor_ID}' ";
             $save = $this->conn->query($sql);
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($rfq_ID))
-                $this->settings->set_flashdata('success', "New RFQ successfully saved.");
+            if (empty($vendor_ID))
+                $this->settings->set_flashdata('success', "New Supplier successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Supplier successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_con() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `contract` where contract_ID = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "This contract successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+
+    function save_rfq() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (in_array($k, array('discount_amount', 'tax_amount')))
+                $v = str_replace(',', '', $v);
+            if (!in_array($k, array('id', 'q_ID')) && !is_array($_POST[$k])) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        if (!empty($q_ID)) {
+            $check = $this->conn->query("SELECT * FROM `quotation` where `q_ID` = '{$q_ID}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+            if ($this->capture_err())
+                return $this->capture_err();
+            if ($check > 0) {
+                $resp['status'] = 'po_failed';
+                $resp['msg'] = "RFQ number already exist.";
+                return json_encode($resp);
+                exit;
+            }
+        } else {
+            $q_ID = "";
+            while (true) {
+                $q_ID = "20RFQ" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $check = $this->conn->query("SELECT * FROM `quotation` where `q_ID` = '{$q_ID}'")->num_rows;
+                if ($check <= 0)
+                    break;
+            }
+        }
+        $data .= ", q_ID = '{$q_ID}' ";
+
+        if (empty($id)) {
+            $sql = "INSERT INTO `quotation` set {$data} ";
+        } else {
+            $sql = "UPDATE `quotation` set {$data} where id = '{$id}' ";
+        }
+        $save = $this->conn->query($sql);
+        if ($save) {
+            $resp['status'] = 'success';
+            $rfq_no = empty($id) ? $this->conn->insert_id : $id;
+            $resp['id'] = $rfq_no;
+            $data = "";
+            foreach ($item_id as $k => $v) {
+                if (!empty($data))
+                    $data .= ",";
+                $data .= "('{$rfq_no}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
+            }
+            if (!empty($data)) {
+                $this->conn->query("DELETE FROM `rfq` where rfq_no = '{$rfq_no}'");
+                $save = $this->conn->query("INSERT INTO `rfq` (`rfq_no`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
+            }
+            if (empty($id))
+                $this->settings->set_flashdata('success', "RFQ successfully saved.");
             else
                 $this->settings->set_flashdata('success', "RFQ successfully updated.");
         } else {
@@ -122,10 +200,10 @@ Class Master extends DBConnection {
 
     function delete_rfq() {
         extract($_POST);
-        $del = $this->conn->query("DELETE FROM `rfq` where rfq_ID = '{$id}'");
+        $del = $this->conn->query("DELETE FROM `quotation` where id = '{$id}'");
         if ($del) {
             $resp['status'] = 'success';
-            $this->settings->set_flashdata('success', "This RFQ successfully deleted.");
+            $this->settings->set_flashdata('success', "RFQ successfully deleted.");
         } else {
             $resp['status'] = 'failed';
             $resp['error'] = $this->conn->error;
@@ -475,8 +553,14 @@ switch ($action) {
     case 'save_rfq':
         echo $Master->save_rfq();
         break;
+    case 'save_con':
+        echo $Master->save_con();
+        break;
     case 'delete_rfq':
         echo $Master->delete_rfq();
+        break;
+    case 'delete_con':
+        echo $Master->delete_con();
         break;
     case 'save_item':
         echo $Master->save_item();

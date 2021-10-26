@@ -51,7 +51,7 @@
                      <?php endif; ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
-                        <i class="nav-icon fas fa-boxes"></i>
+                        <i class="nav-icon fas fa-book-open"></i>
                         <p>
                           Catalog
                         </p>

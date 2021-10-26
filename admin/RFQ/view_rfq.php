@@ -5,7 +5,7 @@
 <?php endif; ?>
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT * from `rfq` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `quotation` where id = {$_GET['id']} ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -58,27 +58,28 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </div>
         <div class="col-6">
             <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-            <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+            <h2 class="text-center"><b>REQUEST FOR QUOTATION</b></h2>
         </div>
         </div>
         <div class="row mb-2">
             <div class="col-6">
                 <p class="m-0"><b>Vendor</b></p>
                 <?php 
-                $sup_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$vendor_ID}'");
+                $sup_qry = $conn->query("SELECT r., s. FROM `quotation` r,`vendor` s where r.vendor_ID  = s.vendor_ID");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
                     <p class="m-0"><?php echo $supplier['name'] ?></p>
                     <p class="m-0"><?php echo $supplier['company_code'] ?></p>                   
-                    <p class="m-0"><?php echo $supplier['email'] ?></p>                   
+                    <p class="m-0"><?php echo $supplier['email'] ?></p> 
+                    <p class="m-0"><?php echo $supplier['vendor_address'] ?></p> 
                 </div>
             </div>
-            </div>
+            
             <div class="col-6 row">
                 <div class="col-6">
                     <p  class="m-0"><b>RFQ. #:</b></p>
-                    <p><b><?php echo $rfq_ID ?></b></p>
+                    <p><b><?php echo $q_ID ?></b></p>
                 </div>
                 <div class="col-6">
                     <p  class="m-0"><b>Date Created</b></p>
@@ -101,8 +102,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <col width="20%">
                         <col width="20%">
                         <col width="20%">
-                        <col width="20%">                 
-                        <col width="15%">
+                        <col width="20%">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled" style="">
@@ -116,16 +116,16 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <tbody>
                         <?php
                         if (isset($id)):
-                            $rfq_qry = $conn->query("SELECT r.,i. FROM `rfq` r inner join inventory i on r.item_code = i.id where r.`id` = '$id'");
+                            $rfq_qry = $conn->query("SELECT o.*,i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                             $total = 0;
                             while ($row = $rfq_qry->fetch_assoc()):
-                                $total += ($row['quantity_request'] * $row['unit_price']);
+                            $total += ($row['quantity'] * $row['unit_price']);
                                 ?>
                                 <tr class=rfq-item" data-id="">
                                     <td class="align-middle p-2 text-center"><?php echo $row['name'] ?></td>
-                                    <td class="align-middle p-2 text-center"><?php echo $row['quantity_request'] ?></td>                               
+                                    <td class="align-middle p-2 text-center"><?php echo $row['quantity'] ?></td>                               
                                     <td class="align-middle p-2 text-center"><?php echo $row['unit_price'] ?></td>
-                                    <td class="align-middle p-2 text-center total-price"><?php echo number_format($row['quantity_request'] * $row['unit_price']) ?></td>
+                                    <td class="align-middle p-2 text-center total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
 
                                 </tr>
                                 <?php
@@ -136,7 +136,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <tfoot>                       
                         <tr>
                         <tr>
-                            <th class="p-1 text-right" colspan="5">Total</th>
+                            <th class="p-1 text-right" colspan="3">Total</th>
                             <th class="p-1 text-right" id="total"><?php echo number_format($total) ?></th>
                         </tr>
                         </tr>
@@ -145,7 +145,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <div class="row">
                     <div class="col-6">
                         <label for="notes" class="control-label">Notes</label>
-                        <p><?php echo isset($notes) ? $notes : '' ?></p>
+                        <p><?php echo isset($remarks) ? $remarks : '' ?></p>
                     </div>
                     <div class="col-6">
                         <label for="status" class="control-label">Status</label>
