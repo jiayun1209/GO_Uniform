@@ -22,7 +22,7 @@
                             <thead>
                                     <tr class="bg-navy disabled">
                                             <th>No.</th>
-                                            <th>Report</th>
+                                            <th>Report Type</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>

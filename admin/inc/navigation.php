@@ -85,7 +85,7 @@
                       </a>
                     </li>
                       <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-purchase_orders">
+                      <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-contract_mgm">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p>
                           Contract Management
@@ -101,10 +101,10 @@
                       </a>
                     </li>
                     
-                    <li class="nav-header">Report</li>
+                    <li class="nav-header">Reporting</li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=report/report_list" class="nav-link nav-user_list">
-                        <i class="nav-icon fas fa-file"></i>
+                        <i class="nav-icon fas fa-folder-open"></i>
                         <p>
                           Report List
                         </p>
