@@ -39,7 +39,7 @@
                         </p>
                       </a>
                     </li>
-                    <?php if($_settings->userdata('type') == 3): ?>
+                    <?php if($_settings->userdata('type') == 4): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
                         <i class="nav-icon fas fa-file-invoice"></i>

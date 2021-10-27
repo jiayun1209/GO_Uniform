@@ -159,7 +159,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                                 echo "<span class='py-2 px-4 btn-flat btn-success'>Approved</span>";
                                 break;
                             case 2:
-                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Denied</span>";
+                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Rejected</span>";
                                 break;
                             default:
                                 echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";
