@@ -41,8 +41,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<label for="type">Login Type</label>
 					<select name="type" id="type" class="custom-select">
 						<option value="1" <?php echo isset($meta['type']) && $meta['type'] == 1 ? 'selected' : '' ?>>Administrator</option>
-						<option value="2" <?php echo isset($meta['type']) && $meta['type'] == 2 ? 'selected' : '' ?>>Manager</option>
-                                                <option value="3" <?php echo isset($meta['type']) && $meta['type'] == 3 ? 'selected' : '' ?>>Staff</option>
+						<option value="2" <?php echo isset($meta['type']) && $meta['type'] == 2 ? 'selected' : '' ?>>Staff</option>
 					</select>
 				</div>
 				<div class="form-group col-6">

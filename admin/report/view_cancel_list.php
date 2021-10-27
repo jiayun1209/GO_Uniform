@@ -6,7 +6,7 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
 
-            <h3 class="card-title">List of Purchase Order Details</h3>
+            <h3 class="card-title">List of Cancelled Purchase Order</h3>
             <div class="card-tools">
             
             <a class="btn btn-sm btn-flat btn-default" href="?page=report/report_list">Back</a>
@@ -19,7 +19,8 @@
                             <colgroup>
                                 <col width="5">
                                 <col width="15">
-                                <col width="55%">
+                                <col width="20%">
+                                <col width="35%">
                                 <col width="15%">
                                 <col width="10%">
                             </colgroup>
@@ -28,6 +29,7 @@
                                     <th>NO.</th>
                                     <th>PO. No</th>
                                     <th>Supplier Name</th>
+                                    <th>Cancel Reason</th>
                                     <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
@@ -42,9 +44,10 @@
                                         <td class="text-center"><?php echo $i++; ?></td>
                                         <td class=""><?php echo $row['po_no'] ?></td>
                                         <td class=""><?php echo $row['sname'] ?></td>
+                                        <td class=""><?php echo $row[''] ?></td>
                                         <td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
                                         <td align="center">
-                                        <a class="dropdown-item" href=  "?page=report/view_details&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                        <a class="dropdown-item" href=  "?page=report/view_cancel&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
                                         
                                     </tr>
                                 <?php endwhile; ?>

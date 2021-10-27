@@ -147,7 +147,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                 </table>
                 <div class="row">
                     <div class="col-6">
-                        <label for="notes" class="control-label">Notes</label>
+                        <label for="notes" class="control-label">Remarks</label>
                         <p><?php echo isset($notes) ? $notes : '' ?></p>
                     </div>
                     <div class="col-6">
@@ -159,7 +159,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
                                 echo "<span class='py-2 px-4 btn-flat btn-success'>Approved</span>";
                                 break;
                             case 2:
-                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Denied</span>";
+                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Rejected</span>";
                                 break;
                             default:
                                 echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";

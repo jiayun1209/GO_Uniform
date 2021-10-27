@@ -43,7 +43,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Cancelled Purchase Order Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/report_list">View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_cancel_list">View</a>        
                                 </td>
                             </tr>
 
