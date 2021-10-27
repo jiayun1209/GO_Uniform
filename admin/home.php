@@ -65,7 +65,7 @@
                 <span class="info-box-text">Pending PO</span>
                 <span class="info-box-number">
                     <?php
-                    $po_pending = $conn->query("SELECT * FROM purchase_order where `status` =4 ")->num_rows;
+                    $po_pending = $conn->query("SELECT * FROM purchase_order where `status` =0 ")->num_rows;
                     echo number_format($po_pending);
                     ?>
                 </span>
@@ -105,6 +105,23 @@
                     <?php
                     $po = $conn->query("SELECT * FROM purchase_order where `status` =2 ")->num_rows;
                     echo number_format($po);
+                    ?>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon text-light bg-gradient-warning elevation-1"><i class="fas fa-file-invoice"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Cancelled PO</span>
+                <span class="info-box-number">
+                    <?php
+                    $po_cancel = $conn->query("SELECT * FROM purchase_order where `status` =3 ")->num_rows;
+                    echo number_format($po_cancel);
                     ?>
                 </span>
             </div>

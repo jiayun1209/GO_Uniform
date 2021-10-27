@@ -69,7 +69,7 @@
                       <a href="<?php echo base_url ?>admin/?page=purchase_orders" class="nav-link nav-purchase_orders">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
-                          Purchase Order
+                          PO Management
                         </p>
                       </a>
                     </li>

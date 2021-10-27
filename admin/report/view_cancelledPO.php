@@ -40,7 +40,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Purchase Order Details Report</h3>
+        <h3 class="card-title">Cancelled Purchase Order Details Report</h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report/report_list">Back</a>
@@ -61,6 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 
             </div>
         </div>
+        
         <div class="card-body">
 		<div class="container-fluid">
         <div class="container-fluid">
@@ -90,7 +91,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
+						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where `status` =3 order by unix_timestamp(po.date_updated)");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];

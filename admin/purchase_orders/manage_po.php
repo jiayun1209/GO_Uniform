@@ -134,17 +134,23 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 					<div class="row">
 						<div class="col-md-6">
 							<label for="remarks" class="control-label">Remarks</label>
-							<textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
+							<textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
 						</div>
 						<div class="col-md-6">
 							<label for="status" class="control-label">Status</label>
-							<select name="status" id="status" class="form-control form-control-sm rounded-0">
+							<select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
 								<option value="0" <?php echo isset($status) && $status == 0 ? 'selected': '' ?>>Pending</option>
 								<option value="1" <?php echo isset($status) && $status == 1 ? 'selected': '' ?>>Approved</option>
 								<option value="2" <?php echo isset($status) && $status == 2 ? 'selected': '' ?>>Rejected</option>
                                                                 <option value="3" <?php echo isset($status) && $status == 3 ? 'selected': '' ?>>Cancelled</option>
 							</select>
+                                                        <br>
+                                                        <label for="cancel_reason" class="control-label">Cancellation Reason</label>
+							<textarea name="cancel_reason" disabled id="cancel_reason" cols="10" rows="2" class="form-control rounded-0"><?php echo isset($cancel_reason) ? $cancel_reason : '' ?></textarea>
+                                                        <small><i>Please enter relevant cancellation reason here.</i></small>
 						</div>
+                                            
+                                            
 					</div>
 				</div>
 			</div>
@@ -233,6 +239,14 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 			}
 		})
 	}
+        function displayCancellation(){
+            var status = document.getElementById("status");
+            if (status.value == "3"){
+                document.getElementById("cancel_reason").disabled=false;
+            }else{
+                document.getElementById("cancel_reason").disabled=true;
+            }
+        }
 	$(document).ready(function(){
 		$('#add_row').click(function(){
 			var tr = $('#item-clone tr').clone()

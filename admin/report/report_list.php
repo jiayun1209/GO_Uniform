@@ -31,19 +31,18 @@
                             $i = 1;
                             ?>
                             <tr>
-                                    <td class="text-center"><?php echo $i++; ?></td>
-                                    <td class="">Purchase Order Details Report</td>
-                                    <td align="center">
-
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_details_list">View</a>
-                                    </td>
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td class="">Purchase Order Details Report</td>
+                                <td align="center">
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_details">View</a>
+                                </td>
                             </tr>
 
                             <tr>
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Cancelled Purchase Order Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_cancel_list">View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_cancelledPO">View</a>        
                                 </td>
                             </tr>
 

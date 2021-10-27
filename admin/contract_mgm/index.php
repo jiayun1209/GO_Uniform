@@ -41,7 +41,7 @@
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT c.,v.,s.* FROM `contract` c,vendor v, staff s where c.vendor_ID = v.vendor_ID and c.staff_ID = s.id ");
+                        $qry = $conn->query("SELECT c.*,v.*,s.* FROM `contract` c,vendor v, staff s where c.vendor_ID = v.vendor_ID and c.id = s.id ");
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
