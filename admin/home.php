@@ -122,7 +122,7 @@
             <span class="info-box-text">Approved RFQ</span>
             <span class="info-box-number">
                 <?php
-                $rfq_appoved = $conn->query("SELECT * FROM rfq where `status` =1 ")->num_rows;
+                $rfq_appoved = $conn->query("SELECT * FROM quotation where `status` =1 ")->num_rows;
                 echo number_format($rfq_appoved);
                 ?>
             </span>
@@ -139,7 +139,7 @@
             <span class="info-box-text">Rejected RFQ</span>
             <span class="info-box-number">
                 <?php
-                $rfq = $conn->query("SELECT * FROM rfq where `status` =2 ")->num_rows;
+                $rfq = $conn->query("SELECT * FROM quotation where `status` =2 ")->num_rows;
                 echo number_format($rfq);
                 ?>
             </span>
