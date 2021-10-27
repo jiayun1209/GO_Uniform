@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if(isset($_GET['id']) && $_GET['id'] > 0){
-    $qry = $conn->query("SELECT * from `item_list` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `inventory` where id = '{$_GET['id']}' ");
     if($qry->num_rows > 0){
         foreach($qry->fetch_assoc() as $k => $v){
             $$k=stripslashes($v);
@@ -24,12 +24,24 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
      <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
     <div class="container-fluid">
         <div class="form-group">
+            <label for="item_code" class="control-label">Item Code</label>
+            <input type="text" name="item_code" id="item_code" class="form-control rounded-0" value="<?php echo isset($item_code) ? $item_code :"" ?>" required>
+        </div>
+        <div class="form-group">
             <label for="name" class="control-label">Item Name</label>
             <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :"" ?>" required>
         </div>
         <div class="form-group">
             <label for="description" class="control-label">Description</label>
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
+        </div>
+        <div class="form-group">
+            <label for="quantity" class="control-label">Quantity</label>
+            <input type="text" name="quantity" id="quantity" class="form-control rounded-0" value="<?php echo isset($quantity) ? $quantity :"" ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="price" class="control-label">Price</label>
+            <input type="text" name="price" id="price" class="form-control rounded-0" value="<?php echo isset($price) ? $price :"" ?>" required>
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Status</label>

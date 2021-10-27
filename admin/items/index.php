@@ -17,17 +17,23 @@
 				<colgroup>
 					<col width="5%">
 					<col width="15%">
-					<col width="25%">
-					<col width="25%">
 					<col width="15%">
 					<col width="15%">
+					<col width="15%">
+					<col width="5%">
+                                        <col width="10%">
+                                        <col width="10%">
+                                        <col width="15%">
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
 						<th>#</th>
 						<th>Date Created</th>
-						<th>Item Name</th>
+						<th>Item Code</th>
+                                                <th>Item Name</th>
 						<th>Description</th>
+                                                <th>Qty</th>
+                                                <th>Price</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -35,15 +41,18 @@
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `inventory` order by (`item_name`) asc ");
+					$qry = $conn->query("SELECT * from `inventory` order by (`name`) asc ");
 					while($row = $qry->fetch_assoc()):
 						$row['description'] = html_entity_decode($row['description']);
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
-							<td><?php echo date("Y-m-d H:i",strtotime($row['item_code'])) ?></td>
-							<td><?php echo $row['item_name'] ?></td>
+							<td><?php echo date("Y-m-d H:i",strtotime($row['id'])) ?></td>
+                                                        <td><?php echo $row['item_code'] ?></td>
+							<td><?php echo $row['name'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
+                                                        <td><?php echo $row['quantity'] ?></td>
+                                                        <td><?php echo $row['price'] ?></td>
 							<td class="text-center">
 								<?php if($row['status'] == 1): ?>
 									<span class="badge badge-success">Active</span>

@@ -135,7 +135,7 @@ Class Master extends DBConnection {
 			if(!empty($data)) $data .=",";
 				$data .= " `description`='".addslashes(htmlentities($description))."' ";
 		}
-		$check = $this->conn->query("SELECT * FROM `item_list` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
+		$check = $this->conn->query("SELECT * FROM `inventory` where `name` = '{$name}' ".(!empty($id) ? " and id != {$id} " : "")." ")->num_rows;
 		if($this->capture_err())
 			return $this->capture_err();
 		if($check > 0){
@@ -145,9 +145,9 @@ Class Master extends DBConnection {
 			exit;
 		}
 		if(empty($id)){
-			$sql = "INSERT INTO `item_list` set {$data} ";
+			$sql = "INSERT INTO `inventory` set {$data} ";
 		}else{
-			$sql = "UPDATE `item_list` set {$data} where id = '{$id}' ";
+			$sql = "UPDATE `inventory` set {$data} where id = '{$id}' ";
 		}
 		$save = $this->conn->query($sql);
 		if($save){
@@ -164,7 +164,7 @@ Class Master extends DBConnection {
 	}
 	function delete_item(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `item_list` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `inventory` where id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"item successfully deleted.");
@@ -177,7 +177,7 @@ Class Master extends DBConnection {
 	}
 	function search_items(){
 		extract($_POST);
-		$qry = $this->conn->query("SELECT * FROM item_list where `name` LIKE '%{$q}%'");
+		$qry = $this->conn->query("SELECT * FROM inventory where `name` LIKE '%{$q}%'");
 		$data = array();
 		while($row = $qry->fetch_assoc()){
 			$data[] = array("label"=>$row['name'],"id"=>$row['id'],"description"=>$row['description']);
@@ -197,7 +197,7 @@ Class Master extends DBConnection {
 			}
 		}
 		if(!empty($po_no)){
-			$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
+			$check = $this->conn->query("SELECT * FROM `purchase_order` where `po_no` = '{$po_no}' ".($id > 0 ? " and id != '{$id}' ":""))->num_rows;
 			if($this->capture_err())
 				return $this->capture_err();
 			if($check > 0){
@@ -210,7 +210,7 @@ Class Master extends DBConnection {
 			$po_no ="";
 			while(true){
 				$po_no = "PO-".(sprintf("%'.011d", mt_rand(1,99999999999)));
-				$check = $this->conn->query("SELECT * FROM `po_list` where `po_no` = '{$po_no}'")->num_rows;
+				$check = $this->conn->query("SELECT * FROM `purchase_order` where `po_no` = '{$po_no}'")->num_rows;
 				if($check <= 0)
 				break;
 			}
@@ -218,9 +218,9 @@ Class Master extends DBConnection {
 		$data .= ", po_no = '{$po_no}' ";
 
 		if(empty($id)){
-			$sql = "INSERT INTO `po_list` set {$data} ";
+			$sql = "INSERT INTO `purchase_order` set {$data} ";
 		}else{
-			$sql = "UPDATE `po_list` set {$data} where id = '{$id}' ";
+			$sql = "UPDATE `purchase_order` set {$data} where id = '{$id}' ";
 		}
 		$save = $this->conn->query($sql);
 		if($save){
@@ -230,11 +230,11 @@ Class Master extends DBConnection {
 			$data = "";
 			foreach($item_id as $k =>$v){
 				if(!empty($data)) $data .=",";
-				$data .= "('{$po_id}','{$v}','{$unit[$k]}','{$unit_price[$k]}','{$qty[$k]}')";
+				$data .= "('{$po_id}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
 			}
 			if(!empty($data)){
-				$this->conn->query("DELETE FROM `order_items` where po_id = '{$po_id}'");
-				$save = $this->conn->query("INSERT INTO `order_items` (`po_id`,`item_id`,`unit`,`unit_price`,`quantity`) VALUES {$data} ");
+				$this->conn->query("DELETE FROM `purchase_order_details` where po_id = '{$po_id}'");
+				$save = $this->conn->query("INSERT INTO `purchase_order_details` (`po_id`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
 			}
 			if(empty($id))
 				$this->settings->set_flashdata('success',"Purchase Order successfully saved.");
@@ -248,7 +248,7 @@ Class Master extends DBConnection {
 	}
 	function delete_po(){
 		extract($_POST);
-		$del = $this->conn->query("DELETE FROM `po_list` where id = '{$id}'");
+		$del = $this->conn->query("DELETE FROM `purchase_order` where id = '{$id}'");
 		if($del){
 			$resp['status'] = 'success';
 			$this->settings->set_flashdata('success',"Purchase Order successfully deleted.");

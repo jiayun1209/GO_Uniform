@@ -42,7 +42,7 @@
 						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-							$row['total_amount'] = $conn->query("SELECT sum(quantity * net_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
+							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
@@ -58,7 +58,7 @@
 											echo '<span class="badge badge-success">Approved</span>';
 											break;
 										case '2':
-											echo '<span class="badge badge-danger">Denied</span>';
+											echo '<span class="badge badge-danger">Rejected</span>';
 											break;
 										default:
 											echo '<span class="badge badge-secondary">Pending</span>';
@@ -90,7 +90,7 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this rent permanently?","delete_rent",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this PO permanently?","delete_rent",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
 			uni_modal("Reservaton Details","purchase_orders/view_details.php?id="+$(this).attr('data-id'),'mid-large')
