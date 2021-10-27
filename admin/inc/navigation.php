@@ -50,6 +50,14 @@
                     </li>
                      <?php endif; ?>
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-catalog">
+                        <i class="nav-icon fas fa-people-carry"></i>
+                        <p>
+                          Subcontractor
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
                         <i class="nav-icon fas fa-book-open"></i>
                         <p>
@@ -57,6 +65,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
