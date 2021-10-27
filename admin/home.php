@@ -20,25 +20,6 @@
         <!-- /.info-box -->
     </div>
     <div class="col-12 col-sm-6 col-md-3">
-        <div class="info-box">
-            <span class="info-box-icon bg-gradient-lightblue elevation-1"><i class="fas fa-comments-dollar"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">Total RFQ</span>
-                <span class="info-box-number">
-                    <?php
-                    $rfq = $conn->query("SELECT * FROM rfq")->num_rows;
-                    echo number_format($rfq);
-                    ?>
-                    <?php ?>
-                </span>
-            </div>
-            <!-- /.info-box-content -->
-        </div>
-        <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-    <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
             <span class="info-box-icon bg-gradient-success elevation-1"><i class="fas fa-boxes"></i></span>
 
@@ -130,7 +111,43 @@
         <!-- /.info-box -->
     </div>
     <!-- /.col -->
+     <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-gradient-lightblue elevation-1"><i class="fas fa-comments-dollar"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Total RFQ</span>
+                <span class="info-box-number">
+                    <?php
+                    $rfq = $conn->query("SELECT * FROM rfq")->num_rows;
+                    echo number_format($rfq);
+                    ?>
+                    <?php ?>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
  <?php if($_settings->userdata('type') == 2): ?>
+    <div class="col-12 col-sm-6 col-md-3">
+    <div class="info-box mb-3">
+        <span class="info-box-icon bg-gradient-gray elevation-1"><i class="fas  fa-comments-dollar"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">Pending RFQ</span>
+            <span class="info-box-number">
+                <?php
+                $rfq_pending = $conn->query("SELECT * FROM quotation where `status` = 0 ")->num_rows;
+                echo number_format($rfq_pending);
+                ?>
+            </span>
+        </div>
+        <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+</div>
 <div class="col-12 col-sm-6 col-md-3">
     <div class="info-box mb-3">
         <span class="info-box-icon bg-gradient-primary elevation-1"><i class="fas  fa-comments-dollar"></i></span>

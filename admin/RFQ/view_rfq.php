@@ -71,8 +71,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <div>
                     <p class="m-0"><?php echo $supplier['name'] ?></p>
                     <p class="m-0"><?php echo $supplier['company_code'] ?></p>                   
-                    <p class="m-0"><?php echo $supplier['email'] ?></p> 
-                    <p class="m-0"><?php echo $supplier['vendor_address'] ?></p> 
+                    <p class="m-0"><?php echo $supplier['email'] ?></p>
                 </div>
             </div>
             

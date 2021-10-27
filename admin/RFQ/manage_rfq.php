@@ -58,6 +58,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="text" class="form-control form-control-sm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
+                 <div class="col-6">
+                    <p  class="m-0"><b>Deadline</b></p>
+                     <input type="date" class="text-center w-100 border-0" value="<?php echo isset($deadline) ? $deadline : '' ?>"/>                 
+                </div>
+                <div class="col-6">
+                    <p  class="m-0"><b>Delivery Date</b></p>
+                    <input type="date"  class="text-center w-100 border-0" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>"/>
+                    
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -71,13 +80,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <col width="15%">
                         </colgroup>
                         <thead>
+                        <br>
                             <tr class="bg-navy disabled">
                                 <th class="px-1 py-1 text-center"></th>
                                 <th class="px-1 py-1 text-center">Qty</th>
                                 <th class="px-1 py-1 text-center">Item</th>
                                 <th class="px-1 py-1 text-center">Description</th>
-                                <th class="px-1 py-1 text-center">Sub Total Price</th>
-                                <th class="px-1 py-1 text-center">Total</th>
+                                <th class="px-1 py-1 text-center">Unit Price</th>
+                                <th class="px-1 py-1 text-center">Sub Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -167,6 +177,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
+    
     function rem_item(_this) {
         _this.closest('tr').remove()
     }
