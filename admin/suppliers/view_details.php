@@ -32,8 +32,17 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID']!= '') {
             <dt class="col-md-4">Email</dt>
             <dd class="col-md-8">: <?php echo $email ?></dd>
             <dt class="col-md-4">Product</dt>
-            <dd class="col-md-8">: <?php echo $product ?></dd>         
-        </dl>
+            <dd class="col-md-8">: <?php echo $product ?></dd> 
+            <dt class="col-md-4">Rating&#11088; (0 to 5)</dt>
+            <dd class="col-md-8">: 
+                        <?php
+                         if (isset($vendor_ID)):
+                        $supplier_qry = $conn->query("SELECT r.*,v.*,m.* FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
+                        while ($row = $supplier_qry->fetch_assoc()):
+                            ?>
+                            <?php echo $row['rating_ID'] ?>&#9733; <?php echo isset($rating_ID) && $rating_ID == $row['rating_ID'] ? 'selected' : '' ?>
+                        <?php endwhile; endif ?></dd>
+                   </dl>
     </callout>
     <div class="row px-2 justify-content-end">
         <div class="col-1">
