@@ -1,4 +1,5 @@
 <?php
+require_once('../../config.php');
 if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
     $qry = $conn->query("SELECT * from `materials_requisition` where mr_ID = '{$_GET['mr_ID']}' ");
     if ($qry->num_rows > 0) {
@@ -19,13 +20,10 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
         height: auto;
     }
 </style>
-<div class="card card-outline card-primary">
-    <div class="card-body">
-        <div class="container-fluid">
-            <div id="msg"></div>
-            <form action="" id="manage-mr_create">	
-                <input type="hidden" name="mr_ID" value="<?php echo isset($meta['mr_ID']) ? $meta['mr_ID'] : '' ?>">
-                <div class="form-group"> <label class="control-label" for="basicinput">Staff ID</label>
+<form action="" id="mr-form">
+    <input type="hidden" name="mr_ID" value="" readonly>
+    <div class="container-fluid">
+        <div class="form-group"> <label class="control-label" for="basicinput">Staff ID</label>
             <div class="controls">
                 <select name="staff_ID" class="custom-select custom-select-sm rounded-0 select3"  required>
                     <option value="">Select Staff ID</option> 
@@ -48,19 +46,17 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
             <input type ="text" name="type" id="type" class="form-control rounded-0" value=" "required>
         </div>
         
-        <div class="form-group"> <label class="control-label" for="basicinput">Item ID</label>
-            <div class="controls">
-                <select name="item_id" class="custom-select custom-select-sm rounded-0 select3"  required>
-                    <option value="">Select Item ID</option> 
-                    <?php
-                    $query = mysqli_query($conn, "select * from inventory");
-                    while ($row = mysqli_fetch_array($query)) {
-                        ?>
-
-                        <option value="<?php echo $row['id']; ?>"><?php echo $row['id']; ?></option>
-                    <?php } ?>
-                </select>
-            </div>
+         <div class="form-group">
+            <label for="item_ID" class="control-label">Item ID</label>
+            <select name="item_ID" id="item_ID" class="custom-select custom-select-sm rounded-0 select3">
+                <option value="" disabled <?php echo!isset($item_ID) ? "selected" : '' ?>></option>
+                <?php
+                $mr_qry = $conn->query("SELECT * FROM `inventory` WHERE id!=0 order by `id` asc");
+                while ($row = $mr_qry->fetch_assoc()):
+                    ?>
+                    <option value="<?php echo $row['id'] ?>" <?php echo isset($item_ID) && $item_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                <?php endwhile; ?>
+            </select>
         </div>
         
         <div class="form-group">
@@ -71,32 +67,21 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
         <div class="form-group">
             <label for="status" class="control-label">Status</label>
             <select name="status" id="registration_status" class="form-control rounded-0" required>
+                <option value="1" <?php echo isset($status) && $status == "" ? "selected" : "1" ?> >Completed</option>
                 <option value="0" <?php echo isset($status) && $status == "" ? "selected" : "0" ?>>Ongoing</option>
             </select>
         </div>
-            </form>
-        </div>
     </div>
-    <div class="card-footer">
-        <div class="col-md-12">
-            <div class="row">
-                <button class="btn btn-sm btn-primary mr-2" form="manage-mr_create">Add</button>
-                <a class="btn btn-sm btn-secondary" href="./?page=mr">Cancel</a>
-            </div>
-        </div>
-    </div>
-</div>
-    
+</form>
 <script>
-    
     $(function () {
-        $('#manage-mr_create').submit(function (e) {
+        $('#mr-form').submit(function (e) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/MR.php?f=create_mr",
+                url: _base_url_ + "classes/MR.php?f=add_mr",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

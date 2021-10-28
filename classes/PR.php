@@ -1,191 +1,128 @@
 <?php
+
 require_once('../config.php');
-Class Prs extends DBConnection {
-	private $settings;
-	public function __construct(){
-		global $_settings;
-		$this->settings = $_settings;
-		parent::__construct();
-	}
-	public function __destruct(){
-		parent::__destruct();
-	}
-	public function save_prs(){
-		extract($_POST);
-		$data = '';
-		$chk = $this->conn->query("SELECT * FROM `purchase_requisition` where pr_ID ='{$pr}' ".($id>0? " and id!= '{$id}' " : ""))->num_rows;
-		if($chk > 0){
-			return 3;
-			exit;
-		}
-		foreach($_POST as $k => $v){
-			if(!in_array($k,array('id','password'))){
-				if(!empty($data)) $data .=" , ";
-				$data .= " {$k} = '{$v}' ";
-			}
-		}
-		if(!empty($password)){
-			$password = md5($password);
-			if(!empty($data)) $data .=" , ";
-			$data .= " `password` = '{$password}' ";
-		}
 
-		if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
-				if($move){
-					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']) && $_SESSION['userdata']['id'] == $id)
-						unlink('../'.$_SESSION['userdata']['avatar']);
-				}
-		}
-		if(empty($id)){
-			$qry = $this->conn->query("INSERT INTO staff set {$data}");
-			if($qry){
-				$this->settings->set_flashdata('success','User Details successfully saved.');
-				return 1;
-			}else{
-				return 2;
-			}
+Class PR extends DBConnection {
 
-		}else{
-			$qry = $this->conn->query("UPDATE staff set $data where id = {$id}");
-			if($qry){
-				$this->settings->set_flashdata('success','User Details successfully updated.');
-				foreach($_POST as $k => $v){
-					if($k != 'id'){
-						if(!empty($data)) $data .=" , ";
-						$this->settings->set_userdata($k,$v);
-					}
-				}
-				if(isset($fname) && isset($move))
-				$this->settings->set_userdata('avatar',$fname);
+    private $settings;
 
-				return 1;
-			}else{
-				return "UPDATE staff set $data where id = {$id}";
-			}
-			
-		}
-	}
-	public function delete_users(){
-		extract($_POST);
-		$avatar = $this->conn->query("SELECT avatar FROM staff where id = '{$id}'")->fetch_array()['avatar'];
-		$qry = $this->conn->query("DELETE FROM staff where id = $id");
-		if($qry){
-			$this->settings->set_flashdata('success','User Details successfully deleted.');
-			if(is_file(base_app.$avatar))
-				unlink(base_app.$avatar);
-			$resp['status'] = 'success';
-		}else{
-			$resp['status'] = 'failed';
-		}
-		return json_encode($resp);
-	}
-	public function save_fusers(){
-		extract($_POST);
-		$data = "";
-		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','password'))){
-				if(!empty($data)) $data .= ", ";
-				$data .= " `{$k}` = '{$v}' ";
-			}
-		}
+    public function __construct() {
+        global $_settings;
+        $this->settings = $_settings;
+        parent::__construct();
+    }
 
-			if(!empty($password))
-			$data .= ", `password` = '".md5($password)."' ";
-		
-			if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
-				if($move){
-					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']))
-						unlink('../'.$_SESSION['userdata']['avatar']);
-				}
-			}
-			$sql = "UPDATE faculty set {$data} where id = $id";
-			$save = $this->conn->query($sql);
+    public function __destruct() {
+        parent::__destruct();
+    }
 
-			if($save){
-			$this->settings->set_flashdata('success','User Details successfully updated.');
-			foreach($_POST as $k => $v){
-				if(!in_array($k,array('id','password'))){
-					if(!empty($data)) $data .=" , ";
-					$this->settings->set_userdata($k,$v);
-				}
-			}
-			if(isset($fname) && isset($move))
-			$this->settings->set_userdata('avatar',$fname);
-			return 1;
-			}else{
-				$resp['error'] = $sql;
-				return json_encode($resp);
-			}
+    function capture_err() {
+        if (!$this->conn->error)
+            return false;
+        else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+            return json_encode($resp);
+            exit;
+        }
+    }
 
-	} 
+    function add_pr() {
+        extract($_POST);
+        $dataPR = "";
+        $dataPRDetails = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('pr_ID'))) {
+                $v = addslashes(trim($v));
 
-	public function save_susers(){
-		extract($_POST);
-		$data = "";
-		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id','password'))){
-				if(!empty($data)) $data .= ", ";
-				$data .= " `{$k}` = '{$v}' ";
-			}
-		}
+                if ($k === "quantity_request" || $k === "item_ID") {
+                    if (!empty($dataPRDetails))
+                    $dataPRDetails .= ",";
+                    $dataPRDetails .= " `{$k}`='{$v}' ";
+                } elseif ($k == "pr_ID") {
+                    if (!empty($dataPRDetails))
+                        $dataPRDetails .= ",";
+                    if (!empty($dataPR))
+                        $dataPR .= ",";
+                        $dataPRDetails .= " `{$k}`='{$v}' ";
+                        $dataPR .= " `{$k}`='{$v}' ";
+                } else {
+                    if (!empty($dataPR))
+                    $dataPR .= ",";
+                    $dataPR .= " `{$k}`='{$v}' ";
+                }
+            }
+        }
 
-			if(!empty($password))
-			$data .= ", `password` = '".md5($password)."' ";
-		
-			if(isset($_FILES['img']) && $_FILES['img']['tmp_name'] != ''){
-				$fname = 'uploads/'.strtotime(date('y-m-d H:i')).'_'.$_FILES['img']['name'];
-				$move = move_uploaded_file($_FILES['img']['tmp_name'],'../'. $fname);
-				if($move){
-					$data .=" , avatar = '{$fname}' ";
-					if(isset($_SESSION['userdata']['avatar']) && is_file('../'.$_SESSION['userdata']['avatar']))
-						unlink('../'.$_SESSION['userdata']['avatar']);
-				}
-			}
-			$sql = "UPDATE students set {$data} where id = $id";
-			$save = $this->conn->query($sql);
 
-			if($save){
-			$this->settings->set_flashdata('success','User Details successfully updated.');
-			foreach($_POST as $k => $v){
-				if(!in_array($k,array('id','password'))){
-					if(!empty($data)) $data .=" , ";
-					$this->settings->set_userdata($k,$v);
-				}
-			}
-			if(isset($fname) && isset($move))
-			$this->settings->set_userdata('avatar',$fname);
-			return 1;
-			}else{
-				$resp['error'] = $sql;
-				return json_encode($resp);
-			}
+        $check = $this->conn->query("SELECT * FROM `purchase_requisition` where `pr_ID` = '{$pr_ID}' " . (!empty($pr_ID) ? " and pr_ID != {$pr_ID} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "The PR already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($pr_ID)) {
+            $sql = "INSERT INTO `purchase_requisition` set {$dataPR} ";
+        } else {
+            $sql = "UPDATE `purchase_requisition` set {$dataPR} where pr_ID = '{$pr_ID}'";
+        }
+        $add = $this->conn->query($sql);
+        $last_id = $this->conn->insert_id;
+        
+        if (empty($pr_ID)) {
+            $sql = "INSERT INTO `purchase_requisiton_details` set pr_ID = $last_id, {$dataPRDetails} ";
+            
+        } else {
+            $sql = "UPDATE `purchase_requisiton_details` set {$dataPRDetails} where pr_ID = '{$pr_ID}'";
+        }
+        
+        
+        $add = $this->conn->query($sql);
 
-	} 
-	
+        if ($add) {
+            $resp['status'] = 'success';
+            if (empty($pr_ID))
+                $this->settings->set_flashdata('success', "New PR successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "PR successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_pr() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `purchase_requisition` where pr_ID = '{$pr_ID}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "PR successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
 }
-
-$users = new users();
+    
+    
+$PR = new PR();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
+$sysset = new SystemSettings();
 switch ($action) {
-	case 'save':
-		echo $users->save_users();
-	break;
-	case 'fsave':
-		echo $users->save_fusers();
-	break;
-	case 'ssave':
-		echo $users->save_susers();
-	break;
-	case 'delete':
-		echo $users->delete_users();
-	break;
-	default:
-		// echo $sysset->index();
-		break;
+
+    
+    case 'add_pr':
+        echo $PR->add_pr();
+        break;
+    case 'delete_pr':
+        echo $PR->delete_pr();
+        break;
+    default:
+        // echo $sysset->index();
+        break;
 }

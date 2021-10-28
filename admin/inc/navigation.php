@@ -48,8 +48,9 @@
                         </p>
                       </a>
                     </li>
+                    
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                      <a href="<?php echo base_url ?>admin/?page=mr" class="nav-link nav-MR_Create">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
                         Create MR  
@@ -68,18 +69,18 @@
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                      <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index" class="nav-link nav-PR">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
-                        Approve PR  
+                         Purchase Requisition  
                         </p>
                       </a>
                     </li>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_todays" class="nav-link nav-RFQ">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/index" class="nav-link nav-MR">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
-                        Approve MR  
+                        Material Requisition  
                         </p>
                       </a>
                     </li>

@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
-if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
-    $qry = $conn->query("SELECT * from `materials_requisition` where mr_ID = '{$_GET['mr_ID']}' ");
+if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
+    $qry = $conn->query("SELECT * from `purchase_requisition` where pr_ID = '{$_GET['pr_ID']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = stripslashes($v);
@@ -20,15 +20,10 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
     <callout class="callout-primary">
         <dl class="row">
             
-            <dt class="col-md-4">MR ID</dt>
-            <dd class="col-md-8">: <?php echo $mr_ID ?></dd>
+            <dt class="col-md-4">PR ID</dt>
+            <dd class="col-md-8">: <?php echo $pr_ID ?></dd>
             <dt class="col-md-4">Staff ID</dt>
             <dd class="col-md-8">: <?php echo $staff_ID ?></dd>
-            <dt class="col-md-4">Description</dt>
-            <dd class="col-md-8">: <?php echo $description ?></dd>
-
-            <dt class="col-md-4">Type</dt>
-            <dd class="col-md-8">: <?php echo $type ?></dd>
 
             <dt class="col-md-4">Status</dt>
             <dd class="col-md-8">:&nbsp;

@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
-if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
-    $qry = $conn->query("SELECT * from `materials_requisition` where mr_ID = '{$_GET['mr_ID']}' ");
+if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
+    $qry = $conn->query("SELECT * from `purchase_requisition` where pr_ID = '{$_GET['pr_ID']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = stripslashes($v);
@@ -23,7 +23,7 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
 
 <form action="" id="mr-form">
     
-    <input type="hidden" name="mr_ID" value="" readonly>
+    <input type="hidden" name="pr_ID" value="" readonly>
     <div class="container-fluid">
        
     
@@ -38,15 +38,6 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
                     <option value="<?php echo $row['id'] ?>" <?php echo isset($staff_ID) && $staff_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['username'] ?></option>
                 <?php endwhile; ?>
             </select>
-        </div>
-        <div class="form-group">
-            <label for="description" class="control-label">Description</label>
-            <input type ="text" name="description" id="description" class="form-control rounded-0" value="<?php echo isset($description) ? $description : " " ?>" readonly>
-        </div>
-
-        <div class="form-group">
-            <label for="type" class="control-label">Type</label>
-            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" readonly>
         </div>
 
         <div class="form-group">
@@ -69,7 +60,7 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
             $('.err-msg').remove();
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/MR.php?f=add_mr",
+                url: _base_url_ + "classes/PR.php?f=add_pr",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -100,19 +91,6 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
             })
         })
     })
-
-
-    function getStaff(val) {
-        $.ajax({
-            type: "POST",
-            url: "get_staff.php",
-            data: 'staff_ID=' + val,
-            success: function (data) {
-                $("#staff").html(data);
-            }
-        });
-    }
-
 
 </script>
 
