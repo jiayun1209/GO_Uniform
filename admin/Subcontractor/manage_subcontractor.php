@@ -1,16 +1,41 @@
 <?php
-require_once('../../config.php');
-if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
-    $qry = $conn->query("SELECT * from `vendor` where vendor_ID = '{$_GET['vendor_ID']}' ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=stripslashes($v);
-        }
-    }
+if (isset($_POST['sendMailBtn'])) {
+    $fromEmail = $_POST['fromEmail'];
+    $toEmail = $_POST['toEmail'];
+    $subjectName = $_POST['subject'];
+    $message = $_POST['message'];
+
+    $to = "$toEmail";
+    $subject = "$subjectName";
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= 'From: '.$fromEmail.'<'.$fromEmail.'>' . "\r\n".'Reply-To: '.$fromEmail."\r\n" . 'X-Mailer: PHP/' . phpversion();
+    $message = '<!doctype html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport"
+					  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+				<meta http-equiv="X-UA-Compatible" content="ie=edge">
+				<title>Document</title>
+			</head>
+			<body>
+			<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">'.$message.'</span>
+				<div class="container">
+                 '.$message.'<br/>
+                    Regards<br/>
+                  '.$fromEmail.'
+				</div>
+			</body>
+			</html>';
+    $result = @mail($to, $subject, $message, $headers);
+
+    echo '<script>alert("Email sent successfully !")</script>';
 }
+
 ?>
 <style>
-    span.select2-selection.select2-selection--single {
+        span.select2-selection.select2-selection--single {
         border-radius: 0;
         padding: 0.25rem 0.5rem;
         padding-top: 0.25rem;
@@ -20,75 +45,30 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
         height: auto;
     }
 </style>
-<form action="" id="supplier-form">
-     <input type="hidden" name="vendor_ID" value="<?php echo($vendor_ID) ? $vendor_ID :"" ?>" readonly>
-    <div class="container-fluid">
-        <div class="form-group">
-            <label for="name" class="control-label">Supplier Name</label>
-            <input type="text" name="name" id="name" class="form-control rounded-0" value="<?php echo isset($name) ? $name :" " ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="company_code" class="control-label">Company Code</label>
-            <input type ="text" name="company_code" id="company_code" class="form-control rounded-0" value="<?php echo isset($company_code) ? $company_code :" " ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="registration_status" class="control-label">Registration Status</label>
-            <select name="registration_status" id="registration_status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "1" ?> >Approved</option>
-                <option value="0" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "0" ?>>Rejected</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="email" class="control-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control rounded-0" value="<?php echo isset($email) ? $email :" " ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="product" class="control-label">Product</label>
-            <input type="text" name="product" id="product" class="form-control rounded-0" value="<?php echo isset($product) ? $product :" " ?>" required>
-        </div>
-          <div class="form-group">
-            <label for="description" class="control-label">Description</label>
-            <input type="text" name="description" id="description" class="form-control rounded-0" value="<?php echo isset($description) ? $description :" " ?>" required>
+<div class="card card-outline card-info">
+    <div class="card-header">
+        <h3 class="card-title">Outsourcing : Invite</h3>
+        <div class="card-tools">
+            <a class="btn btn-sm btn-flat btn-default" href="?page=subcontractor">Back</a>
         </div>
     </div>
+<form action="" id="invite-form" method="post" class="form-invite">
+    <div class="form-label-group">
+        <label for="inputEmail">From <span style="color: #FF0000">*</span></label>
+        <input type="text" name="fromEmail" id="fromEmail" class="form-control"  value="anqing0101@gmail.com" readonly required autofocus>
+    </div> <br/>
+    <div class="form-label-group">
+        <label for="inputEmail">To <span style="color: #FF0000">*</span></label>
+        <input type="text" name="toEmail" id="toEmail" class="form-control" placeholder="Email address" required autofocus>
+    </div> <br/>
+    <label for="inputPassword">Subject <span style="color: #FF0000">*</span></label>
+    <div class="form-label-group">
+        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required>
+    </div><br/>
+    <label for="inputPassword">Message <span style="color: #FF0000">*</span></label>
+    <div class="form-label-group">
+        <textarea  id="message" name="message" class="form-control" placeholder="Message" required ></textarea>
+    </div> <br/>
+    <button type="submit" name="sendMailBtn" class="btn btn-lg btn-primary btn-block text-uppercase" >Send Email</button>
 </form>
-<script>
-    $(function(){
-        $('#supplier-form').submit(function(e){
-			e.preventDefault();
-            var _this = $(this)
-			 $('.err-msg').remove();
-			start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_supplier",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-						location.reload();
-					}else if(resp.status == 'failed' && !!resp.msg){
-                        var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            $("html, body").animate({ scrollTop: 0 }, "fast");
-                    }else{
-						alert_toast("An error occured",'error');
-                        console.log(resp)
-					}
-                    end_loader()
-				}
-			})
-		})
-	})
-</script>
+ 

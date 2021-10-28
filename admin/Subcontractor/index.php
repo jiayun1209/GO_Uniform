@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Subcontractor</h3>
         <div class="card-tools">
-            <a href="../Subcontractor/create_subcontractor.php" data-id = "" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="?page=Subcontractor/manage_subcontractor" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Invite</a>
         </div>
     </div>
     <div class="card-body">
@@ -47,9 +47,11 @@
                                 <td><?php echo $row['email'] ?></td>
                                 <td class="text-center">
                                     <?php if ($row['registration_status'] == 'registered'): ?>
-                                        <span class="badge badge-success">Registered</span>
+                                    <span class="badge badge-success">Registered</span>
+                                    <?php elseif ($row['registration_status'] == 'approved'): ?>
+                                    <span class="badge badge-success">Approved</span>
                                     <?php else: ?>
-                                        <span class="badge badge-secondary">Invited</span>
+                                    <span class="badge badge-secondary">Invited</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo $row['description'] ?></td>
@@ -80,20 +82,20 @@
         $('.delete_data').click(function () {
             _conf("Are you sure to delete this Subcontractor permanently?", "delete_subcontractor", [$(this).attr('data-id')])
         })
-       /*$('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Invite Subcontractor", "subcontractor/create_subcontractor.php")
-        })*/
+        /*$('#create_new').click(function () {
+         uni_modal("<i class='fa fa-plus'></i> Invite Subcontractor", "test/manage_subcontractor.php")
+         })*/
         $('.view_data').click(function () {
             uni_modal("<i class='fa fa-info-circle'></i> Subcontractor's Details", "subcontractor/view_details.php?subcontractor_ID=" + $(this).attr('data-id'), "")
         })
         $('.edit_data').click(function () {
-            uni_modal("<i class='fa fa-edit'></i> Edit Subcontractor's Details", "subcontractor/manage_subcontractor.php?subcontractor_ID=" + $(this).attr('data-id'))
+            uni_modal("<i class='fa fa-edit'></i> Edit Subcontractor's Details", "subcontractor/manage_sub.php?subcontractor_ID=" + $(this).attr('data-id'))
         })
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
     function delete_subcontractor($id) {
-    console.log($id);
+        console.log($id);
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=delete_subcontractor",

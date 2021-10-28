@@ -79,6 +79,59 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+    
+    function save_subcontractor() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('subcontractor_ID'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `subcontractor` where `name` = '{$name}' " . (!empty($subcontractor_ID) ? " and subcontractor_ID != {$subcontractor_ID} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Subcontractor already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($subcontractor_ID)) {
+            $sql = "INSERT INTO `subcontractor` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `subcontractor` set {$data} where subcontractor_ID = '{$subcontractor_ID}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($vendor_ID))
+                $this->settings->set_flashdata('success', "New Subcontractor successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Subcontractor successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_subcontractor() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `subcontractor` where subcontractor_ID = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "subcontractor successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
 
     function save_con() {
         extract($_POST);
@@ -549,6 +602,12 @@ switch ($action) {
         break;
     case 'delete_supplier':
         echo $Master->delete_supplier();
+        break;
+    case 'save_subcontractor':
+        echo $Master->save_subcontractor();
+        break;
+    case 'delete_subcontractor':
+        echo $Master->delete_subcontractor();
         break;
     case 'save_rfq':
         echo $Master->save_rfq();
