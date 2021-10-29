@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Contract </h3>
         <div class="card-tools">
-            <a href="?page=contract_mgm/manage_con" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="?page=contract_mgm/create_con" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
         </div>
     </div>
     <div class="card-body">
@@ -57,7 +57,7 @@
                                     <div class="dropdown-menu" role="menu">
                                         <a class="dropdown-item" href="?page=contract_mgm/view_consub&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=contract_mgm/manage_con&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                        <a class="dropdown-item" href="?page=contract_mgm/manage_consub&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                     </div>
@@ -114,7 +114,7 @@
                                     <div class="dropdown-menu" role="menu">
                                         <a class="dropdown-item" href="?page=contract_mgm/view_conven&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=contract_mgm/manage_con&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                        <a class="dropdown-item" href="?page=contract_mgm/manage_conven&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                     </div>
@@ -188,7 +188,7 @@
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {
-            _conf("Are you sure to delete this contract permanently?", "delete_rent", [$(this).attr('data-id')])
+            _conf("Are you sure to delete this contract permanently?", "delete_con", [$(this).attr('data-id')])
         })
         $('.view_details').click(function () {
             uni_modal("Reservaton Details", "contract_mgm/view_con.php?id=" + $(this).attr('data-id'), 'mid-large')
@@ -199,7 +199,7 @@
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
-    function delete_rent($id) {
+    function delete_con($id) {
         start_loader();
         $.ajax({
             url: base_url + "classes/Master.php?f=delete_con",

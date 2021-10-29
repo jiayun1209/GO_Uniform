@@ -59,7 +59,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <thead>
                         <br>
                         <tr class="bg-navy disabled">
+                        <small><i>Don't leave it empty please key-in 0 for the column you are not used.</i></small>
                             <th class="px-1 py-1 text-center"></th>
+                            <th class="px-1 py-1 text-center">Sub Contractor ID</th>
+                            <th class="px-1 py-1 text-center">Vendor ID</th>
                             <th class="px-1 py-1 text-center">Staff ID</th>
                             <th class="px-1 py-1 text-center">Start Date</th>
                             <th class="px-1 py-1 text-center">End Date</th>
@@ -69,15 +72,30 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <?php
                             if (isset($id)):
                                 $staff = $conn->query("SELECT c.*,s.* from contract c, staff s where c.staff_ID = s.id and c.staff_ID = '$id'");
+                                $sub = $conn->query("SELECT c.*, s.* from contract c, subcontractor s where c.subcontractor_ID = s.subcontractor_ID and c.contract_ID = '$id'");
+                                $ven = $conn->query("SELECT c.*,v.* from contract c, vendor v where c.vendor_ID = v.vendor_ID and c.contract_ID = '$id'");
                                 echo $conn->error;
-                                while ($row = $staff->fetch_assoc()):
+                                while ($row = $staff->fetch_assoc() || $row1 = $sub->fetch_assoc() || $row2 = $ven->fetch_assoc()):
                                     ?>
                                     <tr class="po-item" data-id="">
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+                                        </td>                                       
+                                        <td class="align-middle p-1">
+                                            <input type="hidden" name="sub_id[]" value="<?php echo $row1['subcontractor_ID'] ?>">
+                                            <input type="text" class="text-center w-100 border-0 sub_id" value="<?php echo $row1['name'] ?>" required/>
+                                        </td>  
+                                        <td class="align-middle p-1">
+                                            <input type="hidden" name="ven_id[]" value="<?php echo $row2['vendor_ID'] ?>">
+                                            <input type="text" class="text-center w-100 border-0 ven_id" value="<?php echo $row2['name'] ?>" required/>
                                         </td>
-                                        <td class="align-middle p-1 staff_id "><?php echo $row['staff_ID'] ?></td>
-                                        <td class="align-middle p-1 date "><?php echo $row['startDate'] ?></td>
+                                         <td class="align-middle p-1">
+                                            <input type="hidden" name="staff_id[]" value="<?php echo $row['staff_ID'] ?>">
+                                            <input type="text" class="text-center w-100 border-0 staff_id" value="<?php echo $row['username'] ?>" required/>
+                                        </td>
+                                         <td class="align-middle p-1">
+                                            <input type="date" step="any" class="text-right w-100 border-0" name="dateq[]"  value="<?php echo $row['startDate'] ?>"/>
+                                        </td>
                                         <td class="align-middle p-1">
                                             <input type="date" step="any" class="text-right w-100 border-0" name="date[]"  value="<?php echo $row['endDate'] ?>"/>
                                         </td>
@@ -114,8 +132,22 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td> 
-        <td class="align-middle p-1 staff_id"></td>
-        <td class="align-middle p-1 date"></td>
+          <td class="align-middle p-1">
+            <input type="hidden" name="sub_id[]">
+            <input type="text" class="text-center w-100 border-0 isub_id" required/>
+        </td>
+        <td class="align-middle p-1">
+            <input type="hidden" name="ven_id[]">
+            <input type="text" class="text-center w-100 border-0 ven_id" required/>
+        </td>
+          <td class="align-middle p-1">
+            <input type="hidden" name="staff_id[]">
+            <input type="text" class="text-center w-100 border-0 staff_id" required/>
+        </td>
+         <td class="align-middle p-1">
+            <input type="hidden" name="date1[]">
+            <input type="date" class="text-center w-100 border-0 date" required/>
+        </td>
         <td class="align-middle p-1">
             <input type="hidden" name="date[]">
             <input type="date" class="text-center w-100 border-0 date" required/>

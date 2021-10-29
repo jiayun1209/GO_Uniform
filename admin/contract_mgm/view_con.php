@@ -65,20 +65,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><h3><b>EMPLOYEE</b></p></h3>
                 <?php
-                $s_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id");
-                $s = $s_qry->fetch_array();
-                ?>
-                <div>
-                    <h5> <b><p class="m-0"><?php echo $s['username'] ?></p>    
-                            <?php
-                            if (['type'] == 1)
-                                echo 'Administrator';
-                            else if (['type'] == 2)
-                                echo 'Manager';
-                            else
-                                echo 'Staff';
-                            ?></b></h5>
-
+                    $s_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id");
+                    $s = $s_qry->fetch_array();
+                    ?>
+                    <div>
+                        <h5> <b><p class="m-0"><?php echo $s['username'] ?></p>    
+                                <?php
+                                if (['type'] == 1)
+                                    echo 'Administrator';
+                                else if (['type'] == 2)
+                                    echo 'Manager';
+                                else
+                                    echo 'Staff';
+                                ?></b></h5>
                 </div>
             </div>
 
