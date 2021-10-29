@@ -37,49 +37,54 @@ Class MR extends DBConnection {
 
                 if ($k === "quantity_request" || $k === "item_ID") {
                     if (!empty($dataMRDetails))
-                    $dataMRDetails .= ",";
+                        $dataMRDetails .= ",";
                     $dataMRDetails .= " `{$k}`='{$v}' ";
                 } elseif ($k == "mr_ID") {
                     if (!empty($dataMRDetails))
                         $dataMRDetails .= ",";
                     if (!empty($dataMR))
                         $dataMR .= ",";
-                        $dataMRDetails .= " `{$k}`='{$v}' ";
-                        $dataMR .= " `{$k}`='{$v}' ";
+                    $dataMRDetails .= " `{$k}`='{$v}' ";
+                    $dataMR .= " `{$k}`='{$v}' ";
                 } else {
                     if (!empty($dataMR))
-                    $dataMR .= ",";
+                        $dataMR .= ",";
                     $dataMR .= " `{$k}`='{$v}' ";
                 }
             }
         }
 
 
-        $check = $this->conn->query("SELECT * FROM `materials_requisition` where `type` = '{$type}' " . (!empty($mr_ID) ? " and mr_ID != {$mr_ID} " : "") . " ")->num_rows;
+        $check = $this->conn->query("SELECT * FROM `materials_requisition` where `type` = '{$type}' " .
+                        (!empty($mr_ID) ? " and mr_ID != {$mr_ID} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "The MR type already exist.";
+            $resp['msg'] = "The Material Requisition type already exist.";
             return json_encode($resp);
             exit;
         }
+
+
+
+        $updt_status = $this->conn->update_status;
+
         if (empty($mr_ID)) {
             $sql = "INSERT INTO `materials_requisition` set {$dataMR} ";
         } else {
-            $sql = "UPDATE `materials_requisition` set {$dataMR} where mr_ID = '{$mr_ID}'";
+            $sql = "UPDATE `materials_requisition` set status = '$updt_status' where mr_ID = '{$mr_ID}'";
         }
         $add = $this->conn->query($sql);
         $last_id = $this->conn->insert_id;
-        
+
         if (empty($mr_ID)) {
             $sql = "INSERT INTO `materials_requisition_details` set mr_ID = $last_id, {$dataMRDetails} ";
-            
         } else {
             $sql = "UPDATE `materials_requisition_details` set {$dataMRDetails} where mr_ID = '{$mr_ID}'";
         }
-        
-        
+
+
         $add = $this->conn->query($sql);
 
         if ($add) {
@@ -136,9 +141,8 @@ Class MR extends DBConnection {
         return json_encode($resp);
     }
 
-
-function create_mr() {
-     extract($_POST);
+    function create_mr() {
+        extract($_POST);
         $dataMR = "";
         $dataMRDetails = "";
         foreach ($_POST as $k => $v) {
@@ -147,18 +151,18 @@ function create_mr() {
 
                 if ($k === "quantity_request" || $k === "item_ID") {
                     if (!empty($dataMRDetails))
-                    $dataMRDetails .= ",";
+                        $dataMRDetails .= ",";
                     $dataMRDetails .= " `{$k}`='{$v}' ";
                 } elseif ($k == "mr_ID") {
                     if (!empty($dataMRDetails))
                         $dataMRDetails .= ",";
                     if (!empty($dataMR))
                         $dataMR .= ",";
-                        $dataMRDetails .= " `{$k}`='{$v}' ";
-                        $dataMR .= " `{$k}`='{$v}' ";
+                    $dataMRDetails .= " `{$k}`='{$v}' ";
+                    $dataMR .= " `{$k}`='{$v}' ";
                 } else {
                     if (!empty($dataMR))
-                    $dataMR .= ",";
+                        $dataMR .= ",";
                     $dataMR .= " `{$k}`='{$v}' ";
                 }
             }
@@ -176,15 +180,15 @@ function create_mr() {
         if (empty($mr_ID)) {
             $sql = "INSERT INTO `materials_requisition` set {$dataMR} ";
         }
-   
+
         $add = $this->conn->query($sql);
         $last_id = $this->conn->insert_id;
-        
+
         if (empty($mr_ID)) {
-            $sql = "INSERT INTO `materials_requisition_details` set mr_ID = $last_id, {$dataMRDetails} ";    
+            $sql = "INSERT INTO `materials_requisition_details` set mr_ID = $last_id, {$dataMRDetails} ";
         }
-        
-        
+
+
         $add = $this->conn->query($sql);
 
         if ($add) {
@@ -197,9 +201,9 @@ function create_mr() {
         }
         return json_encode($resp);
     }
-    
+
 }
-    
+
 $MR = new MR();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 $sysset = new SystemSettings();

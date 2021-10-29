@@ -20,6 +20,8 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
     }
 </style>
 <div class="card card-outline card-primary">
+    
+    <h2 align="center">Material Requisition Creation</h2>
     <div class="card-body">
         <div class="container-fluid">
             <div id="msg"></div>
@@ -81,7 +83,7 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] != "") {
         <div class="col-md-12">
             <div class="row">
                 <button class="btn btn-sm btn-primary mr-2" form="manage-mr_create">Add</button>
-                <a class="btn btn-sm btn-secondary" href="./?page=mr">Cancel</a>
+                <a class="btn btn-sm btn-secondary" href="./?page=material_requisition/mr_creation_staff">Cancel</a>
             </div>
         </div>
     </div>

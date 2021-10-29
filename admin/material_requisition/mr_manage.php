@@ -30,7 +30,7 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
         <div class="form-group">
             <label for="staff_ID" class="control-label">Staff Name</label>
             <select name="staff_ID" id="staff_ID" class="custom-select custom-select-sm rounded-0 select3">
-                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                <option value="" disabled <?php echo!isset($staff_ID) ? "selected" : '' ?>></option>
                 <?php
                 $mr_qry = $conn->query("SELECT * FROM `staff` WHERE type!=0 order by `username` asc");
                 while ($row = $mr_qry->fetch_assoc()):
@@ -46,8 +46,9 @@ if (isset($_GET['mr_ID']) && $_GET['mr_ID'] > 0) {
 
         <div class="form-group">
             <label for="type" class="control-label">Type</label>
-            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" readonly>
+            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" >
         </div>
+        
 
         <div class="form-group">
             <label for="status" class="control-label">Status</label>
