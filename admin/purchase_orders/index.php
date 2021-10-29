@@ -7,7 +7,8 @@
 	<div class="card-header">
 		<h3 class="card-title">List of Purchase Orders</h3>
 		<div class="card-tools">
-			<a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+			<a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Standard PO</a>
+                        <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Recurring PO</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -59,6 +60,9 @@
 											break;
 										case '2':
 											echo '<span class="badge badge-danger">Rejected</span>';
+											break;
+                                                                                case '3':
+											echo '<span class="badge badge-warning text-danger">Cancelled</span>';
 											break;
 										default:
 											echo '<span class="badge badge-secondary">Pending</span>';

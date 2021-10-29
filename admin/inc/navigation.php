@@ -98,6 +98,14 @@
                     
                     
                     <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-catalog">
+                        <i class="nav-icon fas fa-people-carry"></i>
+                        <p>
+                          Subcontractor
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
                         <i class="nav-icon fas fa-book-open"></i>
                         <p>
@@ -105,6 +113,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
@@ -117,7 +126,7 @@
                       <a href="<?php echo base_url ?>admin/?page=purchase_orders" class="nav-link nav-purchase_orders">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
-                          Purchase Order
+                          PO Management
                         </p>
                       </a>
                     </li>
