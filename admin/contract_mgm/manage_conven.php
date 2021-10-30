@@ -60,7 +60,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <br>
                         <tr class="bg-navy disabled">
                             <th class="px-1 py-1 text-center"></th>
-                            <th class="px-1 py-1 text-center">Staff ID</th>
+                            <th class="px-1 py-1 text-center">Vendor ID</th>
                             <th class="px-1 py-1 text-center">Start Date</th>
                             <th class="px-1 py-1 text-center">End Date</th>
                         </tr>
@@ -68,15 +68,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tbody>
                             <?php
                             if (isset($id)):
-                                $staff = $conn->query("SELECT c.*,s.* from contract c, staff s where c.staff_ID = s.id and c.staff_ID = '$id'");
+                                $ven = $conn->query("SELECT c.*,v.* from contract c, vendor v where c.vendor_ID = v.vendor_ID and c.contract_ID = '$id'");
                                 echo $conn->error;
-                                while ($row = $staff->fetch_assoc()):
+                                while ($row = $ven->fetch_assoc()):
                                     ?>
                                     <tr class="po-item" data-id="">
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-                                        </td>
-                                        <td class="align-middle p-1 staff_id "><?php echo $row['staff_ID'] ?></td>
+                                        </td>                                      
+                                        <td class="align-middle p-1 ven_id "><?php echo $row['vendor_ID'] ?></td>                            
                                         <td class="align-middle p-1 date "><?php echo $row['startDate'] ?></td>
                                         <td class="align-middle p-1">
                                             <input type="date" step="any" class="text-right w-100 border-0" name="date[]"  value="<?php echo $row['endDate'] ?>"/>
@@ -114,7 +114,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td> 
-        <td class="align-middle p-1 staff_id"></td>
+        <td class="align-middle p-1 ven_id"></td>       
         <td class="align-middle p-1 date"></td>
         <td class="align-middle p-1">
             <input type="hidden" name="date[]">

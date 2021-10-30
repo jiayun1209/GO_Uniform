@@ -43,7 +43,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <h3 class="card-title"><?php echo isset($id) ? "Update Contract Details" : "New Contract" ?> </h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/manage_con&id=<?php echo $id ?>">Edit</a>
+            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/manage_consub&id=<?php echo $id ?>">Edit</a>
             <a class="btn btn-sm btn-flat btn-default" href="?page=contract_mgm">Back</a>
         </div>
     </div>
