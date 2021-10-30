@@ -80,69 +80,6 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
-<<<<<<< HEAD
-=======
-    function delete_con() {
-        extract($_POST);
-        $del = $this->conn->query("DELETE FROM `contract` where contract_ID = '{$id}'");
-        if ($del) {
-            $resp['status'] = 'success';
-            $this->settings->set_flashdata('success', "Contract successfully deleted.");
-        } else {
-            $resp['status'] = 'failed';
-            $resp['error'] = $this->conn->error;
-        }
-        return json_encode($resp);
-    }
-
-    function save_con() {
-        extract($_POST);
-        $data = "";
-        foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('id'))) {
-                $v = addslashes(trim($v));
-                if (!empty($data))
-                    $data .= ",";
-                $data .= " `{$k}`='{$v}' ";
-            }
-        }
-        $check = $this->conn->query("SELECT * FROM `contract` where `contract_ID` = '{$contract_ID}' " . (!empty($id) ? " and contract_ID != {$id} " : "") . " ")->num_rows;
-        if ($this->capture_err())
-            return $this->capture_err();
-        if ($check > 0) {
-            $resp['status'] = 'failed';
-            $resp['msg'] = "Contract already exist.";
-            return json_encode($resp);
-            exit;
-        }
-        if (empty($id)) {
-            $sql = "INSERT INTO `contract` set {$data} ";
-            $save = $this->conn->query($sql);
-        } else {
-            $sql = "UPDATE `contract` set {$data} where contract_ID = '{$id}' ";
-            $save = $this->conn->query($sql);
-        }
-        if ($save) {
-            $resp['status'] = 'success';
-            if (empty($id))
-                $this->settings->set_flashdata('success', "New Contract successfully saved.");
-            else
-                $this->settings->set_flashdata('success', "Contract successfully updated.");
-        } else {
-            $contract_ID = "";
-            while (true) {
-                $q_ID = "C" . (sprintf("%'.06d", mt_rand(1, 99999999999)));
-                $check = $this->conn->query("SELECT * FROM `contract` where `contract_ID` = '{$contract_ID}'")->num_rows;
-                if ($check <= 0)
-                    break;
-                $resp['status'] = 'failed';
-                $resp['err'] = $this->conn->error . "[{$sql}]";
-            }
-            return json_encode($resp);
-        }
-    }
-
->>>>>>> origin/master
     function save_subcontractor() {
         extract($_POST);
         $data = "";
@@ -189,6 +126,59 @@ Class Master extends DBConnection {
         if ($del) {
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "subcontractor successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+
+    function save_con() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('vendor_ID'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' " . (!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Supplier already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($vendor_ID)) {
+            $sql = "INSERT INTO `vendor` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `vendor` set {$data} where vendor_ID = '{$vendor_ID}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($vendor_ID))
+                $this->settings->set_flashdata('success', "New Supplier successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Supplier successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_con() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `contract` where contract_ID = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "This contract successfully deleted.");
         } else {
             $resp['status'] = 'failed';
             $resp['error'] = $this->conn->error;
@@ -601,7 +591,6 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
-<<<<<<< HEAD
     function save_event() {
         extract($_POST);
         $data = "";
@@ -612,21 +601,7 @@ Class Master extends DBConnection {
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
-=======
-}
-
-function save_event() {
-    extract($_POST);
-    $data = "";
-    foreach ($_POST as $k => $v) {
-        if (!in_array($k, array('id'))) {
-            $v = addslashes(trim($v));
-            if (!empty($data))
-                $data .= ",";
-            $data .= " `{$k}`='{$v}' ";
->>>>>>> origin/master
         }
-<<<<<<< HEAD
         $check = $this->conn->query("SELECT * FROM `events` where `title` = '{$title}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
@@ -654,49 +629,20 @@ function save_event() {
             $resp['err'] = $this->conn->error . "[{$sql}]";
         }
         return json_encode($resp);
-=======
->>>>>>> origin/master
     }
-    $check = $this->conn->query("SELECT * FROM `events` where `title` = '{$title}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
-    if ($this->capture_err())
-        return $this->capture_err();
-    if ($check > 0) {
-        $resp['status'] = 'failed';
-        $resp['msg'] = "Events already exist.";
-        return json_encode($resp);
-        exit;
-    }
-    if (empty($id)) {
-        $sql = "INSERT INTO `events` set {$data} ";
-        $save = $this->conn->query($sql);
-    } else {
-        $sql = "UPDATE `events` set {$data} where id = '{$id}' ";
-        $save = $this->conn->query($sql);
-    }
-    if ($save) {
-        $resp['status'] = 'success';
-        if (empty($id))
-            $this->settings->set_flashdata('success', "New Events successfully saved.");
-        else
-            $this->settings->set_flashdata('success', "Events successfully updated.");
-    } else {
-        $resp['status'] = 'failed';
-        $resp['err'] = $this->conn->error . "[{$sql}]";
-    }
-    return json_encode($resp);
-}
 
-function delete_event() {
-    extract($_POST);
-    $del = $this->conn->query("DELETE FROM `events` where id = '{$id}'");
-    if ($del) {
-        $resp['status'] = 'success';
-        $this->settings->set_flashdata('success', "Event successfully deleted.");
-    } else {
-        $resp['status'] = 'failed';
-        $resp['error'] = $this->conn->error;
+    function delete_event() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `events` where id = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "Event successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
     }
-<<<<<<< HEAD
 
     function save_alert() {
         extract($_POST);
@@ -709,10 +655,7 @@ function delete_event() {
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `alert` where `alert_name` = '{$alert_name}' " . ($alert_id > 0 ? " and alert_id != '{$alert_id}' " : ""))->num_rows;
-        
-        
-        
+        $check = $this->conn->query("SELECT * FROM `alert` where `alert_name` = '{$alert_name}' " . (!empty($alert_id) ? " and alert_id != {$alert_id} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
@@ -740,12 +683,7 @@ function delete_event() {
         }
         return json_encode($resp);
     }
-=======
-    return json_encode($resp);
-}
->>>>>>> origin/master
 
-<<<<<<< HEAD
     function delete_alert() {
         extract($_POST);
         $del = $this->conn->query("DELETE FROM `alert` where alert_id = '{$alert_id}'");
@@ -755,60 +693,9 @@ function delete_event() {
         } else {
             $resp['status'] = 'failed';
             $resp['error'] = $this->conn->error;
-=======
-function save_alert() {
-    extract($_POST);
-    $data = "";
-    foreach ($_POST as $k => $v) {
-        if (!in_array($k, array('id'))) {
-            $v = addslashes(trim($v));
-            if (!empty($data))
-                $data .= ",";
-            $data .= " `{$k}`='{$v}' ";
->>>>>>> origin/master
         }
-    }
-    $check = $this->conn->query("SELECT * FROM `alert` where `alert_id` = '{$alert_id}' " . (!empty($alert_id) ? " and alert_id != {$alert_id} " : "") . " ")->num_rows;
-    if ($this->capture_err())
-        return $this->capture_err();
-    if ($check > 0) {
-        $resp['status'] = 'failed';
-        $resp['msg'] = "Alert already exist.";
         return json_encode($resp);
-        exit;
     }
-    if (empty($id)) {
-        $sql = "INSERT INTO `alert` set {$data} ";
-        $save = $this->conn->query($sql);
-    } else {
-        $sql = "UPDATE `alert` set {$data} where alert_id = '{$alert_id}' ";
-        $save = $this->conn->query($sql);
-    }
-    if ($save) {
-        $resp['status'] = 'success';
-        if (empty($id))
-            $this->settings->set_flashdata('success', "New Alert successfully saved.");
-        else
-            $this->settings->set_flashdata('success', "Alert successfully updated.");
-    } else {
-        $resp['status'] = 'failed';
-        $resp['err'] = $this->conn->error . "[{$sql}]";
-    }
-    return json_encode($resp);
-}
-
-function delete_alert() {
-    extract($_POST);
-    $del = $this->conn->query("DELETE FROM `alert` where id = '{$id}'");
-    if ($del) {
-        $resp['status'] = 'success';
-        $this->settings->set_flashdata('success', "Alert successfully deleted.");
-    } else {
-        $resp['status'] = 'failed';
-        $resp['error'] = $this->conn->error;
-    }
-    return json_encode($resp);
-}
 
 }
 
