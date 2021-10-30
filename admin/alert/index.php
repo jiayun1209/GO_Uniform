@@ -15,14 +15,17 @@
             <div class="container-fluid">
                 <table class="table table-hover table-striped">
                     <colgroup>
+
                         <col width="5%">
+                        <col width="10%">
                         <col width="15%">
-                        <col width="15%">
-                        <col width="55%">
+                        <col width="30%">
+                        <col width="20%">
                         <col width="20%">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled">
+                            <th>No</th>
                             <th>Alert ID</th>
                             <th>Alert Name</th>
                             <th>Description</th>
@@ -33,15 +36,19 @@
                     <tbody>
                         <?php
                         $i = 1;
+                        $cnt = 1;
                         $qry = $conn->query("SELECT * from `alert` order by (`alert_id`) asc ");
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
+
+                                <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
                                 <td><?php echo $row['alert_id'] ?></td>
                                 <td><?php echo $row['alert_name'] ?></td>
                                 <td><?php echo $row['description'] ?></td>
-                                <td><?php echo $row['date_alert'] ?></td>
-                                
+                                <td class=""><?php echo $row['date_alert'] ?></td>
+
+
 
                                 <td align="center">
                                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
@@ -81,13 +88,13 @@
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
-    function delete_alert($id) {
-    console.log($id);
+    function delete_alert($alert_id) {
+        console.log($alert_id);
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=delete_alert",
             method: "POST",
-            data: {id: $id},
+            data: {alert_id: $alert_id},
             dataType: "json",
             error: err => {
                 console.log(err)

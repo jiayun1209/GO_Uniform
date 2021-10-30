@@ -41,7 +41,7 @@
                     </li>
                     
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=operation_calendar/index" class="nav-link nav-suppliers">
+                      <a href="<?php echo base_url ?>admin/?page=operation_calendar/index" class="nav-link nav-calendar">
                         <i class="nav-icon fas fa-truck-loading"></i>
                         <p>
                         Operation Calendar  
@@ -51,7 +51,7 @@
                     
                     <?php if($_settings->userdata('type') == 4): ?>
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=purchase_requisition/pr_creation_staff" class="nav-link nav-RFQ">
+                      <a href="<?php echo base_url ?>admin/?page=purchase_requisition/pr_creation_staff" class="nav-link nav-PR_Create">
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
                         Create PR   
@@ -151,10 +151,10 @@
                     </li>
                     
                     <li class="nav-item dropdown">
-                      <a href="<?php echo base_url ?>admin/?page=add_event/index" class="nav-link nav-system_info">
+                      <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-system_info">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
-                          Add Operation Events
+                          Manage Operation Events
                         </p>
                       </a>
                     </li>
@@ -163,7 +163,7 @@
                       <a href="<?php echo base_url ?>admin/?page=alert/index" class="nav-link nav-system_info">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
-                          Add Alert
+                          Manage Alert
                         </p>
                       </a>
                     </li>
