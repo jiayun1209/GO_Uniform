@@ -39,13 +39,20 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
                 <?php endwhile; ?>
             </select>
         </div>
+        
+        
+        <div class="form-group">
+            <label for="type" class="control-label">Type</label>
+            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" >
+        </div>
 
         <div class="form-group">
             <label for="status" class="control-label">Status</label>
             <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status == 1 ? "selected" : "1" ?> >Completed</option>
-                <option value="0" <?php echo isset($status) && $status == 0 ? "selected" : "0" ?>>Ongoing</option>
+                <option value="completed" <?php echo isset($status) && $status == "completed" ? "selected" : "completed" ?> >Completed</option>
+                <option value="ongoing" <?php echo isset($status) && $status == "ongoing" ? "selected" : "ongoing" ?>>Ongoing</option>
             </select>
+            
         </div>
 
     </div>

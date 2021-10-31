@@ -37,8 +37,13 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] != "") {
                 </select>
             </div>
         </div>
-        
-         <div class="form-group">
+
+        <div class="form-group">
+            <label for="type" class="control-label">Type</label>
+            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" required>
+        </div>
+
+        <div class="form-group">
             <label for="item_ID" class="control-label">Item ID</label>
             <select name="item_ID" id="item_ID" class="custom-select custom-select-sm rounded-0 select3">
                 <option value="" disabled <?php echo!isset($item_ID) ? "selected" : '' ?>></option>
@@ -50,17 +55,17 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] != "") {
                 <?php endwhile; ?>
             </select>
         </div>
-        
+
         <div class="form-group">
-            <label for="type" class="control-label">Quantity Request</label>
+            <label for="quantity_request" class="control-label">Quantity Request</label>
             <input type="text" name="quantity_request" id="quantity_request" class="form-control rounded-0" value="<?php echo isset($quantity_request) ? $quantity_request : " " ?>" required>
         </div>
-        
+
         <div class="form-group">
             <label for="status" class="control-label">Status</label>
-            <select name="status" id="registration_status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($status) && $status == "" ? "selected" : "1" ?> >Completed</option>
-                <option value="0" <?php echo isset($status) && $status == "" ? "selected" : "0" ?>>Ongoing</option>
+            <select name="status" id="status" class="form-control rounded-0" required>
+                <option value="completed" <?php echo isset($status) && $status == "" ? "selected" : "completed" ?> >Completed</option>
+                <option value="ongoing" <?php echo isset($status) && $status == "" ? "selected" : "ongoing" ?>>Ongoing</option>
             </select>
         </div>
     </div>

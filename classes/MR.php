@@ -68,12 +68,12 @@ Class MR extends DBConnection {
 
 
 
-        $updt_status = $this->conn->update_status;
+      //  $updt_status = $this->conn->update_status;
 
         if (empty($mr_ID)) {
             $sql = "INSERT INTO `materials_requisition` set {$dataMR} ";
         } else {
-            $sql = "UPDATE `materials_requisition` set status = '$updt_status' where mr_ID = '{$mr_ID}'";
+            $sql = "UPDATE `materials_requisition` set {$dataMR} where mr_ID = '{$mr_ID}'";
         }
         $add = $this->conn->query($sql);
         $last_id = $this->conn->insert_id;
