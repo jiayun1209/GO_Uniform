@@ -49,10 +49,12 @@
                                 <td class="text-center">
                                     <?php if ($row['registration_status'] == 1): ?>
                                         <span class="badge badge-success">Approved</span>
-                                        <?php elseif ($row['registration_status'] == 2): ?>
-                                        <span class="badge badge-success">Registered</span>
+                                    <?php elseif ($row['registration_status'] == 2): ?>
+                                        <span class="badge badge-warning">Registered</span>
+                                            <?php elseif ($row['registration_status'] == 3): ?>
+                                        <span class="badge badge-secondary">Invited</span>
                                     <?php else: ?>
-                                        <span class="badge badge-secondary">Rejected</span>
+                                        <span class="badge badge-dark">Rejected</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo $row['email'] ?></td>
@@ -70,10 +72,16 @@
                                         <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['vendor_ID'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['vendor_ID'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
+                                        <div class="dropdown-divider"></div>
+                                            <?php 
+                                        if ($row['registration_status'] != 1 && $row['registration_status'] != 2 && $row['registration_status'] != 3): ?>
+                                            <a class="dropdown-item" href="?page=suppliers/invite_list&vendor_ID=<?php echo $row['vendor_ID'] ?>"><span class="fa fa-envelope text-primary"></span> Invite</a>
+                                        <div class="dropdown-divider"></div>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+<?php endwhile; ?>
                     </tbody>
                 </table>
             </div>
@@ -98,7 +106,7 @@
         $('.table').dataTable();
     })
     function delete_supplier($id) {
-    console.log($id);
+        console.log($id);
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=delete_supplier",

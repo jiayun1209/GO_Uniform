@@ -36,6 +36,7 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
             <select name="registration_status" id="registration_status" class="form-control rounded-0" required>
                 <option value="1" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "1" ?> >Approved</option>
                 <option value="0" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "0" ?>>Rejected</option>
+                <option value="3" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "3" ?>>Invited</option>
             </select>
         </div>
         <div class="form-group">
