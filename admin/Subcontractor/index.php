@@ -38,6 +38,7 @@
                         <?php
                         $i = 1;
                         $qry = $conn->query("SELECT * from `subcontractor` order by (`subcontractor_ID`) asc ");
+                 
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
@@ -73,10 +74,13 @@
                         <?php endwhile; ?>
                     </tbody>
                 </table>
+                
             </div>
         </div>
+        
     </div>
 </div>
+    
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {

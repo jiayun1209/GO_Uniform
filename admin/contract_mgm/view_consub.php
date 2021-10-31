@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><h3><b>SUB CONTRACTOR</b></p></h3>
                 <?php
-                $sub_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID");
+                $sub_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.id = $id");
                 $sub = $sub_qry->fetch_array();
                 ?>
                 <div>
@@ -115,7 +115,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody>
                             <?php
-                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.subcontractor_ID != 0");
+                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.subcontractor_ID != 0 and r.id = '$id'");
 
                             while ($row = $rfq_qry->fetch_assoc()):
                                 ?>

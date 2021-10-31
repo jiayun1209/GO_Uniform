@@ -1,7 +1,15 @@
 <?php
+    DEFINE ('DB_USER','root');
+    DEFINE ('DB_PASSWORD','');
+    DEFINE ('DB_HOST','localhost');
+    DEFINE ('DB_NAME','go');
+    
+    //Connection
+    $dbc = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR die ('Could not connect to MySQL: ' . mysqli_connect_error( ));
+    
+    mysqli_set_charset($dbc, 'utf8');
 // Code user Registration
 if (isset($_POST['submit'])) {
-    require_once('classes/DBConnection.php');
     $companyReg = $_POST['companyReg'];
     $companyName = $_POST['companyName'];
     $companyEmail = $_POST['companyEmail'];
@@ -12,19 +20,20 @@ if (isset($_POST['submit'])) {
     $region = $_POST['region'];
     $currency = $_POST['currency'];
     $language = $_POST['language'];
+    $address = $streetNo.' '.$postalCode.' '.$city.' '.$region.' '.$country;
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
+    $fullName = $firstName.' '.$lastName; 
     $supplierEmail = $_POST['supplierEmail'];
-    $contactNo = $_POST['contactNo'];
-    $status = "Registered";
+    $status = "2";
     $productGrp = $_POST['productGrp'];
     $description = $_POST['description'];
+    $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
+    $query1 = mysqli_query($dbc, "insert into vendor(name,company_code,registration_status,email,product,description) values('$fullName','$companyReg','$status','$supplierEmail','$productGrp','$description')"); 
     $fileCount = count($_FILES['file']['name']);
-    $query = mysqli_query($dbc, "insert into company(companyReg,companyName,companyEmail,streetNo,postalCode,city,country,region,currency,language) values('$companyReg','$companyName','$companyEmail','$streetNo','$postalCode','$city','$country','$region','$currency','$language')");
-    $query1 = mysqli_query($dbc, "insert into vendor(companyReg,firstName,lastName,supplierEmail,contactNo,status,productGrp,description) values('$companyReg','$firstName','$lastName','$supplierEmail','$contactNo','$status','$productGrp','$description')"); 
     for($i=0;$i<$fileCount;$i++){
         $fileName = $_FILES['file']['name'][$i];
-        $query2 = mysqli_query($dbc,"insert into companyfile(companyReg,title,file) values('$companyReg','$fileName','$fileName')");
+        $query2 = mysqli_query($dbc,"insert into companyfile(company_code,title,file) values('$companyReg','$fileName','$fileName')");
     }
     if ($query && $query1 && $query2){
         echo "<script>alert('You are successfully register');</script>";
@@ -44,14 +53,10 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8" content="width=device-width, initial-scale=1.0">
-        <title>GO Uniform | Supplier Self Registration</title>
-        <link rel="icon"  type="image/png" sizes="16×16" href="pictures/Logo2.png">
+        <title>GO Uniform | Self Registration</title>
+        <link rel="icon"  type="image/png" sizes="16×16" href="uploads/1635148440_Logo2.png">
     </head>
     <style>
-        body{
-            font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-        }
-
         section{
             padding-left: 120px;
             padding-right: 250px;
@@ -102,9 +107,8 @@ and open the template in the editor.
         }
 
     </style>
-    <body>
         <section class="header domReload">
-            <h1>Supplier self registration</h1>
+            <h1>Self registration</h1>
             <div class="content">
                 <div class="intro copy">
                     <p>If this is <strong>your first time visiting our website</strong>, please familiarize yourself with the way GO Uniform Sdn Bhd does business with its suppliers.<br>The first pre-requiste before your company contacts our purchasing staff is to register and fill in the following <strong>Supplier Registration Form</strong>. </p><p>After entering all data, please submit the form by pressing the submit button.</p><p>Your entered data is then available for the respective GO Uniform Sdn Bhd purchasing staff who checks your product / service portfolio. If they are interested in your profile, they will get in touch with you directly by using the contact address you have entered.</p>
@@ -238,13 +242,7 @@ and open the template in the editor.
                     <!--  </div> -->
                 </div>
 
-                <div class="form-group">
-                    <label id="fld-phone-label" for="fld-phone" class="col-sm-3 control-label">Phone number&nbsp;*</label>
-                    <!--  <div class="col-sm-9"> -->
-                    <input id="fld-phone" name="contactNo" class="input-text form-control" type="text" value=""/>
-                    <div class="validation-error"></div>
-                    <!--  </div> -->
-                </div>
+                
 
                 <h2>Goods &amp; Services:</h2>
                 <div class="form-group">
@@ -300,14 +298,5 @@ and open the template in the editor.
                 </div>
             </form>
         </div>
-        <br>
-        <br>
 
-    </body>
-    <div id="footer" style="width: 100%">
-        <hr size="1" noshade="noshade" />
-    </div> <!-- end div footer -->
-
-
-
-</html>
+    

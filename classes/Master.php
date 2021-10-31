@@ -137,35 +137,35 @@ Class Master extends DBConnection {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('vendor_ID'))) {
+            if (!in_array($k, array('id'))) {
                 $v = addslashes(trim($v));
                 if (!empty($data))
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' " . (!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "") . " ")->num_rows;
+        $check = $this->conn->query("SELECT * FROM `id` where `startDate` = '{startDate}' " . (!empty($startDate) ? " and startDate != {$startDate} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "Supplier already exist.";
+            $resp['msg'] = "Contract already exist.";
             return json_encode($resp);
             exit;
         }
-        if (empty($vendor_ID)) {
-            $sql = "INSERT INTO `vendor` set {$data} ";
+        if (empty($id)) {
+            $sql = "INSERT INTO `contract` set {$data} ";
             $save = $this->conn->query($sql);
         } else {
-            $sql = "UPDATE `vendor` set {$data} where vendor_ID = '{$vendor_ID}' ";
+            $sql = "UPDATE `contract` set {$data} where id = '{$id}' ";
             $save = $this->conn->query($sql);
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($vendor_ID))
-                $this->settings->set_flashdata('success', "New Supplier successfully saved.");
+            if (empty($id))
+                $this->settings->set_flashdata('success', "New Contract successfully saved.");
             else
-                $this->settings->set_flashdata('success', "Supplier successfully updated.");
+                $this->settings->set_flashdata('success', "Contract successfully updated.");
         } else {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
@@ -175,7 +175,7 @@ Class Master extends DBConnection {
 
     function delete_con() {
         extract($_POST);
-        $del = $this->conn->query("DELETE FROM `contract` where contract_ID = '{$id}'");
+        $del = $this->conn->query("DELETE FROM `contract` where id = '{$id}'");
         if ($del) {
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "This contract successfully deleted.");
@@ -777,3 +777,4 @@ switch ($action) {
         // echo $sysset->index();
         break;
 }
+

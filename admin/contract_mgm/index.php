@@ -187,9 +187,9 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('.delete_data').click(function () {
-            _conf("Are you sure to delete this contract permanently?", "delete_con", [$(this).attr('data-id')])
-        })
+        $('.delete_data').click(function(){
+			_conf("Are you sure to delete this contract permanently?","delete_rent",[$(this).attr('data-id')])
+		})
         $('.view_details').click(function () {
             uni_modal("Reservaton Details", "contract_mgm/view_con.php?id=" + $(this).attr('data-id'), 'mid-large')
         })
@@ -199,29 +199,29 @@
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
-    function delete_con($id) {
-        start_loader();
-        $.ajax({
-            url: base_url + "classes/Master.php?f=delete_con",
-            method: "POST",
-            data: {id: $id},
-            dataType: "json",
-            error: err => {
-                console.log(err)
-                alert_toast("An error occured.", 'error');
-                end_loader();
-            },
-            success: function (resp) {
-                if (typeof resp == 'object' && resp.status == 'success') {
-                    location.reload();
-                } else {
-                    alert_toast("An error occured.", 'error');
-                    end_loader();
-                }
-            }
-        })
-    }
-    function renew_rent($id) {
+    function delete_rent($id){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=delete_con",
+			method:"POST",
+			data:{id: $id},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert_toast("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+					location.reload();
+				}else{
+					alert_toast("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
+    /*function renew_rent($id) {
         start_loader();
         $.ajax({
             url: base_url + "classes/Master.php?f=renew_rent",
@@ -242,5 +242,5 @@
                 }
             }
         })
-    }
+    }*/
 </script>

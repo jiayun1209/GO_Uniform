@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><h3><b>EMPLOYEE</b></p></h3>
                 <?php
-                    $s_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id");
+                    $s_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id and r.id = $id");
                     $s = $s_qry->fetch_array();
                     ?>
                     <div>
@@ -112,7 +112,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody>
                             <?php
-                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id and r.staff_ID != 0");
+                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`staff` s where r.staff_ID  = s.id and r.staff_ID != 0 and r.id = '$id'");
 
                             while ($row = $rfq_qry->fetch_assoc()):
                                 ?>
@@ -125,11 +125,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                         </tbody>                        
                     </table>
-                    <div class="row">
-                        <div class="col-6">                            
-                            <label for="remarks" class="control-label">Company Sign Here:</label>
-                            <img src="uploads/company_sign.PNG" id="remarks" cols="10" rows="4" class="form-control rounded-0"  >
-                        </div>
+                    <div class="row">                       
                         <label for="notes" class="control-label">Notes</label>
                         <p><?php echo isset($remarks) ? $remarks : '' ?></p>
                     </div>   

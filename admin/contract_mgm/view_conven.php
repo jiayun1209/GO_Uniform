@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><h3><b>VENDOR</b></p></h3>
                 <?php
-                $sup_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`vendor` s where r.vendor_ID  = s.vendor_ID and r.vendor_ID != 0");
+                $sup_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`vendor` s where r.vendor_ID  = s.vendor_ID and r.id = '$id'");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
@@ -112,7 +112,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody>
                             <?php
-                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`vendor` s where r.vendor_ID  = s.vendor_ID and r.vendor_ID != 0");
+                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`vendor` s where r.vendor_ID  = s.vendor_ID and r.vendor_ID != 0 and r.id = '$id'");
 
                             while ($row = $rfq_qry->fetch_assoc()):
                                 ?>
@@ -131,43 +131,43 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <label for="remarks" class="control-label">Company Sign Here:</label>
                             <img src="uploads/company_sign.PNG" id="remarks" cols="10" rows="4" class="form-control rounded-0"  >
                         </div>
-                            <label for="notes" class="control-label">Notes</label>
-                            <p><?php echo isset($remarks) ? $remarks : '' ?></p>
-                        </div>   
-                    </div>
+                        <label for="notes" class="control-label">Notes</label>
+                        <p><?php echo isset($remarks) ? $remarks : '' ?></p>
+                    </div>   
             </div>
         </div>
-
     </div>
-    <table class="d-none" id="item-clone">
-        <tr class="rfq-item" data-id="">
-            <td class="align-middle p-1 text-center">
-                <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-            </td> 
-        </tr>
-    </table>
-    <script>
-        $(function () {
-            $('#print').click(function (e) {
-                e.preventDefault();
-                start_loader();
-                var _h = $('head').clone()
-                var _p = $('#out_print').clone()
-                var _el = $('<div>')
-                _p.find('thead th').attr('style', 'color:black !important')
-                _el.append(_h)
-                _el.append(_p)
 
-                var nw = window.open("", "", "width=1200,height=950")
-                nw.document.write(_el.html())
-                nw.document.close()
+</div>
+<table class="d-none" id="item-clone">
+    <tr class="rfq-item" data-id="">
+        <td class="align-middle p-1 text-center">
+            <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+        </td> 
+    </tr>
+</table>
+<script>
+    $(function () {
+        $('#print').click(function (e) {
+            e.preventDefault();
+            start_loader();
+            var _h = $('head').clone()
+            var _p = $('#out_print').clone()
+            var _el = $('<div>')
+            _p.find('thead th').attr('style', 'color:black !important')
+            _el.append(_h)
+            _el.append(_p)
+
+            var nw = window.open("", "", "width=1200,height=950")
+            nw.document.write(_el.html())
+            nw.document.close()
+            setTimeout(() => {
+                nw.print()
                 setTimeout(() => {
-                    nw.print()
-                    setTimeout(() => {
-                        end_loader();
-                        nw.close()
-                    }, 300);
-                }, 200);
-            })
+                    end_loader();
+                    nw.close()
+                }, 300);
+            }, 200);
         })
-    </script>
+    })
+</script>
