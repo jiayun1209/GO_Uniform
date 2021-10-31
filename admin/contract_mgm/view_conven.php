@@ -127,10 +127,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 
                     </table>
                     <div class="row">
-                        <div class="col-6">                            
-                            <label for="remarks" class="control-label">Company Sign Here:</label>
-                            <img src="uploads/company_sign.PNG" id="remarks" cols="10" rows="4" class="form-control rounded-0"  >
-                        </div>
+                        <div class="col-6">   
                         <label for="notes" class="control-label">Notes</label>
                         <p><?php echo isset($remarks) ? $remarks : '' ?></p>
                     </div>   

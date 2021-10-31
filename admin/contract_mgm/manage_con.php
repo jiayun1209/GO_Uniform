@@ -39,8 +39,8 @@ if (isset($_POST['save'])) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><?php echo isset($id) ? "Update Contract Date" : "New Contract" ?> </h3
-         <div class="card-tools">            
+        <h3 class="card-title"><?php echo isset($id) ? "Update Contract Date" : "New Contract" ?> </h3>
+                 <div class="card-tools">            
             <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/view_con&id=<?php echo $id ?>">View</a>
             <a class="btn btn-sm btn-flat btn-default" href="?page=contract_mgm">Back</a>
         </div>
