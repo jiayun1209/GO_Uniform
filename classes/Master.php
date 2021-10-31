@@ -109,7 +109,7 @@ Class Master extends DBConnection {
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($vendor_ID))
+            if (empty($subcontractor_ID))
                 $this->settings->set_flashdata('success', "New Subcontractor successfully saved.");
             else
                 $this->settings->set_flashdata('success', "Subcontractor successfully updated.");

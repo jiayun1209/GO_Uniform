@@ -34,9 +34,10 @@ if (isset($_GET['subcontractor_ID']) && $_GET['subcontractor_ID'] > 0) {
         <div class="form-group">
             <label for="registration_status" class="control-label">Registration Status</label>
             <select name="registration_status" id="registration_status" class="form-control rounded-0" required>
-                <option value="registered" <?php echo isset($registration_status) && $registration_status == "" ? "selected" : "registered" ?> >Registered</option>
-                <option value="invited" <?php echo isset($registration_status) && $registration_status == "" ? "selected" : "invited" ?>>Invited</option>
-                <option value="approved" <?php echo isset($registration_status) && $registration_status == "" ? "selected" : "approved" ?>>Approve</option>
+               <option value="approved" <?php echo isset($registration_status) && $registration_status == "approved" ? "selected" : "approved" ?> >Approved</option>
+                <option value="rejected" <?php echo isset($registration_status) && $registration_status == "rejected" ? "selected" : "rejected" ?>>Rejected</option>
+                <option value="registered" <?php echo isset($registration_status) && $registration_status == "registered" ? "selected" : "registered" ?>>Registered</option>
+                <option value="invited" <?php echo isset($registration_status) && $registration_status == "invited" ? "selected" : "invited" ?>>Invited</option>
             </select>
         </div>
         <div class="form-group">

@@ -34,8 +34,9 @@ if(isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != ""){
         <div class="form-group">
             <label for="registration_status" class="control-label">Registration Status</label>
             <select name="registration_status" id="registration_status" class="form-control rounded-0" required>
-                <option value="1" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "1" ?> >Approved</option>
-                <option value="0" <?php echo isset($registration_status) && $registration_status =="" ? "selected": "0" ?>>Rejected</option>
+                <option value="1" <?php echo isset($registration_status) && $registration_status == 1 ? "selected" : "1" ?> >Approved</option>
+                <option value="0" <?php echo isset($registration_status) && $registration_status == 0 ? "selected" : "0" ?>>Rejected</option>
+                <option value="2" <?php echo isset($registration_status) && $registration_status == 2 ? "selected" : "2" ?>>Registered</option>
             </select>
         </div>
         <div class="form-group">

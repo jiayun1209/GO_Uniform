@@ -25,6 +25,8 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID']!= '') {
             <dd class="col-md-8">: 
                 <?php if ($registration_status == 1): ?>
                     <span class="badge badge-success">Approved</span>
+                 <?php elseif ($registration_status == 2): ?>
+                    <span class="badge badge-warning">Registered</span>
                 <?php else: ?>
                     <span class="badge badge-secondary">Rejected</span>
                 <?php endif; ?>

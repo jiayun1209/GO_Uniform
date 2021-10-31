@@ -26,22 +26,29 @@ if (isset($_POST['submit'])) {
     $fullName = $firstName.' '.$lastName; 
     $supplierEmail = $_POST['supplierEmail'];
     $status = "2";
+    $sub_status = "registered";
     $productGrp = $_POST['productGrp'];
     $description = $_POST['description'];
+    $querySub = "";
+    $query1 = "";
     $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
+    if($productGrp == "others"){
+    $querySub = mysqli_query($dbc, "insert into subcontractor(name,company_code,email,registration_status,description) values('$fullName','$companyReg','$supplierEmail','$sub_status','$description')"); }
+    else{
     $query1 = mysqli_query($dbc, "insert into vendor(name,company_code,registration_status,email,product,description) values('$fullName','$companyReg','$status','$supplierEmail','$productGrp','$description')"); 
+    }
     $fileCount = count($_FILES['file']['name']);
     for($i=0;$i<$fileCount;$i++){
         $fileName = $_FILES['file']['name'][$i];
         $query2 = mysqli_query($dbc,"insert into companyfile(company_code,title,file) values('$companyReg','$fileName','$fileName')");
     }
-    if ($query && $query1 && $query2){
+    if ($query && $query2 && ($querySub || $query1)){
         echo "<script>alert('You are successfully register');</script>";
     } else {
         echo "<script>alert('Not register something went worng');</script>";
     }
+    }
     
-}
 ?>
 <!DOCTYPE html>
 <!--
@@ -125,7 +132,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-company-name-label" for="fld-company-Regno" class="col-sm-3 control-label">Company Registration No&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-company-Regno" name="companyReg" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-company-Regno" name="companyReg" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -133,7 +140,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-company-name-label" for="fld-company-name" class="col-sm-3 control-label">Company name&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-company-name" name="companyName" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-company-name" name="companyName" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -141,7 +148,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-company-name-label" for="fld-company-email" class="col-sm-3 control-label">Company Email Address&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-company-email" name="companyEmail" class="input-text form-control" type="email" value=""/>
+                    <input id="fld-company-email" name="companyEmail" class="input-text form-control" type="email" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -149,7 +156,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-street-label" for="fld-street-no" class="col-sm-3 control-label">Street no&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-street-no" name="streetNo" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-street-no" name="streetNo" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -157,7 +164,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-postal-code-label" for="fld-postal-code" class="col-sm-3 control-label">Postal Code&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-postal-code" name="postalCode" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-postal-code" name="postalCode" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -165,7 +172,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-city-label" for="fld-city" class="col-sm-3 control-label">City&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-city" name="city" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-city" name="city" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -173,7 +180,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-country-label" for="fld-country" class="col-sm-3 control-label">Country / Territory&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <select id="fld-countryCode" name="country" class="input-text form-control">
+                    <select id="fld-countryCode" name="country" class="input-text form-control" required>
                         <option value="">--Please choose an option--</option>
                         <option name="malaysia" value="malaysia">Malaysia</option>
                         <option name="singapore" value="singapore">Singapore</option>
@@ -188,7 +195,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-region-label" for="fld-region" class="col-sm-3 control-label">Region&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-region" name="region" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-region" name="region" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -196,7 +203,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-currency-label" for="fld-currency" class="col-sm-3 control-label">Currency&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-currency" name="currency" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-currency" name="currency" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -204,7 +211,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-language-label" for="fld-language" class="col-sm-3 control-label">Language&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <select id="fld-language" name="language" class="input-text form-control">
+                    <select id="fld-language" name="language" class="input-text form-control" required>
                         <option value="">--Please choose an option--</option>
                         <option name="english" value="english">English</option>
                         <option name="malay" value="malay">Malay</option>
@@ -221,7 +228,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-firstName-label" for="fld-firstName" class="col-sm-3 control-label">First Name&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-firstName" name="firstName" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-firstName" name="firstName" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -229,7 +236,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-lastName-label" for="fld-lastName" class="col-sm-3 control-label">Last Name&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-lastName" name="lastName" class="input-text form-control" type="text" value=""/>
+                    <input id="fld-lastName" name="lastName" class="input-text form-control" type="text" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -237,7 +244,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-email-label" for="fld-email" class="col-sm-3 control-label">Email Address&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <input id="fld-email" name="supplierEmail" class="input-text form-control" type="email" value=""/>
+                    <input id="fld-email" name="supplierEmail" class="input-text form-control" type="email" value="" required/>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div>
@@ -252,11 +259,12 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-pcn-group-label" for="fld-pcn-group" class="col-sm-3 control-label">Product Group&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <select id="fld-product-grp" name="productGrp" class="input-text form-control">
+                    <select id="fld-product-grp" name="productGrp" class="input-text form-control" required>
                         <option value="">--Please choose an option--</option>
-                        <option name="baju kurung" value="baju kurung">Baju Kurung</option>
+                        <option name="materials" value="materials">Materials</option>
                         <option name="school uniform" value="school uniform">School Uniform</option>
                         <option name="career uniform" value="career uniform">Career Uniform</option>
+                        <option name="others" value="others">Others</option>
                     </select>
                    <!--  <input id="fld-language" name="productGrp" type="hidden" value=""/>-->
                     <div class="validation-error"></div>
@@ -266,7 +274,7 @@ and open the template in the editor.
                 <div class="form-group">
                     <label id="fld-goods-description-label" for="fld-goods-description" class="col-sm-3 control-label">What goods and/ or services in concrete you want to sell to us:&nbsp;*</label>
                     <!--  <div class="col-sm-9"> -->
-                    <textarea id="fld-goods-description" name="description" class="input-text form-control" rows="7"></textarea>
+                    <textarea id="fld-goods-description" name="description" class="input-text form-control" rows="7" required></textarea>
                     <div class="validation-error"></div>
                     <!--  </div> -->
                 </div> 
