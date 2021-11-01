@@ -234,7 +234,7 @@ Class Master extends DBConnection {
             foreach ($item_id as $k => $v) {
                 if (!empty($data))
                     $data .= ",";
-                $data .= "('{$rfq_no}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
+                $data .= "('{$rfq_no}',{$v},'{$unit_price[$k]}','{$qty[$k]}')";
             }
             if (!empty($data)) {
                 $this->conn->query("DELETE FROM `rfq` where rfq_no = '{$rfq_no}'");
@@ -381,7 +381,7 @@ Class Master extends DBConnection {
         $qry = $this->conn->query("SELECT * FROM inventory where `name` LIKE '%{$q}%'");
         $data = array();
         while ($row = $qry->fetch_assoc()) {
-            $data[] = array("label" => $row['name'], "id" => $row['id'], "description" => $row['description']);
+            $data[] = array("label" => $row['id'], "name" => $row['name'], "description" => $row['description']);
         }
         return json_encode($data);
     }

@@ -58,14 +58,13 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="text" class="form-control form-control-sm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
-                 <div class="col-6">
+                <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
-                     <input type="text" class="text-center w-100 border-0" value="<?php echo isset($deadline) ? $deadline : '' ?>"/>                 
+                    <input type="text" name="deadline" id="deadline" class="text-center w-100 border-0 deadline" required>          
                 </div>
                 <div class="col-6">
                     <p  class="m-0"><b>Delivery Date</b></p>
-                    <input type="text"  class="text-center w-100 border-0" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>"/>
-                    
+                   <input type="text" name="delivery_date" id="delivery_date" class="text-center w-100 border-0 delivery_date" required>                     
                 </div>
             </div>
             <div class="row">
@@ -74,6 +73,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <colgroup>
                             <col width="5%">
                             <col width="5%">
+                            <col width="10%">
                             <col width="20%">
                             <col width="30%">
                             <col width="15%">
@@ -81,14 +81,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </colgroup>
                         <thead>
                         <br>
-                            <tr class="bg-navy disabled">
-                                <th class="px-1 py-1 text-center"></th>
-                                <th class="px-1 py-1 text-center">Qty</th>
-                                <th class="px-1 py-1 text-center">Item</th>
-                                <th class="px-1 py-1 text-center">Description</th>
-                                <th class="px-1 py-1 text-center">Unit Price</th>
-                                <th class="px-1 py-1 text-center">Sub Total</th>
-                            </tr>
+                        <tr class="bg-navy disabled">
+                            <th class="px-1 py-1 text-center"></th>
+                            <th class="px-1 py-1 text-center">Qty</th>
+                            <th class="px-1 py-1 text-center">Item ID</th>
+                             <th class="px-1 py-1 text-center">Item Name</th>
+                            <th class="px-1 py-1 text-center">Description</th>
+                            <th class="px-1 py-1 text-center">Unit Price</th>
+                            <th class="px-1 py-1 text-center">Sub Total</th>
+                        </tr>
                         </thead>
                         <tbody>
                             <?php
@@ -97,7 +98,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
-                                $total += ($row['quantity'] * $row['unit_price']);
+                                    $total += ($row['quantity'] * $row['unit_price']);
                                     ?>
                                     <tr class="po-item" data-id="">
                                         <td class="align-middle p-1 text-center">
@@ -106,10 +107,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-0 text-center">
                                             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
                                         </td>
-                                        <td class="align-middle p-1">
-                                            <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
-                                            <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
+                                        <td class="align-middle p-1">                                            
+                                            <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['item_id'] ?>" required/>
                                         </td>
+                                        <td class="align-middle p-1 item-name"><?php echo $row['name'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -165,10 +166,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-0 text-center">
             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
-        <td class="align-middle p-1">
-            <input type="hidden" name="item_id[]">
+        <td class="align-middle p-1">          
             <input type="text" class="text-center w-100 border-0 item_id" required/>
         </td>
+        <td class="align-middle p-1 item-name"></td>
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
@@ -177,7 +178,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
-    
+
     function rem_item(_this) {
         _this.closest('tr').remove()
     }
@@ -198,19 +199,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             _total += parseFloat(_price)
         })
         var discount_perc = 0
-         if ($('[name="discount_percentage"]').val() > 0) {
-         discount_perc = $('[name="discount_percentage"]').val()
-         }
-         var discount_amount = _total * (discount_perc / 100);
-         $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-         var tax_perc = 0
-         if ($('[name="tax_percentage"]').val() > 0) {
-         tax_perc = $('[name="tax_percentage"]').val()
-         }
-         var tax_amount = _total * (tax_perc / 100);
-         $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-         $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-         $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
+        if ($('[name="discount_percentage"]').val() > 0) {
+            discount_perc = $('[name="discount_percentage"]').val()
+        }
+        var discount_amount = _total * (discount_perc / 100);
+        $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
+        var tax_perc = 0
+        if ($('[name="tax_percentage"]').val() > 0) {
+            tax_perc = $('[name="tax_percentage"]').val()
+        }
+        var tax_amount = _total * (tax_perc / 100);
+        $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
+        $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
+        $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
     }
 
     function _autocomplete(_item) {
@@ -232,6 +233,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             select: function (event, ui) {
                 console.log(ui)
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
+                _item.find('.item-name').text(ui.item.name)
                 _item.find('.item-description').text(ui.item.description)
             }
         })

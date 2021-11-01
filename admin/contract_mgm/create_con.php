@@ -24,17 +24,12 @@ if (isset($_POST['submit'])) {
         $staff_ID = 0;
         $subcontractor_ID = $id;
         $query = mysqli_query($conn, "insert into contract(contract_ID,subcontractor_ID,vendor_ID,staff_ID,startDate,endDate,remarks) values('$contract_ID','$subcontractor_ID',$vendor_ID,$staff_ID,'$startDate','$endDate','$remarks')");
-    } else if ($contract == "vendor_ID") {
+    } else {
         $subcontractor_ID = '0';
         $staff_ID = 0;
         $vendor_ID = $id;
         $query = mysqli_query($conn, "insert into contract(contract_ID,subcontractor_ID,vendor_ID,staff_ID,startDate,endDate,remarks) values('$contract_ID','$subcontractor_ID',$vendor_ID,$staff_ID,'$startDate','$endDate','$remarks')");
-    }else{
-        $subcontractor_ID = '0';
-        $staff_ID = $id;
-        $vendor_ID = 0;
-        $query = mysqli_query($conn, "insert into contract(contract_ID,subcontractor_ID,vendor_ID,staff_ID,startDate,endDate,remarks) values('$contract_ID','$subcontractor_ID',$vendor_ID,$staff_ID,'$startDate','$endDate','$remarks')");
-}
+    }
     if ($query) {
         echo "<script>alert('You are successfully created');</script>";
     } else {
@@ -109,7 +104,6 @@ if (isset($_POST['submit'])) {
                             <option value="">--Please choose an option--</option>
                             <option name="subcontractor_ID" value="subcontractor_ID">Sub Contractor</option>
                             <option name="vendor_ID" value="vendor_ID">Vendor</option>
-                            <option name="staff_ID" value="staff_ID">Staff</option>
                         </select>                      
                         <div class="validation-error"></div>
                         <small><i>Please choose one of the person that you want to create a new contract.</i></small>
