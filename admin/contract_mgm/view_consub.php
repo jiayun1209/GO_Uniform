@@ -43,7 +43,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <h3 class="card-title"><?php echo isset($id) ? "Update Contract Details" : "New Contract" ?> </h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/manage_con&id=<?php echo $id ?>">Edit</a>
+            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/manage_consub&id=<?php echo $id ?>">Edit</a>
             <a class="btn btn-sm btn-flat btn-default" href="?page=contract_mgm">Back</a>
         </div>
     </div>
@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-6">
                 <p class="m-0"><h3><b>SUB CONTRACTOR</b></p></h3>
                 <?php
-                $sub_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID");
+                $sub_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.id = '$id'");
                 $sub = $sub_qry->fetch_array();
                 ?>
                 <div>
@@ -115,7 +115,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody>
                             <?php
-                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.subcontractor_ID != 0");
+                            $rfq_qry = $conn->query("SELECT r.*, s.* FROM `contract` r,`subcontractor` s where r.subcontractor_ID  = s.subcontractor_ID and r.subcontractor_ID != 0 and r.id = '$id'");
 
                             while ($row = $rfq_qry->fetch_assoc()):
                                 ?>
@@ -129,10 +129,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </tbody>                        
                     </table>
                     <div class="row">
-                        <div class="col-6">                            
-                            <label for="remarks" class="control-label">Company Sign Here:</label>
-                            <img src="uploads/company_sign.PNG" id="remarks" cols="10" rows="4" class="form-control rounded-0"  >
-                        </div>
+                        <div class="col-6">
                         <label for="notes" class="control-label">Notes</label>
                         <p><?php echo isset($remarks) ? $remarks : '' ?></p>
                     </div>   

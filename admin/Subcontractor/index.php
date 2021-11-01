@@ -38,7 +38,7 @@
                         <?php
                         $i = 1;
                         $qry = $conn->query("SELECT * from `subcontractor` order by (`subcontractor_ID`) asc ");
-
+                 
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
@@ -51,6 +51,8 @@
                                     <span class="badge badge-success">Registered</span>
                                     <?php elseif ($row['registration_status'] == 'approved'): ?>
                                     <span class="badge badge-success">Approved</span>
+                                    <?php elseif ($row['registration_status'] == 'rejected'): ?>
+                                    <span class="badge badge-dark">Rejected</span>
                                     <?php else: ?>
                                     <span class="badge badge-secondary">Invited</span>
                                     <?php endif; ?>
@@ -74,13 +76,13 @@
                         <?php endwhile; ?>
                     </tbody>
                 </table>
-
+                
             </div>
         </div>
-
+        
     </div>
 </div>
-
+    
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {
@@ -121,4 +123,4 @@
             }
         })
     }
-    </script>
+</script>

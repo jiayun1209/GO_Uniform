@@ -9,10 +9,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          
+          <a href="" class="navbar-brand">GO_Uniform Operation Calendar</a>
         </div>
         <div class="navbar-collapse collapse">
-          
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="http://localhost/GO_Uniform/admin/">Back</a></li>
+           
+          </ul>
          
         </div><!--/.nav-collapse -->
       </div>

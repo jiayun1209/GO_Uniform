@@ -40,8 +40,8 @@ if (isset($_POST['save'])) {
 <div class="card card-outline card-info">
     <div class="card-header">
         <h3 class="card-title"><?php echo isset($id) ? "Update Contract Date" : "New Contract" ?> </h3>
-                 <div class="card-tools">            
-            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/view_con&id=<?php echo $id ?>">View</a>
+        <div class="card-tools">
+            <a class="btn btn-sm btn-flat btn-primary" href="?page=contract_mgm/view_consub&id=<?php echo $id ?>">View</a>
             <a class="btn btn-sm btn-flat btn-default" href="?page=contract_mgm">Back</a>
         </div>
     </div>
@@ -68,7 +68,7 @@ if (isset($_POST['save'])) {
                         <br>
                         <tr class="bg-navy disabled">
                             <th class="px-1 py-1 text-center"></th>
-                            <th class="px-1 py-1 text-center">Staff ID</th>
+                            <th class="px-1 py-1 text-center">Sub Contractor ID</th>
                             <th class="px-1 py-1 text-center">Start Date</th>
                             <th class="px-1 py-1 text-center">End Date</th>
                         </tr>
@@ -76,7 +76,7 @@ if (isset($_POST['save'])) {
                         <tbody>
                             <?php
                             if (isset($id)):                               
-                                $sub = $conn->query("SELECT c.*, s.* from contract c, staff s where c.staff_ID = s.id and c.id = '$id'");
+                                $sub = $conn->query("SELECT c.*, s.* from contract c, subcontractor s where c.subcontractor_ID = s.subcontractor_ID and c.id = '$id'");
                                 echo $conn->error;
                                 while ($row = $sub->fetch_assoc()):
                                     ?>
@@ -84,7 +84,7 @@ if (isset($_POST['save'])) {
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
-                                         <td class="align-middle p-1 sub_id "><?php echo $row['staff_ID'] ?></td>                                                                             
+                                         <td class="align-middle p-1 sub_id "><?php echo $row['subcontractor_ID'] ?></td>                                                                             
                                          <td class="align-middle p-1 date "><?php echo $row['startDate'] ?></td>
                                          <td class="align-middle p-1">
                                              <input type="text" name="endDate" id="endDate" required autofocus>
@@ -107,5 +107,7 @@ if (isset($_POST['save'])) {
         </form>
     </div>
     <div class="card-footer">
+        <button type="submit" name="save" class="btn btn-flat btn-primary" form="po-form">Save</button>
         <a class="btn btn-flat btn-default" href="?page=contract_mgm">Cancel</a>
     </div>
+</div>

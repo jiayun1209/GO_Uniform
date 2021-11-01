@@ -19,6 +19,8 @@
 					<col width="15%">
 					<col width="15%">
 					<col width="15%">
+                                        <col width="15%">
+                                        <col width="15%">
                                         <col width="25%">
 				</colgroup>
 				<thead>
@@ -27,13 +29,15 @@
 						<th>Catalog ID</th>
 						<th>Description</th>
                                                 <th>Vendor ID</th>
+                                                <th>Vendor Name</th>
+                                                <th>Vendor Company</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-					$qry = $conn->query("SELECT * from `catalog`");
+					$qry = $conn->query("SELECT c.*, v.name, com.company_name from `catalog` c, `vendor` v, `company` com where c.vendor_ID = v.vendor_ID and com.company_code = v.company_code");
 					while($row = $qry->fetch_assoc()):
 						$row['description'] = html_entity_decode($row['description']);
 					?>
@@ -42,6 +46,8 @@
                                                         <td><?php echo $row['catalog_ID'] ?></td>
 							<td class='truncate-3' title="<?php echo $row['description'] ?>"><?php echo $row['description'] ?></td>
                                                         <td><?php echo $row['vendor_ID'] ?></td>
+                                                        <td><?php echo $row['name'] ?></td>
+                                                        <td><?php echo $row['company_name'] ?></td>
 							<td align="center">
 								 <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
 				                  		Action

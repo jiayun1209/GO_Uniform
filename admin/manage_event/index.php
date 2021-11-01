@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Operation Calendar</h3>
         <div class="card-tools">
-            <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="javascript:void(0)" data-id = "" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
         </div>
     </div>
     <div class="card-body">
@@ -15,9 +15,11 @@
             <div class="container-fluid">
                 <table class="table table-hover table-striped">
                     <colgroup>
+                        
+                        <col width="5%">
                         <col width="5%">					
-                        <col width="20%">
-                        <col width="15%">
+                        <col width="18%">
+                        <col width="12%">
                         <col width="10%">
                         <col width="10%">					
                         <col width="10%">
@@ -25,7 +27,8 @@
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled">
-                            <th>id</th>
+                             <th>No</th>
+                            <th>ID</th>
                             <th>Title</th>
                             <th>Description</th>
                             <th>Start Date</th>
@@ -38,12 +41,15 @@
                     <tbody>
                         <?php
                         $i = 1;
+                        
+                        $cnt = 1;
                         $qry = $conn->query("SELECT * from `events` order by (`id`) asc ");
                         while ($row = $qry->fetch_assoc()):
-                            
                             ?>
                             <tr>
-                                <td><?php echo $row['id'] ?></td>
+                                
+                                <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
+                                 <td><?php echo $row['id'] ?></td>
                                 <td><?php echo $row['title'] ?></td>
                                 <td><?php echo $row['description'] ?></td>
                                 <td class=""><?php echo $row['start_date'] ?></td>
@@ -58,17 +64,19 @@
                                         <span class="badge badge-secondary">Block</span>
                                     <?php endif; ?>
                                 </td>
+                                
+                                
                                 <td align="center">
-                                    <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
                                         Action
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" href="?page=add_event/view_event&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                        <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span> View</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=RFQ/manage_event&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['id'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
                                     </div>
                                 </td>
                             </tr>
@@ -85,13 +93,13 @@
             _conf("Are you sure to delete this Event permanently?", "delete_event", [$(this).attr('data-id')])
         })
         $('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Create New Event", "add_event/add_event.php")
+            uni_modal("<i class='fa fa-plus'></i> Add New Event", "manage_event/add_event.php")
         })
         $('.view_data').click(function () {
-            uni_modal("<i class='fa fa-info-circle'></i> Event Details", "add_event/view_event.php?id=" + $(this).attr('data-id'), "")
+            uni_modal("<i class='fa fa-info-circle'></i> Event's Details", "manage_event/view_event.php?id=" + $(this).attr('data-id'), "")
         })
         $('.edit_data').click(function () {
-            uni_modal("<i class='fa fa-edit'></i> Edit Event Details", "add_event/manage_event.php?id=" + $(this).attr('data-id'))
+            uni_modal("<i class='fa fa-edit'></i> Edit Event's Details", "manage_event/manage_event.php?id=" + $(this).attr('data-id'))
         })
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
@@ -119,5 +127,4 @@
             }
         })
     }
-
 </script>

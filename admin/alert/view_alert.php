@@ -17,6 +17,9 @@ if (isset($_GET['alert_id']) && $_GET['alert_id']!= '') {
 <div class="container fluid">
     <callout class="callout-primary">
         <dl class="row">
+            
+            <dt class="col-md-4">Alert ID</dt>
+            <dd class="col-md-8">: <?php echo $alert_id ?></dd>
             <dt class="col-md-4">Alert Name</dt>
             <dd class="col-md-8">: <?php echo $alert_name ?></dd>
             <dt class="col-md-4">Description</dt>

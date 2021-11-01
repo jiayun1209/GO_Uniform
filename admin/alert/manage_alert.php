@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if (isset($_GET['alert_id']) && $_GET['alert_id'] != "") {
-    $qry = $conn->query("SELECT * from `alert` where alert_id = '{$_GET['alert_id ']}' ");
+    $qry = $conn->query("SELECT * from `alert` where alert_id = '{$_GET['alert_id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = stripslashes($v);
@@ -21,20 +21,17 @@ if (isset($_GET['alert_id']) && $_GET['alert_id'] != "") {
     }
 </style>
 <form action="" id="alert-form">
-    <input type="hidden" name="alert_id " value="<?php echo($alert_id ) ? $alert_id : "" ?>" readonly>
+    <input type="hidden" name="alert_id" value="<?php echo($alert_id) ? $alert_id : "" ?>" readonly>
     <div class="container-fluid">
         <div class="form-group">
             <label for="alert_name" class="control-label">Alert Name</label>
-            <input type="text" name="alert_name" id="alert_name" class="form-control rounded-0" value="<?php echo isset($alert_name) ? $alert_name : " " ?>" required>
+            <input type="text" name="alert_name" id="alert_name" class="form-control rounded-0" value="<?php echo isset($alert_name) ? $alert_name : " " ?>" readonly>
         </div>
         <div class="form-group">
             <label for="description" class="control-label">Description</label>
             <input type="text" name="description" id="description" class="form-control rounded-0" value="<?php echo isset($description) ? $description : " " ?>" required>
         </div>
-        <div class="form-group">
-            <label for="date_alert" class="control-label">Date Created</label>
-            <input type="datetime" name="date_alert" id="date_alert" class="form-control rounded-0" value="<?php echo isset($date_alert) ? $date_alert : " " ?>" required>
-        </div>
+
     </div>
 </form>
 <script>

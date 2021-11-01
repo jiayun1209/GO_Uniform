@@ -1,4 +1,5 @@
 <?php
+require_once('../../config.php');
 if (isset($_GET['pr_ID']) && $_GET['pr_ID'] != "") {
     $qry = $conn->query("SELECT * from `purchase_requisition` where pr_ID = '{$_GET['pr_ID']}' ");
     if ($qry->num_rows > 0) {
@@ -19,73 +20,59 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] != "") {
         height: auto;
     }
 </style>
-<div class="card card-outline card-primary">
+<form action="" id="mr-form">
+    <input type="hidden" name="pr_ID" value="" readonly>
+    <div class="container-fluid">
+        <div class="form-group"> <label class="control-label" for="basicinput">Staff ID</label>
+            <div class="controls">
+                <select name="staff_ID" class="custom-select custom-select-sm rounded-0 select3"  required>
+                    <option value="">Select Staff ID</option> 
+                    <?php
+                    $query = mysqli_query($conn, "select * from staff");
+                    while ($row = mysqli_fetch_array($query)) {
+                        ?>
 
-    <h2 align="center">Purchase Requisition Creation</h2>
-    <div class="card-body">
-        <div class="container-fluid">
-
-            <div id="msg"></div>
-            <form action="" id="manage-pr_create">	
-                <input type="hidden" name="pr_ID" value="<?php echo isset($meta['pr_ID']) ? $meta['pr_ID'] : '' ?>">
-                <div class="form-group"> <label class="control-label" for="basicinput">Staff ID</label>
-                    <div class="controls">
-                        <select name="staff_ID" class="custom-select custom-select-sm rounded-0 select3"  required>
-                            <option value="">Select Staff ID</option> 
-                            <?php
-                            $query = mysqli_query($conn, "select * from staff");
-                            while ($row = mysqli_fetch_array($query)) {
-                                ?>
-
-                                <option value="<?php echo $row['id']; ?>"><?php echo $row['id']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group"> <label class="control-label" for="basicinput">Item ID</label>
-                    <div class="controls">
-                        <select name="item_id" class="custom-select custom-select-sm rounded-0 select3"  required>
-                            <option value="">Select Item ID</option> 
-                            <?php
-                            $query = mysqli_query($conn, "select * from inventory");
-                            while ($row = mysqli_fetch_array($query)) {
-                                ?>
-
-                                <option value="<?php echo $row['id']; ?>"><?php echo $row['id']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="type" class="control-label">Quantity Request</label>
-                    <input type="text" name="quantity_request" id="quantity_request" class="form-control rounded-0" value="<?php echo isset($quantity_request) ? $quantity_request : " " ?>" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="status" class="control-label">Status</label>
-                    <select name="status" id="registration_status" class="form-control rounded-0" required>
-                        <option value="0" <?php echo isset($status) && $status == "" ? "selected" : "0" ?>>Ongoing</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="col-md-12">
-            <div class="row">
-                <button class="btn btn-sm btn-primary mr-2" form="manage-pr_create">Add</button>
-                <a class="btn btn-sm btn-secondary" href="./?page=purchase_requisition/pr_creation_staff">Cancel</a>
+                        <option value="<?php echo $row['id']; ?>"><?php echo $row['id']; ?></option>
+                    <?php } ?>
+                </select>
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="type" class="control-label">Type</label>
+            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="item_ID" class="control-label">Item ID</label>
+            <select name="item_ID" id="item_ID" class="custom-select custom-select-sm rounded-0 select3">
+                <option value="" disabled <?php echo!isset($item_ID) ? "selected" : '' ?>></option>
+                <?php
+                $mr_qry = $conn->query("SELECT * FROM `inventory` WHERE id!=0 order by `id` asc");
+                while ($row = $mr_qry->fetch_assoc()):
+                    ?>
+                    <option value="<?php echo $row['id'] ?>" <?php echo isset($item_ID) && $item_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity_request" class="control-label">Quantity Request</label>
+            <input type="text" name="quantity_request" id="quantity_request" class="form-control rounded-0" value="<?php echo isset($quantity_request) ? $quantity_request : " " ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status" class="control-label">Status</label>
+            <select name="status" id="status" class="form-control rounded-0" required>
+                <option value="completed" <?php echo isset($status) && $status == "" ? "selected" : "completed" ?> >Completed</option>
+                <option value="ongoing" <?php echo isset($status) && $status == "" ? "selected" : "ongoing" ?>>Ongoing</option>
+            </select>
+        </div>
     </div>
-</div>
-
+</form>
 <script>
-
     $(function () {
-        $('#manage-pr_create').submit(function (e) {
+        $('#mr-form').submit(function (e) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();

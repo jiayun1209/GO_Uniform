@@ -79,7 +79,7 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-    
+
     function save_subcontractor() {
         extract($_POST);
         $data = "";
@@ -109,7 +109,7 @@ Class Master extends DBConnection {
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($vendor_ID))
+            if (empty($subcontractor_ID))
                 $this->settings->set_flashdata('success', "New Subcontractor successfully saved.");
             else
                 $this->settings->set_flashdata('success', "Subcontractor successfully updated.");
@@ -137,35 +137,35 @@ Class Master extends DBConnection {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('vendor_ID'))) {
+            if (!in_array($k, array('id'))) {
                 $v = addslashes(trim($v));
                 if (!empty($data))
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `vendor` where `name` = '{$name}' " . (!empty($vendor_ID) ? " and vendor_ID != {$vendor_ID} " : "") . " ")->num_rows;
+        $check = $this->conn->query("SELECT * FROM `id` where `startDate` = '{startDate}' " . (!empty($startDate) ? " and startDate != {$startDate} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "Supplier already exist.";
+            $resp['msg'] = "Contract already exist.";
             return json_encode($resp);
             exit;
         }
-        if (empty($vendor_ID)) {
-            $sql = "INSERT INTO `vendor` set {$data} ";
+        if (empty($id)) {
+            $sql = "INSERT INTO `contract` set {$data} ";
             $save = $this->conn->query($sql);
         } else {
-            $sql = "UPDATE `vendor` set {$data} where vendor_ID = '{$vendor_ID}' ";
+            $sql = "UPDATE `contract` set {$data} where id = '{$id}' ";
             $save = $this->conn->query($sql);
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($vendor_ID))
-                $this->settings->set_flashdata('success', "New Supplier successfully saved.");
+            if (empty($id))
+                $this->settings->set_flashdata('success', "New Contract successfully saved.");
             else
-                $this->settings->set_flashdata('success', "Supplier successfully updated.");
+                $this->settings->set_flashdata('success', "Contract successfully updated.");
         } else {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
@@ -175,7 +175,7 @@ Class Master extends DBConnection {
 
     function delete_con() {
         extract($_POST);
-        $del = $this->conn->query("DELETE FROM `contract` where contract_ID = '{$id}'");
+        $del = $this->conn->query("DELETE FROM `contract` where id = '{$id}'");
         if ($del) {
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "This contract successfully deleted.");
@@ -591,9 +591,7 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
-}
-
- function save_event() {
+    function save_event() {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
@@ -609,7 +607,7 @@ Class Master extends DBConnection {
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "Events already exist.";
+            $resp['msg'] = "The Events already exist.";
             return json_encode($resp);
             exit;
         }
@@ -645,28 +643,28 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-    
+
     function save_alert() {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('id'))) {
+            if (!in_array($k, array('alert_id'))) {
                 $v = addslashes(trim($v));
                 if (!empty($data))
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `alert` where `alert_id` = '{$alert_id}' " . (!empty($alert_id) ? " and alert_id != {$alert_id} " : "") . " ")->num_rows;
+        $check = $this->conn->query("SELECT * FROM `alert` where `alert_name` = '{$alert_name}' " . (!empty($alert_id) ? " and alert_id != {$alert_id} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
         if ($check > 0) {
             $resp['status'] = 'failed';
-            $resp['msg'] = "Alert already exist.";
+            $resp['msg'] = "The Alert already exist.";
             return json_encode($resp);
             exit;
         }
-        if (empty($id)) {
+        if (empty($alert_id)) {
             $sql = "INSERT INTO `alert` set {$data} ";
             $save = $this->conn->query($sql);
         } else {
@@ -675,7 +673,7 @@ Class Master extends DBConnection {
         }
         if ($save) {
             $resp['status'] = 'success';
-            if (empty($id))
+            if (empty($alert_id))
                 $this->settings->set_flashdata('success', "New Alert successfully saved.");
             else
                 $this->settings->set_flashdata('success', "Alert successfully updated.");
@@ -688,7 +686,7 @@ Class Master extends DBConnection {
 
     function delete_alert() {
         extract($_POST);
-        $del = $this->conn->query("DELETE FROM `alert` where id = '{$id}'");
+        $del = $this->conn->query("DELETE FROM `alert` where alert_id = '{$alert_id}'");
         if ($del) {
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "Alert successfully deleted.");
@@ -698,6 +696,8 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+
+}
 
 $Master = new Master();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
@@ -777,3 +777,4 @@ switch ($action) {
         // echo $sysset->index();
         break;
 }
+

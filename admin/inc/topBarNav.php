@@ -58,6 +58,9 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php echo base_url.'/classes/Login.php?f=logout' ?>"><span class="fas fa-sign-out-alt"></span> Logout</a>
                   </div>
+                 <button type="image" name="Alert Icon" 
+            <img src="C:\xampp\htdocs\GO_Uniform\uploads\alerticon" alt="Alert Icon" class="brand-image img-circle elevation-3 bg-light" style="width: 1.75rem;height: 1.75rem;max-height: unset">
+        </button>
               </div>
           </li>
           <li class="nav-item">

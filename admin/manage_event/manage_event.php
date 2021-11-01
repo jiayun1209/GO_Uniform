@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
-if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
-    $qry = $conn->query("SELECT * from `purchase_requisition` where pr_ID = '{$_GET['pr_ID']}' ");
+if (isset($_GET['id']) && $_GET['id'] != "") {
+    $qry = $conn->query("SELECT * from `events` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = stripslashes($v);
@@ -20,54 +20,46 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
         height: auto;
     }
 </style>
-
-<form action="" id="mr-form">
-    
-    <input type="hidden" name="pr_ID" value="" readonly>
+<form action="" id="event-form">
+    <input type="hidden" name="id" value="<?php echo($id) ? $id : "" ?>" readonly>
     <div class="container-fluid">
-       
-    
         <div class="form-group">
-            <label for="staff_ID" class="control-label">Staff Name</label>
-            <select name="staff_ID" id="staff_ID" class="custom-select custom-select-sm rounded-0 select3">
-                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
-                <?php
-                $mr_qry = $conn->query("SELECT * FROM `staff` WHERE type!=0 order by `username` asc");
-                while ($row = $mr_qry->fetch_assoc()):
-                    ?>
-                    <option value="<?php echo $row['id'] ?>" <?php echo isset($staff_ID) && $staff_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['username'] ?></option>
-                <?php endwhile; ?>
-            </select>
+            <label for="title" class="control-label">Title</label>
+            <input type="text" name="title" id="title" class="form-control rounded-0" value="<?php echo isset($title) ? $title : " " ?>" required>
         </div>
-        
-        
         <div class="form-group">
-            <label for="type" class="control-label">Type</label>
-            <input type="text" name="type" id="type" class="form-control rounded-0" value="<?php echo isset($type) ? $type : " " ?>" >
+            <label for="description" class="control-label">Description</label>
+            <input type ="text" name="description" id="description" class="form-control rounded-0" value="<?php echo isset($description) ? $description : " " ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="start_date" class="control-label">Start Date</label>
+            <input type="text" name="start_date" id="start_date" class="form-control rounded-0" value="<?php echo isset($start_date) ? $start_date : " " ?>" required>
+        </div>
+        <div class="form-group">
+            <label for="end_date" class="control-label">End Date</label>
+            <input type="end_date" name="end_date" id="end_date" class="form-control rounded-0" value="<?php echo isset($end_date) ? $end_date : " " ?>" required>
         </div>
 
         <div class="form-group">
             <label for="status" class="control-label">Status</label>
             <select name="status" id="status" class="form-control rounded-0" required>
-                <option value="completed" <?php echo isset($status) && $status == "completed" ? "selected" : "completed" ?> >Completed</option>
-                <option value="ongoing" <?php echo isset($status) && $status == "ongoing" ? "selected" : "ongoing" ?>>Ongoing</option>
+                <option value="1" <?php echo isset($status) && $status == 1 ? "selected" : "1" ?> >Active</option>
+                <option value="0" <?php echo isset($status) && $status == 0 ? "selected" : "0" ?>>Block</option>
             </select>
-            
         </div>
 
     </div>
 </form>
-
-
 <script>
     $(function () {
-        $('#mr-form').submit(function (e) {
+        $('#event-form').submit(function (e) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/PR.php?f=add_pr",
+                url: _base_url_ + "classes/Master.php?f=save_event",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -98,6 +90,4 @@ if (isset($_GET['pr_ID']) && $_GET['pr_ID'] > 0) {
             })
         })
     })
-
 </script>
-

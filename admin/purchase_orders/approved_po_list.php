@@ -5,12 +5,7 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of Purchase Orders</h3>
-		<div class="card-tools">
-			<a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Standard PO</a>
-                        <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Recurring PO</a>
-                        <a href="?page=purchase_orders/approved_po_list" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>  Send PO</a>
-		</div>
+		<h3 class="card-title">List of Approved Purchase Orders</h3>
 	</div>
 	<div class="card-body">
 		<div class="container-fluid">
@@ -41,7 +36,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
+						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status='1' order by unix_timestamp(po.date_updated) ");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -80,6 +75,8 @@
 								  	<a class="dropdown-item" href="?page=purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item" href="?page=purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+				                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="?page=purchase_orders/send_po&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send PO</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
