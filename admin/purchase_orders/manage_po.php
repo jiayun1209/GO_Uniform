@@ -83,7 +83,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						<tbody>
 							<?php 
 							if(isset($id)):
-							$order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_order_details` o inner join inventory i on o.item_id = i.id where o.`po_id` = '$id' ");
+                                                            $status = 1;
+							$order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_order_details` o inner join inventory i on o.item_id = i.id where o.`po_id` = '$id' and i.status != '$status'");
 							echo $conn->error;
 							while($row = $order_items_qry->fetch_assoc()):
 							?>

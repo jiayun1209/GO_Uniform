@@ -5,8 +5,8 @@
     <a href="<?php echo base_url ?>admin" class="brand-link bg-secondary text-sm">
         <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3 bg-light" style="width: 1.75rem;height: 1.75rem;max-height: unset">
         <span class="brand-text font-weight-normal"><?php echo $_settings->info('short_name') ?></span>
-       
-    
+
+
     </a>
     <!-- Sidebar -->
     <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden bg-dark">
@@ -33,23 +33,7 @@
                                     </p>
                                 </a>
                             </li> 
-                            <li class="nav-item dropdown">
-                                <a href="<?php echo base_url ?>admin/?page=suppliers" class="nav-link nav-suppliers">
-                                    <i class="nav-icon fas fa-truck-loading"></i>
-                                    <p>
-                                        Supplier List   
-                                    </p>
-                                </a>
-                            </li>
 
-                            <li class="nav-item dropdown">
-                                    <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php" class="nav-link nav-PR_Create">
-                                        <i class="nav-icon fas fa-calendar"></i>
-                                        <p>
-                                            Operation Calendar   
-                                        </p>
-                                    </a>
-                                </li>
 
                             <?php if ($_settings->userdata('type') == 4): ?>
                                 <li class="nav-item dropdown">
@@ -81,25 +65,24 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index" class="nav-link nav-PR">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>
-                                            Purchase Requisition  
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=material_requisition/index" class="nav-link nav-MR">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>
-                                            Material Requisition  
-                                        </p>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
-
+                                <a href="<?php echo base_url ?>admin/?page=suppliers" class="nav-link nav-suppliers">
+                                    <i class="nav-icon fas fa-truck-loading"></i>
+                                    <p>
+                                        Supplier List   
+                                    </p>
+                                </a>
+                            </li>
 
                             <li class="nav-item dropdown">
+                                <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php" class="nav-link nav-PR_Create">
+                                    <i class="nav-icon fas fa-calendar"></i>
+                                    <p>
+                                        Operation Calendar   
+                                    </p>
+                                </a>
+                            </li>
+                            
+                             <li class="nav-item dropdown">
                                 <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-catalog">
                                     <i class="nav-icon fas fa-people-carry"></i>
                                     <p>
@@ -133,7 +116,81 @@
                                 </a>
                             </li>
 
+                            <?php endif; ?>
+
+                            
+                           
+
                             <?php if ($_settings->userdata('type') == 1): ?>
+                                <li class="nav-item dropdown">
+                                    <li class="nav-item dropdown">
+                                <a href="<?php echo base_url ?>admin/?page=suppliers" class="nav-link nav-suppliers">
+                                    <i class="nav-icon fas fa-truck-loading"></i>
+                                    <p>
+                                        Supplier List   
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php" class="nav-link nav-PR_Create">
+                                    <i class="nav-icon fas fa-calendar"></i>
+                                    <p>
+                                        Operation Calendar   
+                                    </p>
+                                </a>
+                            </li>
+                            
+                             <li class="nav-item dropdown">
+                                <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-catalog">
+                                    <i class="nav-icon fas fa-people-carry"></i>
+                                    <p>
+                                        Subcontractor
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
+                                    <i class="nav-icon fas fa-book-open"></i>
+                                    <p>
+                                        Catalog
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
+                                    <i class="nav-icon fas fa-boxes"></i>
+                                    <p>
+                                        Item List
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="<?php echo base_url ?>admin/?page=purchase_orders" class="nav-link nav-purchase_orders">
+                                    <i class="nav-icon fas fa-file-invoice"></i>
+                                    <p>
+                                        PO Management
+                                    </p>
+                                </a>
+                            </li>
+                            <li>
+                                    <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index_creation" class="nav-link nav-PR_Create">
+                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <p>
+                                            Purchase Requisition  
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=material_requisition/index_creation" class="nav-link nav-MR_Create">
+                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <p>
+                                            Material Requisition  
+                                        </p>
+                                    </a>
+                                </li>
                                 <li class="nav-header">Maintenance</li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
