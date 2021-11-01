@@ -60,11 +60,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
                  <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
-                     <input type="date" class="text-center w-100 border-0" value="<?php echo isset($deadline) ? $deadline : '' ?>"/>                 
+                     <input type="text" class="text-center w-100 border-0" value="<?php echo isset($deadline) ? $deadline : '' ?>"/>                 
                 </div>
                 <div class="col-6">
                     <p  class="m-0"><b>Delivery Date</b></p>
-                    <input type="date"  class="text-center w-100 border-0" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>"/>
+                    <input type="text"  class="text-center w-100 border-0" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>"/>
                     
                 </div>
             </div>
