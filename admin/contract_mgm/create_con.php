@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     if ($contract == "subcontractor_ID") {
         $vendor_ID = 0;
         $staff_ID = 0;
-        $subcontractor_ID = '$id';
+        $subcontractor_ID = $id;
         $query = mysqli_query($conn, "insert into contract(contract_ID,subcontractor_ID,vendor_ID,staff_ID,startDate,endDate,remarks) values('$contract_ID','$subcontractor_ID',$vendor_ID,$staff_ID,'$startDate','$endDate','$remarks')");
     } else if ($contract == "vendor_ID") {
         $subcontractor_ID = '0';

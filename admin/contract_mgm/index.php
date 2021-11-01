@@ -48,6 +48,7 @@
                                 <td class="text-center"><?php echo $row['subcontractor_ID'] ?></td>                                
                                 <td class="text-right"><?php echo $row['startDate'] ?></td>
                                 <td class="text-right"><?php echo $row['endDate'] ?></td>
+
                                 <td align="center">
                                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                         Action
@@ -66,6 +67,7 @@
                     </tbody>
                 </table>
             </div>  </div>    
+
         <div class="container-fluid">
             <div class="container-fluid">
                 <table class="table table-hover table-striped">
@@ -103,6 +105,7 @@
                                 <td class="text-center"><?php echo $row['vendor_ID'] ?></td>
                                 <td class="text-right"><?php echo $row['startDate'] ?></td>
                                 <td class="text-right"><?php echo $row['endDate'] ?></td>
+
                                 <td align="center">
                                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                         Action
@@ -160,6 +163,7 @@
                                 <td class="text-center"><?php echo $row['staff_ID'] ?></td>
                                 <td class="text-right"><?php echo $row['startDate'] ?></td>
                                 <td class="text-right"><?php echo $row['endDate'] ?></td>
+
                                 <td align="center">
                                     <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                         Action
@@ -189,16 +193,6 @@
         $('.view_details').click(function () {
             uni_modal("Reservaton Details", "contract_mgm/view_con.php?id=" + $(this).attr('data-id'), 'mid-large')
         })
-
-    
-        
-          
-    
-
-        
-    
-    @@ -199,29 +199,29 @@
-  
         $('.renew_data').click(function () {
             _conf("Are you sure to renew this rent data?", "renew_rent", [$(this).attr('data-id')]);
         })
@@ -231,16 +225,6 @@
         start_loader();
         $.ajax({
             url: base_url + "classes/Master.php?f=renew_rent",
-
-    
-        
-          
-    
-
-        
-    
-    @@ -242,5 +242,5 @@ function renew_rent($id) {
-  
             method: "POST",
             data: {id: $id},
             dataType: "json",
