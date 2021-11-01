@@ -72,7 +72,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-								  	<a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                                    <a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item" href="?page=RFQ/manage_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>

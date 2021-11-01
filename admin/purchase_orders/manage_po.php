@@ -1,9 +1,9 @@
 <?php
-if(isset($_GET['id']) && $_GET['id'] > 0){
+if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT * from `purchase_order` where id = '{$_GET['id']}' ");
-    if($qry->num_rows > 0){
-        foreach($qry->fetch_assoc() as $k => $v){
-            $$k=$v;
+    if ($qry->num_rows > 0) {
+        foreach ($qry->fetch_assoc() as $k => $v) {
+            $$k = $v;
         }
     }
 }
@@ -18,20 +18,20 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         padding-left: 0.5rem;
         height: auto;
     }
-	/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-		}
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-		/* Firefox */
-		input[type=number] {
-		-moz-appearance: textfield;
-		}
-		[name="tax_percentage"],[name="discount_percentage"]{
-			width:5vw;
-		}
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+    [name="tax_percentage"],[name="discount_percentage"]{
+        width:5vw;
+    }
 </style>
 <div class="card card-outline card-info">
 	<div class="card-header">
@@ -162,59 +162,59 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 	</div>
 </div>
 <table class="d-none" id="item-clone">
-	<tr class="po-item" data-id="">
-		<td class="align-middle p-1 text-center">
-			<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
-		</td>
-		<td class="align-middle p-0 text-center">
-			<input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
-		</td>
-		<td class="align-middle p-1">
-			<input type="hidden" name="item_id[]">
-			<input type="text" class="text-center w-100 border-0 item_id" required/>
-		</td>
-		<td class="align-middle p-1 item-description"></td>
-		<td class="align-middle p-1">
-			<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
-		</td>
-		<td class="align-middle p-1 text-right total-price">0</td>
-	</tr>
+    <tr class="po-item" data-id="">
+        <td class="align-middle p-1 text-center">
+            <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
+        </td>
+        <td class="align-middle p-0 text-center">
+            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+        </td>
+        <td class="align-middle p-1">
+            <input type="hidden" name="item_id[]">
+            <input type="text" class="text-center w-100 border-0 item_id" required/>
+        </td>
+        <td class="align-middle p-1 item-description"></td>
+        <td class="align-middle p-1">
+            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
+        </td>
+        <td class="align-middle p-1 text-right total-price">0</td>
+    </tr>
 </table>
 <script>
-	function rem_item(_this){
-		_this.closest('tr').remove()
-	}
-	function calculate(){
-		var _total = 0
-		$('.po-item').each(function(){
-			var qty = $(this).find("[name='qty[]']").val()
-			var unit_price = $(this).find("[name='unit_price[]']").val()
-			var row_total = 0;
-			if(qty > 0 && unit_price > 0){
-				row_total = parseFloat(qty) * parseFloat(unit_price)
-			}
-			$(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
-		})
-		$('.total-price').each(function(){
-			var _price = $(this).text()
-				_price = _price.replace(/\,/gi,'')
-				_total += parseFloat(_price)
-		})
-		var discount_perc = 0
-		if($('[name="discount_percentage"]').val() > 0){
-			discount_perc = $('[name="discount_percentage"]').val()
-		}
-		var discount_amount = _total * (discount_perc/100);
-		$('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
-		var tax_perc = 0
-		if($('[name="tax_percentage"]').val() > 0){
-			tax_perc = $('[name="tax_percentage"]').val()
-		}
-		var tax_amount = _total * (tax_perc/100);
-		$('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
-		$('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
-		$('#total').text(parseFloat(_total-discount_amount).toLocaleString("en-US"))
-	}
+    function rem_item(_this) {
+        _this.closest('tr').remove()
+    }
+    function calculate() {
+        var _total = 0
+        $('.po-item').each(function () {
+            var qty = $(this).find("[name='qty[]']").val()
+            var unit_price = $(this).find("[name='unit_price[]']").val()
+            var row_total = 0;
+            if (qty > 0 && unit_price > 0) {
+                row_total = parseFloat(qty) * parseFloat(unit_price)
+            }
+            $(this).find('.total-price').text(parseFloat(row_total).toLocaleString('en-US'))
+        })
+        $('.total-price').each(function () {
+            var _price = $(this).text()
+            _price = _price.replace(/\,/gi, '')
+            _total += parseFloat(_price)
+        })
+        var discount_perc = 0
+        if ($('[name="discount_percentage"]').val() > 0) {
+            discount_perc = $('[name="discount_percentage"]').val()
+        }
+        var discount_amount = _total * (discount_perc / 100);
+        $('[name="discount_amount"]').val(parseFloat(discount_amount).toLocaleString("en-US"))
+        var tax_perc = 0
+        if ($('[name="tax_percentage"]').val() > 0) {
+            tax_perc = $('[name="tax_percentage"]').val()
+        }
+        var tax_amount = _total * (tax_perc / 100);
+        $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
+        $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
+        $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
+    }
 
 	function _autocomplete(_item){
 		_item.find('.item_id').autocomplete({
@@ -278,49 +278,49 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		$('#po-form').submit(function(e){
 			e.preventDefault();
             var _this = $(this)
-			$('.err-msg').remove();
-			$('[name="po_no"]').removeClass('border-danger')
-			if($('#item-list .po-item').length <= 0){
-				alert_toast(" Please add at least 1 item on the list.",'warning')
-				return false;
-			}
-			start_loader();
-			$.ajax({
-				url:_base_url_+"classes/Master.php?f=save_po",
-				data: new FormData($(this)[0]),
+            $('.err-msg').remove();
+            $('[name="po_no"]').removeClass('border-danger')
+            if ($('#item-list .po-item').length <= 0) {
+                alert_toast(" Please add at least 1 item on the list.", 'warning')
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                url: _base_url_ + "classes/Master.php?f=save_po",
+                data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
                 processData: false,
                 method: 'POST',
                 type: 'POST',
                 dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert_toast("An error occured",'error');
-					end_loader();
-				},
-				success:function(resp){
-					if(typeof resp =='object' && resp.status == 'success'){
-						location.href = "./?page=purchase_orders/view_po&id="+resp.id;
-					}else if((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg){
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occured", 'error');
+                    end_loader();
+                },
+                success: function (resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        location.href = "./?page=purchase_orders/view_po&id=" + resp.id;
+                    } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
-                            el.addClass("alert alert-danger err-msg").text(resp.msg)
-                            _this.prepend(el)
-                            el.show('slow')
-                            $("html, body").animate({ scrollTop: 0 }, "fast");
-                            end_loader()
-							if(resp.status == 'po_failed'){
-								$('[name="po_no"]').addClass('border-danger').focus()
-							}
-                    }else{
-						alert_toast("An error occured",'error');
-						end_loader();
+                        el.addClass("alert alert-danger err-msg").text(resp.msg)
+                        _this.prepend(el)
+                        el.show('slow')
+                        $("html, body").animate({scrollTop: 0}, "fast");
+                        end_loader()
+                        if (resp.status == 'po_failed') {
+                            $('[name="po_no"]').addClass('border-danger').focus()
+                        }
+                    } else {
+                        alert_toast("An error occured", 'error');
+                        end_loader();
                         console.log(resp)
-					}
-				}
-			})
-		})
+                    }
+                }
+            })
+        })
 
-        
-	})
+
+    })
 </script>

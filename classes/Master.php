@@ -79,6 +79,59 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+    
+    function save_subcontractor() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('subcontractor_ID'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `subcontractor` where `name` = '{$name}' " . (!empty($subcontractor_ID) ? " and subcontractor_ID != {$subcontractor_ID} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Subcontractor already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($subcontractor_ID)) {
+            $sql = "INSERT INTO `subcontractor` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `subcontractor` set {$data} where subcontractor_ID = '{$subcontractor_ID}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($vendor_ID))
+                $this->settings->set_flashdata('success', "New Subcontractor successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Subcontractor successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_subcontractor() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `subcontractor` where subcontractor_ID = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "subcontractor successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
 
     function save_con() {
         extract($_POST);
@@ -540,6 +593,112 @@ Class Master extends DBConnection {
 
 }
 
+ function save_event() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('id'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `events` where `title` = '{$title}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Events already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($id)) {
+            $sql = "INSERT INTO `events` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `events` set {$data} where id = '{$id}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($id))
+                $this->settings->set_flashdata('success', "New Events successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Events successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_event() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `events` where id = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "Event successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+    
+    function save_alert() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('id'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `alert` where `alert_id` = '{$alert_id}' " . (!empty($alert_id) ? " and alert_id != {$alert_id} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Alert already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($id)) {
+            $sql = "INSERT INTO `alert` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `alert` set {$data} where alert_id = '{$alert_id}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($id))
+                $this->settings->set_flashdata('success', "New Alert successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Alert successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_alert() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `alert` where id = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "Alert successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+
 $Master = new Master();
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
 $sysset = new SystemSettings();
@@ -549,6 +708,12 @@ switch ($action) {
         break;
     case 'delete_supplier':
         echo $Master->delete_supplier();
+        break;
+    case 'save_subcontractor':
+        echo $Master->save_subcontractor();
+        break;
+    case 'delete_subcontractor':
+        echo $Master->delete_subcontractor();
         break;
     case 'save_rfq':
         echo $Master->save_rfq();
@@ -594,6 +759,18 @@ switch ($action) {
         break;
     case 'renew_rent':
         echo $Master->renew_rent();
+        break;
+    case 'save_event':
+        echo $Master->save_event();
+        break;
+    case 'delete_event':
+        echo $Master->delete_event();
+        break;
+    case 'save_alert':
+        echo $Master->save_alert();
+        break;
+    case 'delete_alert':
+        echo $Master->delete_alert();
         break;
 
     default:

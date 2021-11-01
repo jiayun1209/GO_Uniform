@@ -39,6 +39,36 @@
                         </p>
                       </a>
                     </li>
+                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=operation_calendar/index" class="nav-link nav-suppliers">
+                        <i class="nav-icon fas fa-truck-loading"></i>
+                        <p>
+                        Operation Calendar  
+                        </p>
+                      </a>
+                    </li>
+                    
+                    <?php if($_settings->userdata('type') == 4): ?>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=purchase_requisition/pr_creation_staff" class="nav-link nav-RFQ">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Create PR   
+                        </p>
+                      </a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/mr_creation_staff" class="nav-link nav-MR_Create">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Create MR  
+                        </p>
+                      </a>
+                    </li>
+                     <?php endif; ?>
+                    
                      <?php if($_settings->userdata('type') == 2): ?>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=RFQ" class="nav-link nav-RFQ">
@@ -48,7 +78,33 @@
                         </p>
                       </a>
                     </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index" class="nav-link nav-PR">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                         Purchase Requisition  
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=material_requisition/index" class="nav-link nav-MR">
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                        Material Requisition  
+                        </p>
+                      </a>
+                    </li>
                      <?php endif; ?>
+                    
+                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-catalog">
+                        <i class="nav-icon fas fa-people-carry"></i>
+                        <p>
+                          Subcontractor
+                        </p>
+                      </a>
+                    </li>
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
                         <i class="nav-icon fas fa-book-open"></i>
@@ -57,6 +113,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                         <i class="nav-icon fas fa-boxes"></i>
@@ -92,6 +149,26 @@
                         </p>
                       </a>
                     </li>
+                    
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=add_event/index" class="nav-link nav-system_info">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                          Add Operation Events
+                        </p>
+                      </a>
+                    </li>
+                     
+                    <li class="nav-item dropdown">
+                      <a href="<?php echo base_url ?>admin/?page=alert/index" class="nav-link nav-system_info">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                          Add Alert
+                        </p>
+                      </a>
+                    </li>
+                    
+                    
                     <li class="nav-item dropdown">
                       <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
                         <i class="nav-icon fas fa-cogs"></i>
@@ -110,6 +187,7 @@
                         </p>
                       </a>
                     </li>
+                    
                     <?php endif; ?>
 
                   </ul>
