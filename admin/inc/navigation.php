@@ -43,10 +43,13 @@
                             </li>
 
                             <li class="nav-item dropdown">
-                            <li class="nav-link nav-calendar"><a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php">- - - -  Operation Calendar</a></li>
-
-                            </a>
-                            </li>
+                                    <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php" class="nav-link nav-PR_Create">
+                                        <i class="nav-icon fas fa-calendar"></i>
+                                        <p>
+                                            Operation Calendar   
+                                        </p>
+                                    </a>
+                                </li>
 
                             <?php if ($_settings->userdata('type') == 4): ?>
                                 <li class="nav-item dropdown">
