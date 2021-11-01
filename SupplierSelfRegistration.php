@@ -264,7 +264,8 @@ and open the template in the editor.
                         <option name="materials" value="materials">Materials</option>
                         <option name="school uniform" value="school uniform">School Uniform</option>
                         <option name="career uniform" value="career uniform">Career Uniform</option>
-                        <option name="others" value="others">Others</option>
+                        <option name="accessories" value="accessories">Accessories</option>
+                        <option name="others" value="others">Others(Service)</option>
                     </select>
                    <!--  <input id="fld-language" name="productGrp" type="hidden" value=""/>-->
                     <div class="validation-error"></div>
