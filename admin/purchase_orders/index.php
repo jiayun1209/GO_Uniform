@@ -5,7 +5,7 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of Purchase Orders</h3>
+            <h3 class="card-title"><b>List of Purchase Orders</b></h3>
 		<div class="card-tools">
                     <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Standard PO</a>
                     <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Recurring PO</a>
@@ -28,14 +28,14 @@
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
-						<th>#</th>
-						<th>Date Created</th>
-						<th>PO #</th>
-						<th>Supplier</th>
-						<th>Items</th>
-						<th>Total Amount</th>
-						<th>Status</th>
-						<th>Action</th>
+						<th class="px-1 py-1 text-center">No.</th>
+						<th class="px-1 py-1 text-left">Date Created</th>
+						<th class="px-1 py-1 text-left">PO No.</th>
+						<th class="px-1 py-1 text-left">Supplier Name</th>
+						<th class="px-1 py-1 text-center">Items</th>
+						<th class="px-1 py-1 text-right">Total Amount (RM)</th>
+						<th class="px-1 py-1 text-center">Status</th>
+						<th class="px-1 py-1 text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -50,10 +50,10 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
 							<td class=""><?php echo $row['po_no'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class="text-right"><?php echo number_format($row['item_count']) ?></td>
+							<td class="text-left"><?php echo $row['sname'] ?></td>
+							<td class="text-center"><?php echo number_format($row['item_count']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-							<td>
+							<td class="text-center">
 								<?php 
 									switch ($row['status']) {
 										case '1':

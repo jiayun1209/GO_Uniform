@@ -35,14 +35,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier</label>
+                    <label for="vendor_ID">Supplier Name</label>
                     <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
@@ -54,7 +54,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label for="po_no">PO # <span class="po_err_msg text-danger"></span></label>
+                    <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
                     <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
@@ -65,9 +65,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <colgroup>
                             <col width="5%">
                             <col width="5%">
-                            <col width="20%">
                             <col width="15%">
-                            <col width="15%">
+                            <col width="10%">
+                            <col width="25%">
                             <col width="15%">
                             <col width="15%">
                         </colgroup>
@@ -78,8 +78,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <th class="px-1 py-1 text-center">Item Name</th>
                                 <th class="px-1 py-1 text-center">Item Code</th>
                                 <th class="px-1 py-1 text-center">Description</th>
-                                <th class="px-1 py-1 text-center">Price</th>
-                                <th class="px-1 py-1 text-center">Total</th>
+                                <th class="px-1 py-1 text-center">Price (RM)</th>
+                                <th class="px-1 py-1 text-center">Total (RM)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -100,7 +100,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
                                             <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
                                         </td>
-                                        <td class="align-middle p-1 item-code"><?php echo $row['item_code'] ?></td>
+                                        <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -113,23 +113,23 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tfoot>
                             <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
+                                <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></span> Sub Total</th>
                                 <th class="p-1 text-right" id="sub_total">0</th>
                             </tr>
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Discount (%)
+                                <th class="p-1 text-right" colspan="6">Discount (%)
                                     <input type="number" step="any" name="discount_percentage" class="border-light text-right" value="<?php echo isset($discount_percentage) ? $discount_percentage : 0 ?>">
                                 </th>
                                 <th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($discount_amount) ? $discount_amount : 0 ?>" name="discount_amount"></th>
                             </tr>
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Tax Inclusive (%)
+                                <th class="p-1 text-right" colspan="6">Tax Inclusive (%)
                                     <input type="number" step="any" name="tax_percentage" class="border-light text-right" value="<?php echo isset($tax_percentage) ? $tax_percentage : 0 ?>">
                                 </th>
                                 <th class="p-1"><input type="text" class="w-100 border-0 text-right" readonly value="<?php echo isset($tax_amount) ? $tax_amount : 0 ?>" name="tax_amount"></th>
                             </tr>
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Total</th>
+                                <th class="p-1 text-right" colspan="6">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
                             </tr>
