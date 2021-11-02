@@ -7,9 +7,9 @@
 	<div class="card-header">
 		<h3 class="card-title">List of Purchase Orders</h3>
 		<div class="card-tools">
-			<a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Standard PO</a>
-                        <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Recurring PO</a>
-                        <a href="?page=purchase_orders/approved_po_list" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>  Send PO</a>
+                    <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Standard PO</a>
+                    <a href="?page=purchase_orders/manage_po" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Recurring PO</a>
+                    <a href="?page=purchase_orders/approved_po_list" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>  Send PO</a>
 		</div>
 	</div>
 	<div class="card-body">

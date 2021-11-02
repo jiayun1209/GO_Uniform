@@ -381,7 +381,7 @@ Class Master extends DBConnection {
         $qry = $this->conn->query("SELECT * FROM inventory where `name` LIKE '%{$q}%'");
         $data = array();
         while ($row = $qry->fetch_assoc()) {
-            $data[] = array("label" => $row['id'], "name" => $row['name'], "description" => $row['description']);
+            $data[] = array("label" => $row['name'], "id" => $row['id'], "description" => $row['description'], "id" => $row['id'], "item_code" => $row['item_code']);
         }
         return json_encode($data);
     }
