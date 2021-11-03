@@ -5,8 +5,8 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of Approved Purchase Orders</h3>
-                <div class="card-tools">
+            <h3 class="card-title"><b>Tracking & Monitoring Purchase Orders</b></h3>
+		<div class="card-tools">
                     <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Back</a>
 		</div>
 	</div>
@@ -26,20 +26,20 @@
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
-						<th>#</th>
-						<th>Date Created</th>
-						<th>PO #</th>
-						<th>Supplier</th>
-						<th>Items</th>
-						<th>Total Amount</th>
-						<th>Status</th>
-						<th>Action</th>
+						<th class="px-1 py-1 text-center">No.</th>
+						<th class="px-1 py-1 text-left">Date Created</th>
+						<th class="px-1 py-1 text-left">PO No.</th>
+						<th class="px-1 py-1 text-left">Supplier Name</th>
+						<th class="px-1 py-1 text-center">Items</th>
+						<th class="px-1 py-1 text-right">Total Amount (RM)</th>
+						<th class="px-1 py-1 text-center">Status</th>
+						<th class="px-1 py-1 text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status='1' order by unix_timestamp(po.date_updated) ");
+						$qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where po.status='1' order by unix_timestamp(po.date_updated)");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -48,10 +48,10 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
 							<td class=""><?php echo $row['po_no'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class="text-right"><?php echo number_format($row['item_count']) ?></td>
+							<td class="text-left"><?php echo $row['sname'] ?></td>
+							<td class="text-center"><?php echo number_format($row['item_count']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-							<td>
+							<td class="text-center">
 								<?php 
 									switch ($row['status']) {
 										case '1':
@@ -78,8 +78,6 @@
 								  	<a class="dropdown-item" href="?page=purchase_orders/view_po&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item" href="?page=purchase_orders/manage_po&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-				                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="?page=purchase_orders/send_po&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send PO</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
