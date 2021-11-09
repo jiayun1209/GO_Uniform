@@ -35,7 +35,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?></b> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update Quotation Details" : "New Quotation" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
@@ -43,7 +43,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
+                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
                         $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
@@ -51,11 +51,22 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code']?> <?php echo  $row['name'] ?></option>
                         <?php endwhile; ?>
+                    </select>  
+                                       
+                     <label for="pr_ID">PR ID</label>
+                    <select name="pr_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select2">
+                        <option value="" disabled <?php echo!isset($pr_ID) ? "selected" : '' ?>></option>
+                        <?php
+                        $pr_qry = $conn->query("SELECT * FROM `purchase_requisition` WHERE status = 'completed'");
+                        while ($row = $pr_qry->fetch_assoc()):
+                            ?>
+                            <option value="<?php echo $row['pr_ID'] ?>" <?php echo isset($pr_ID) && $pr_ID == $row['pr_ID'] ? 'selected' : '' ?>> <?php echo  $row['pr_ID'] ?></option>
+                        <?php endwhile; ?>
                     </select>
-                </div>
+                </div> 
                  <div class="col-md-6 form-group">
                     <label for="q_ID">RFQ NO# <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
+                    <input type="text" class="form-control form-control-lsm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
                 <div class="col-6">
@@ -93,7 +104,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_requisition` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -104,7 +115,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-0 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">

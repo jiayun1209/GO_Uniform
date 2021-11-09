@@ -5,11 +5,11 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-            <h3 class="card-title"><b>List of Purchase Orders</b></h3>
+            <h3 class="card-title"><b>List of RFQ</b></h3>
 		<div class="card-tools">
                     <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create Quotation</a>
-                    <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Quotation WITH PR</a>
-                    <a href="?page=RFQ/approved_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>Send RFQ</a>                    
+                    <a href="?page=RFQ/manage_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Quotation WITH PR</a>
+                    <a href="?page=RFQ/send_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span> Send RFQ</a>                    
 		</div>
 	</div>
 	<div class="card-body">
@@ -41,7 +41,7 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT po.*, s.name as sname FROM `quotation` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
+						$qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID order by unix_timestamp(q.date_updated) ");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
