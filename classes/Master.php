@@ -187,7 +187,7 @@ Class Master extends DBConnection {
     }
 
     function save_rfq() {
-        extract($_POST);
+     extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
             if (in_array($k, array('discount_amount', 'tax_amount')))
@@ -205,14 +205,14 @@ Class Master extends DBConnection {
                 return $this->capture_err();
             if ($check > 0) {
                 $resp['status'] = 'po_failed';
-                $resp['msg'] = "RFQ number already exist.";
+                $resp['msg'] = "RFQ Number already exist.";
                 return json_encode($resp);
                 exit;
             }
         } else {
             $q_ID = "";
             while (true) {
-                $q_ID = "20RFQ" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $q_ID = "20RFQ-" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
                 $check = $this->conn->query("SELECT * FROM `quotation` where `q_ID` = '{$q_ID}'")->num_rows;
                 if ($check <= 0)
                     break;
@@ -228,17 +228,17 @@ Class Master extends DBConnection {
         $save = $this->conn->query($sql);
         if ($save) {
             $resp['status'] = 'success';
-            $rfq_no = empty($id) ? $this->conn->insert_id : $id;
+            $rfq_no= empty($id) ? $this->conn->insert_id : $id;
             $resp['id'] = $rfq_no;
             $data = "";
             foreach ($item_id as $k => $v) {
                 if (!empty($data))
                     $data .= ",";
-                $data .= "('{$rfq_no}',{$v},'{$unit_price[$k]}','{$qty[$k]}')";
+                $data .= "('{$rfq_no}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
             }
             if (!empty($data)) {
                 $this->conn->query("DELETE FROM `rfq` where rfq_no = '{$rfq_no}'");
-                $save = $this->conn->query("INSERT INTO `rfq` (`rfq_no`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
+                $save = $this->conn->query("INSERT INTO `rfq` (`$rfq_no`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
             }
             if (empty($id))
                 $this->settings->set_flashdata('success', "RFQ successfully saved.");
@@ -263,7 +263,7 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-
+    
     function save_item() {
         extract($_POST);
         $data = "";
@@ -723,7 +723,7 @@ switch ($action) {
         break;
     case 'delete_rfq':
         echo $Master->delete_rfq();
-        break;
+        break;      
     case 'delete_con':
         echo $Master->delete_con();
         break;

@@ -5,9 +5,11 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of RFQ</h3>
+            <h3 class="card-title"><b>List of Purchase Orders</b></h3>
 		<div class="card-tools">
-			<a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+                    <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create Quotation</a>
+                    <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Quotation WITH PR</a>
+                    <a href="?page=RFQ/approved_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>Send RFQ</a>                    
 		</div>
 	</div>
 	<div class="card-body">
@@ -26,20 +28,20 @@
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
-						<th>#</th>
-						<th>Date Created</th>
-						<th>RFQ #</th>
-						<th>Supplier</th>
-						<th>Material Details</th>
-						<th>Total Amount</th>
-						<th>Status</th>
-						<th>Action</th>
+                                            <th class="px-1 py-1 text-left">No. </th>
+						<th class="px-1 py-1 text-left">Date Created</th>
+						<th class="px-1 py-1 text-left">RFQ No.</th>
+						<th class="px-1 py-1 text-left">Supplier Name</th>
+						<th class="px-1 py-1 text-center">Material Details</th>
+						<th class="px-1 py-1 text-right">Total Amount (RM)</th>
+						<th class="px-1 py-1 text-center">Status</th>
+						<th class="px-1 py-1 text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID order by unix_timestamp(q.date_updated) ");
+						$qry = $conn->query("SELECT po.*, s.name as sname FROM `quotation` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
 						while($row = $qry->fetch_assoc()):
 							$row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
 							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
@@ -48,17 +50,17 @@
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
 							<td class=""><?php echo $row['q_ID'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class="text-right"><?php echo number_format($row['item_count']) ?></td>
+							<td class="text-left"><?php echo $row['sname'] ?></td>
+							<td class="text-center"><?php echo number_format($row['item_count']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-							<td>
+							<td class="text-center">
 								<?php 
 									switch ($row['status']) {
 										case '1':
 											echo '<span class="badge badge-success">Approved</span>';
 											break;
 										case '2':
-											echo '<span class="badge badge-danger">Rejected</span>';
+											echo '<span class="badge badge-danger">Inactive</span>';
 											break;
 										default:
 											echo '<span class="badge badge-secondary">Pending</span>';
@@ -72,7 +74,7 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-                                                    <a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+								  	<a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item" href="?page=RFQ/manage_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
@@ -90,7 +92,7 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this PO permanently?","delete_rent",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this RFQ permanently?","delete_rent",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
 			uni_modal("Reservaton Details","RFQ/view_rfq.php?id="+$(this).attr('data-id'),'mid-large')
@@ -104,7 +106,7 @@
 	function delete_rent($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_rfq",
+			url:_base_url_+"classes/Master.php?f=delete_po",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",
@@ -123,7 +125,7 @@
 			}
 		})
 	}
-	/*function renew_rent($id){
+	function renew_rent($id){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=renew_rent",
@@ -144,5 +146,5 @@
 				}
 			}
 		})
-	}*/
+	}
 </script>

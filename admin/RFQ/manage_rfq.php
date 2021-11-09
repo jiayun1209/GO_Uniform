@@ -35,14 +35,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier</label>
+                    <label for="vendor_ID">Supplier Name</label>
                     <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
@@ -53,18 +53,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <?php endwhile; ?>
                     </select>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label for="q_ID">RFQ # <span class="po_err_msg text-danger"></span></label>
+                 <div class="col-md-6 form-group">
+                    <label for="q_ID">RFQ NO# <span class="po_err_msg text-danger"></span></label>
                     <input type="text" class="form-control form-control-sm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
                 <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
-                    <input type="text" name="deadline" id="deadline" class="text-center w-100 border-0 deadline" required>          
-                </div>
+                    <input type="date" name="deadline" id="deadline" class="text-center w-100 border-0 deadline"  placeholder="deadline" required>          
+                </div>           
                 <div class="col-6">
                     <p  class="m-0"><b>Delivery Date</b></p>
-                   <input type="text" name="delivery_date" id="delivery_date" class="text-center w-100 border-0 delivery_date" required>                     
+                    <input type="date" name="delivery_date" id="delivery_date" class="text-center w-100 border-0 delivery_date"  placeholder="Delivery Date" required>                     
                 </div>
             </div>
             <div class="row">
@@ -73,26 +73,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <colgroup>
                             <col width="5%">
                             <col width="5%">
+                            <col width="15%">
                             <col width="10%">
-                            <col width="20%">
-                            <col width="30%">
+                            <col width="25%">
                             <col width="15%">
                             <col width="15%">
                         </colgroup>
                         <thead>
-                        <br>
-                        <tr class="bg-navy disabled">
-                            <th class="px-1 py-1 text-center"></th>
-                            <th class="px-1 py-1 text-center">Qty</th>
-                            <th class="px-1 py-1 text-center">Item ID</th>
-                             <th class="px-1 py-1 text-center">Item Name</th>
-                            <th class="px-1 py-1 text-center">Description</th>
-                            <th class="px-1 py-1 text-center">Unit Price</th>
-                            <th class="px-1 py-1 text-center">Sub Total</th>
-                        </tr>
+                            <tr class="bg-navy disabled">
+                                <th class="px-1 py-1 text-center"></th>
+                                <th class="px-1 py-1 text-center">Qty</th>
+                                <th class="px-1 py-1 text-center">Item Name</th>
+                                <th class="px-1 py-1 text-center">Item Code</th>
+                                <th class="px-1 py-1 text-center">Description</th>
+                                <th class="px-1 py-1 text-center">Unit Price (RM)</th>
+                                <th class="px-1 py-1 text-center">Sub Total (RM)</th>
+                            </tr>
                         </thead>
-                        <tbody>
-                            <?php
+                        <tbody> <?php
                             if (isset($id)):
                                 $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                                 echo $conn->error;
@@ -107,11 +105,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-0 text-center">
                                             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
                                         </td>
-                                        <td class="align-middle p-1">                                            
-                                            <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['item_id'] ?>" required/>
-                                        </td>
-                                        <td class="align-middle p-1 item-name"><?php echo $row['name'] ?></td>
-                                        <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
+                                        <td class="align-middle p-1">
+                                            <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
+                                            <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
+                                        </td>                                        
+                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
+                                        <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                     
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
                                         </td>
@@ -121,8 +120,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 endwhile;
                             endif;
                             ?>
-                        </tbody>
-                        <tfoot>
+                        </tbody>                         
+                       <tfoot>
                             <tr class="bg-lightblue">
                             <tr>
                                 <th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
@@ -138,16 +137,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <div class="row">
                         <div class="col-md-6">
                             <label for="remarks" class="control-label">Remarks</label>
-                            <textarea name="remarks" id="remarks" cols="10" rows="4" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
+                            <textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
-                            <select name="status" id="status" class="form-control form-control-sm rounded-0">
+                            <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
-                            </select>
+                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Active</option>
+                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Inactive</option>
+                            </select>                          
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -166,10 +167,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-0 text-center">
             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
-        <td class="align-middle p-1">          
+        <td class="align-middle p-1">
+            <input type="hidden" name="item_id[]">
             <input type="text" class="text-center w-100 border-0 item_id" required/>
         </td>
-        <td class="align-middle p-1 item-name"></td>
+        <td class="align-middle p-1 item-code"></td>
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
@@ -178,7 +180,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
-
     function rem_item(_this) {
         _this.closest('tr').remove()
     }
@@ -233,10 +234,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             select: function (event, ui) {
                 console.log(ui)
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
-                _item.find('.item-name').text(ui.item.name)
+                _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
             }
         })
+    }
+    function displayCancellation() {
+        var status = document.getElementById("status");
+        if (status.value == "3") {
+            document.getElementById("cancel_reason").disabled = false;
+        } else {
+            document.getElementById("cancel_reason").disabled = true;
+        }
     }
     $(document).ready(function () {
         $('#add_row').click(function () {

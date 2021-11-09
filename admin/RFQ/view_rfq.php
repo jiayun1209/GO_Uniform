@@ -5,7 +5,7 @@
 <?php endif; ?>
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT * from `quotation` where id = {$_GET['id']} ");
+    $qry = $conn->query("SELECT * from `quotation` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -30,52 +30,52 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         margin: 0;
     }
 
-    /* Firefox 
+    /* Firefox */
     input[type=number] {
         -moz-appearance: textfield;
     }
     [name="tax_percentage"],[name="discount_percentage"]{
         width:5vw;
-    }*/
+    }
 </style>
 <div class="card card-outline card-info">
-	<div class="card-header">
-		<h3 class="card-title"><?php echo isset($id) ? "Update RFQ Details": "New RFQ" ?> </h3>
+    <div class="card-header">
+        <h3 class="card-title"><b><?php echo isset($id) ? "RFQ Details" : "New RFQ" ?></b></h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-		    <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&id=<?php echo $id ?>">Edit</a>
-		    <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
+            <a class="btn btn-sm btn-flat btn-primary" href="?page=RFQ/manage_rfq&id=<?php echo $id ?>">Edit</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
         </div>
-	</div>
-	<div class="card-body" id="out_print">
+    </div>
+    <div class="card-body" id="out_print">
         <div class="row">
-        <div class="col-6 d-flex align-items-center">
-            <div>
-                <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
-                <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
+            <div class="col-6 d-flex align-items-center">
+                <div>
+                    <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
+                </div>
             </div>
-        </div>
-        <div class="col-6">
-            <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-            <h2 class="text-center"><b>REQUEST FOR QUOTATION</b></h2>
-        </div>
+            <div class="col-6">
+                <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
+                <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+            </div>
         </div>
         <div class="row mb-2">
             <div class="col-6">
-                <p class="m-0"><b>Vendor</b></p>
-                <?php 
-                $sup_qry = $conn->query("SELECT r.*, s.* FROM `quotation` r,`vendor` s where r.vendor_ID  = s.vendor_ID");
+                <p class="m-0"><b>Supplier Details</b></p>
+                <?php
+                $sup_qry = $conn->query("SELECT v.*,c.* FROM `vendor` v inner join company c on v.company_code = c.company_code where v.`vendor_ID` = '{$vendor_ID}' ");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
-                    <p class="m-0"><?php echo $supplier['name'] ?></p>
-                    <p class="m-0"><?php echo $supplier['company_code'] ?></p>                   
+                    <p class="m-0"><?php echo $supplier['company_code'] ?> - <?php echo $supplier['name'] ?></p>                 
                     <p class="m-0"><?php echo $supplier['email'] ?></p>
+                    <p class="m-0"><?php echo $supplier['address'] ?></p>
+
                 </div>
             </div>
-            
-            <div class="col-6 row">
+         <div class="col-6 row">
                 <div class="col-6">
                     <p  class="m-0"><b>RFQ. #:</b></p>
                     <p><b><?php echo $q_ID ?></b></p>
@@ -83,8 +83,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <div class="col-6">
                     <p  class="m-0"><b>Date Created</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($date_created)) ?></b></p>
-                </div>
-                <div class="col-6">
+                </div>       
+            <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>
                 </div>
@@ -98,31 +98,36 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
                     <colgroup>
+                        <col width="10%">
                         <col width="20%">
+                        <col width="15%">
                         <col width="20%">
-                        <col width="20%">
-                        <col width="20%">
+                        <col width="15%">
+                        <col width="15%">
                     </colgroup>
                     <thead>
-                        <tr class="bg-navy disabled" style="">
-                            <th class="bg-navy disabled text-light px-1 py-2 text-center">Material Details</th>
-                            <th class="bg-navy disabled text-light px-1 py-2 text-center">Quantity</th>
-                            <th class="bg-navy disabled text-light px-1 py-2 text-center">Price</th>
-                            <th class="bg-navy disabled text-light px-1 py-2 text-center">Sub Total</th>
-
+                        <tr class="bg-navy disabled">
+                            <th class="px-1 py-1 text-center">Qty</th>
+                            <th class="px-1 py-1 text-center">Item Name</th>
+                            <th class="px-1 py-1 text-center">Item Code</th>
+                            <th class="px-1 py-1 text-center">Description</th>
+                            <th class="px-1 py-1 text-center">Unit Price (RM)</th>
+                            <th class="px-1 py-1 text-center">Sub Total (RM)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if (isset($id)):
-                            $rfq_qry = $conn->query("SELECT o.*,i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                            $rfq_qry = $conn->query("SELECT o.*,i.name, i.description, i.item_code FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                             $total = 0;
                             while ($row = $rfq_qry->fetch_assoc()):
-                            $total += ($row['quantity'] * $row['unit_price']);
+                                $total += ($row['quantity'] * $row['unit_price']);
                                 ?>
                                 <tr class=rfq-item" data-id="">
-                                    <td class="align-middle p-2 text-center"><?php echo $row['name'] ?></td>
-                                    <td class="align-middle p-2 text-center"><?php echo $row['quantity'] ?></td>                               
+                                    <td class="align-middle p-2 text-center"><?php echo $row['quantity'] ?></td> 
+                                    <td class="align-middle p-2 text-center"><?php echo $row['name'] ?></td>     
+                                    <td class="align-middle p-2 text-center"><?php echo $row['item_code'] ?></td> 
+                                    <td class="align-middle p-2 text-center"><?php echo $row['description'] ?></td>
                                     <td class="align-middle p-2 text-center"><?php echo $row['unit_price'] ?></td>
                                     <td class="align-middle p-2 text-center total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
 
@@ -155,7 +160,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 echo "<span class='py-2 px-4 btn-flat btn-success'>Approved</span>";
                                 break;
                             case 2:
-                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Denied</span>";
+                                echo "<span class='py-2 px-4 btn-flat btn-danger'>Inactive</span>";
                                 break;
                             default:
                                 echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";
@@ -169,17 +174,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </div>
 </div>
 <table class="d-none" id="item-clone">
-    <tr class="rfq-item" data-id="">
+    <tr class="po-item" data-id="">
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
-        <td class="align-middle p-1 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="quantity_request"/>
+        <td class="align-middle p-0 text-center">
+            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
-
-        <td class="align-middle p-1 text-center"></td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price" value="0"/>
+            <input type="text" class="text-center w-100 border-0" name="unit[]"/>
+        </td>
+        <td class="align-middle p-1">
+            <input type="hidden" name="item_id[]">
+            <input type="text" class="text-center w-100 border-0 item_id" required/>
+        </td>
+        <td class="align-middle p-1 item-code"></td>
+        <td class="align-middle p-1 item-description"></td>
+        <td class="align-middle p-1">
+            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
         </td>
         <td class="align-middle p-1 text-right total-price">0</td>
     </tr>
