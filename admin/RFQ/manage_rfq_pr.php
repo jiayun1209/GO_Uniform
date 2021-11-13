@@ -104,7 +104,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_requisition` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_requisiton_details` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -114,8 +114,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
-                                        <td class="align-middle p-0 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity_request'] ?>"/>
+                                       <td class="align-middle p-0 text-center">
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
@@ -155,7 +155,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Active</option>
+                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                 <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Inactive</option>
                             </select>                          
                         </div>
@@ -176,7 +176,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
-        <td class="align-middle p-0 text-center">
+       <td class="align-middle p-0 text-center">
             <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
         </td>
         <td class="align-middle p-1">
@@ -248,7 +248,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
-            }
+            }          
         })
     }
     function displayCancellation() {
@@ -313,7 +313,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=RFQ/view_rfq&id=" + resp.id;
+                        location.href = "./?page=RFQ/view_rfq_pr&id=" + resp.id;
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)

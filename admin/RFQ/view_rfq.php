@@ -58,7 +58,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="col-6">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-                <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+                <h2 class="text-center"><b>RFQ with PR</b></h2>
             </div>
         </div>
         <div class="row mb-2">
@@ -83,12 +83,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <div class="col-6">
                     <p  class="m-0"><b>Date Created</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($date_created)) ?></b></p>
-                </div>       
+                </div>    
+             <div class="col-6">
+                    <p  class="m-0"><b>PR. #:</b></p>
+                    <p><b><?php echo $pr_ID ?></b></p>
+                </div>
             <div class="col-6">
                     <p  class="m-0"><b>Deadline</b></p>
-                    <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>
-                </div>
-                <div class="col-6">
+                    <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>               
                     <p  class="m-0"><b>Delivery Date</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($delivery_date)) ?></b></p>
                 </div>
