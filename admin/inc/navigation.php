@@ -174,6 +174,15 @@
                                         </p>
                                     </a>
                                 </li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=purchase_r" class="nav-link nav-PR_Create">
+                                        <i class="nav-icon fas fa-file-invoice"></i>
+                                        <p>
+                                            Purchase Requisition
+                                        </p>
+                                    </a>
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index_creation" class="nav-link nav-PR_Create">
                                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -223,6 +232,15 @@
                                         <i class="nav-icon fas fa-cogs"></i>
                                         <p>
                                             Manage Alert
+                                        </p>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=budget/index" class="nav-link nav-system_budget">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Manage Purchase Budget
                                         </p>
                                     </a>
                                 </li>

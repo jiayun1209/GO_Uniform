@@ -187,7 +187,7 @@ Class Master extends DBConnection {
     }
 
     function save_rfq() {
-  extract($_POST);
+        extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
             if (in_array($k, array('discount_amount', 'tax_amount')))
@@ -263,7 +263,7 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-    
+
     function save_item() {
         extract($_POST);
         $data = "";
@@ -697,6 +697,137 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
+    function save_budget() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('budget_no'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `budget_limit` where `staff_ID` = '{$staff_ID}' " . (!empty($budget_no) ? " and budget_no != {$budget_no} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "The budget limit already set by the staff.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($budget_no)) {
+            $sql = "INSERT INTO `budget_limit` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `budget_limit` set {$data} where budget_no = '{$budget_no}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($budget_no))
+                $this->settings->set_flashdata('success', "New budget limit successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Budget limit successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_budget() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `budget_limit` where budget_no = '{$budget_no}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "Budget limit successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+    
+    function save_pr() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (in_array($k, array('discount_amount', 'tax_amount')))
+                $v = str_replace(',', '', $v);
+            if (!in_array($k, array('id', 'pr_no')) && !is_array($_POST[$k])) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        if (!empty($pr_no)) {
+            $check = $this->conn->query("SELECT * FROM `purchase_requisition` where `pr_no` = '{$pr_no}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+            if ($this->capture_err())
+                return $this->capture_err();
+            if ($check > 0) {
+                $resp['status'] = 'pr_failed';
+                $resp['msg'] = "PR Number already exist.";
+                return json_encode($resp);
+                exit;
+            }
+        } else {
+            $pr_np = "";
+            while (true) {
+                $q_ID = "20PR" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $check = $this->conn->query("SELECT * FROM `purchase_requisition` where `pr_no` = '{$pr_no}'")->num_rows;
+                if ($check <= 0)
+                    break;
+            }
+        }
+        $data .= ", pr_no = '{$pr_no}' ";
+
+        if (empty($id)) {
+            $sql = "INSERT INTO `purchase_requisition` set {$data} ";
+        } else {
+            $sql = "UPDATE `purchase_requisition` set {$data} where id = '{$id}' ";
+        }
+        $save = $this->conn->query($sql);
+        if ($save) {
+            $resp['status'] = 'success';
+            $pr_id = empty($id) ? $this->conn->insert_id : $id;
+            $resp['id'] = $pr_id;
+            $data = "";
+            foreach ($item_id as $k => $v) {
+                if (!empty($data))
+                    $data .= ",";
+                $data .= "('{$pr_id}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
+            }
+            if (!empty($data)) {
+                $this->conn->query("DELETE FROM `purchase_requisition_details` where pr_id= '{$pr_id}'");
+                $save = $this->conn->query("INSERT INTO `purchase_requisition_details` (`pr_id`,`item_id`,`quantity_request`) VALUES {$data} ");
+            }
+            if (empty($id))
+                $this->settings->set_flashdata('success', "PR successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "PR successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_pr() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `purchase_requisition` where id = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "PR successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+
 }
 
 $Master = new Master();
@@ -723,7 +854,7 @@ switch ($action) {
         break;
     case 'delete_rfq':
         echo $Master->delete_rfq();
-        break;      
+        break;
     case 'delete_con':
         echo $Master->delete_con();
         break;
@@ -771,6 +902,18 @@ switch ($action) {
         break;
     case 'delete_alert':
         echo $Master->delete_alert();
+        break;
+    case 'save_budget':
+        echo $Master->save_budget();
+        break;
+    case 'delete_budget':
+        echo $Master->delete_budget();
+        break;
+     case 'save_pr':
+        echo $Master->save_pr();
+        break;
+    case 'delete_pr':
+        echo $Master->delete_pr();
         break;
 
     default:
