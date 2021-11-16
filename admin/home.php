@@ -170,7 +170,7 @@
         <span class="info-box-icon bg-gradient-danger elevation-1"><i class="fas  fa-comments-dollar"></i></span>
 
         <div class="info-box-content">
-            <span class="info-box-text">Rejected RFQ</span>
+            <span class="info-box-text">Inactive RFQ</span>
             <span class="info-box-number">
                 <?php
                 $rfq = $conn->query("SELECT * FROM quotation where `status` =2 ")->num_rows;

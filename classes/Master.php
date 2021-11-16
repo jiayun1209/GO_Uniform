@@ -187,7 +187,7 @@ Class Master extends DBConnection {
     }
 
     function save_rfq() {
-  extract($_POST);
+        extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
             if (in_array($k, array('discount_amount', 'tax_amount')))
@@ -263,7 +263,7 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-    
+
     function save_item() {
         extract($_POST);
         $data = "";
@@ -382,6 +382,16 @@ Class Master extends DBConnection {
         $data = array();
         while ($row = $qry->fetch_assoc()) {
             $data[] = array("label" => $row['name'], "id" => $row['id'], "description" => $row['description'], "id" => $row['id'], "item_code" => $row['item_code']);
+        }
+        return json_encode($data);
+    }
+
+    function search_pr() {
+        extract($_POST);
+        $qry = $this->conn->query("SELECT * FROM purchase_requisitions_details where `quantity`");
+        $data = array();
+        while ($row = $qry->fetch_assoc()) {
+            $data[] = array("label" =>  $row['id'], "quantity" => $row['quantity'], "id" => $row['id'], "pr_id" => $row['pr_id']);
         }
         return json_encode($data);
     }
@@ -723,7 +733,7 @@ switch ($action) {
         break;
     case 'delete_rfq':
         echo $Master->delete_rfq();
-        break;      
+        break;
     case 'delete_con':
         echo $Master->delete_con();
         break;
@@ -741,6 +751,9 @@ switch ($action) {
         break;
     case 'search_items':
         echo $Master->search_items();
+        break;
+    case 'search_pr':
+        echo $Master->search_pr();
         break;
     case 'save_po':
         echo $Master->save_po();

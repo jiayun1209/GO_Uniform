@@ -35,7 +35,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Update RFQ Details" : "New RFQ" ?></b> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update Quotation Details" : "New Quotation" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
@@ -43,19 +43,32 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
+                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
                         $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code']?> <?php echo  $row['name'] ?></option>
+                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code'] ?> <?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
-                    </select>
-                </div>
-                 <div class="col-md-6 form-group">
+                    </select>    
+                    <div class="col-md-6 form-group">
+                        <p  class="m-0"><b>PR No. #</b></p>
+                        <?php
+                        if (isset($id)):
+                            $q_qry = $conn->query("SELECT * FROM `quotation` where id = '$id'");
+                            while ($row = $q_qry->fetch_assoc()):
+                                ?>
+                                <?php echo ($row['pr_ID']) ?>    
+                                <?php
+                            endwhile;
+                        endif;
+                        ?>
+                    </div>
+                </div> 
+                <div class="col-md-6 form-group">
                     <label for="q_ID">RFQ NO# <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
+                    <input type="text" class="form-control form-control-lsm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
                 <div class="col-6">
@@ -103,14 +116,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
-                                        <td class="align-middle p-0 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+                                        <td class="align-middle p-1">
+                                            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
                                             <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
                                         </td>                                        
-                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
+                                        <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                     
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -122,14 +135,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             endif;
                             ?>
                         </tbody>                         
-                       <tfoot>
+                        <tfoot>
                             <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+                                <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
                             </tr>
 
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Total</th>
+                                <th class="p-1 text-right" colspan="6">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
                             </tr>
@@ -165,8 +178,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
-        <td class="align-middle p-0 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+        <td class="align-middle p-1">
+            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"/>
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
@@ -237,6 +250,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
+                _item.find('input[name="pr_id[]"]').val(ui.pr.id)
+                _item.find('.qty').text(ui.qty)
             }
         })
     }
