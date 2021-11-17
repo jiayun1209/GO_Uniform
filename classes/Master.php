@@ -386,6 +386,16 @@ Class Master extends DBConnection {
         return json_encode($data);
     }
 
+    function search_pr() {
+        extract($_POST);
+        $qry = $this->conn->query("SELECT * FROM purchase_requisitions_details where `quantity`");
+        $data = array();
+        while ($row = $qry->fetch_assoc()) {
+            $data[] = array("label" =>  $row['id'], "quantity" => $row['quantity'], "id" => $row['id'], "pr_id" => $row['pr_id']);
+        }
+        return json_encode($data);
+    }
+
     function save_po() {
         extract($_POST);
         $data = "";
@@ -951,6 +961,9 @@ switch ($action) {
         break;
     case 'search_items':
         echo $Master->search_items();
+        break;
+    case 'search_pr':
+        echo $Master->search_pr();
         break;
     case 'save_po':
         echo $Master->save_po();

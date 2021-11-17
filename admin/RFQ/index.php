@@ -7,9 +7,8 @@
 	<div class="card-header">
             <h3 class="card-title"><b>List of RFQ</b></h3>
 		<div class="card-tools">
-                    <a href="?page=RFQ/manage_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create Quotation</a>
-                    <a href="?page=RFQ/manage_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create Quotation WITH PR</a>
-                    <a href="?page=RFQ/send_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span> Send RFQ</a>                    
+                    <a href="?page=RFQ/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create Quotation</a>
+                    <a href="?page=RFQ/approved_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span> Send RFQ</a>                    
 		</div>
 	</div>
 	<div class="card-body">
@@ -76,9 +75,7 @@
 				                  <div class="dropdown-menu" role="menu">
 								  	<a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item" href="?page=RFQ/manage_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+				                    <a class="dropdown-item" href="?page=RFQ/manage_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>				                   
 				                  </div>
 							</td>
 						</tr>
@@ -92,7 +89,7 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this RFQ permanently?","delete_rent",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this RFQ permanently?","delete_rfq",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
 			uni_modal("Reservaton Details","RFQ/view_rfq.php?id="+$(this).attr('data-id'),'mid-large')
@@ -103,10 +100,10 @@
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')
 		$('.table').dataTable();
 	})
-	function delete_rent($id){
+	function delete_rfq($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_po",
+			url:_base_url_+"classes/Master.php?f=delete_rfq",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

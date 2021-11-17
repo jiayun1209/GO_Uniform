@@ -49,22 +49,21 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code']?> <?php echo  $row['name'] ?></option>
+                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code'] ?> <?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
-                    </select>  
-                                       
-                     <label for="pr_ID">PR ID</label>
-                    <select name="pr_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select2">
+                    </select>                                        
+                    <label for="pr_ID">PR ID</label>
+                    <select name="pr_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select0">
                         <option value="" disabled <?php echo!isset($pr_ID) ? "selected" : '' ?>></option>
                         <?php
-                        $pr_qry = $conn->query("SELECT * FROM `purchase_requisition` WHERE status = 'completed'");
+                        $pr_qry = $conn->query("SELECT p.*,q.* FROM `purchase_requisitions` p inner join purchase_requisitions_details q WHERE status = 1 AND p.id =q.pr_id");
                         while ($row = $pr_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $row['pr_ID'] ?>" <?php echo isset($pr_ID) && $pr_ID == $row['pr_ID'] ? 'selected' : '' ?>> <?php echo  $row['pr_ID'] ?></option>
+                            <option value="<?php echo $row['pr_no'] ?>" <?php echo isset($pr_no) && $pr_no == $row['pr_no'] ? 'selected' : '' ?>> <?php echo $row['pr_no'] ?></option>
                         <?php endwhile; ?>
                     </select>
                 </div> 
-                 <div class="col-md-6 form-group">
+                <div class="col-md-6 form-group">
                     <label for="q_ID">RFQ NO# <span class="po_err_msg text-danger"></span></label>
                     <input type="text" class="form-control form-control-lsm rounded-0" id="q_ID" name="q_ID" value="<?php echo isset($q_ID) ? $q_ID : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
@@ -104,7 +103,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_requisiton_details` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -114,14 +113,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-1 text-center">
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
-                                       <td class="align-middle p-0 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+                                        <td class="align-middle p-1">
+                                            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
                                             <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
                                         </td>                                        
-                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
+                                        <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                     
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -133,14 +132,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             endif;
                             ?>
                         </tbody>                         
-                       <tfoot>
+                        <tfoot>
                             <tr class="bg-lightblue">
                             <tr>
-                                <th class="p-1 text-right" colspan="5"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
+                                <th class="p-1 text-right" colspan="6"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button>
                             </tr>
 
                             <tr>
-                                <th class="p-1 text-right" colspan="5">Total</th>
+                                <th class="p-1 text-right" colspan="6">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
                             </tr>
@@ -176,8 +175,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 text-center">
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
-       <td class="align-middle p-0 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+        <td class="align-middle p-1">
+            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"/>
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
@@ -248,7 +247,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
-            }          
+                _item.find('input[name="pr_id[]"]').val(ui.pr.id)
+                _item.find('.qty').text(ui.qty)
+            }
         })
     }
     function displayCancellation() {
@@ -313,7 +314,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=RFQ/view_rfq_pr&id=" + resp.id;
+                        location.href = "./?page=RFQ/view_rfq&id=" + resp.id;
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)

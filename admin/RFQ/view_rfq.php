@@ -58,7 +58,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="col-6">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-                <h2 class="text-center"><b>RFQ with PR</b></h2>
+                <h2 class="text-center"><b>RFQ</b></h2>
             </div>
         </div>
         <div class="row mb-2">
@@ -142,7 +142,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <tfoot>                       
                         <tr>
                         <tr>
-                            <th class="p-1 text-right" colspan="3">Total</th>
+                            <th class="p-1 text-right" colspan="5">Total</th>
                             <th class="p-1 text-right" id="total"><?php echo number_format($total) ?></th>
                         </tr>
                         </tr>
