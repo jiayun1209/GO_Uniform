@@ -30,7 +30,7 @@ foreach ($user->fetch_array() as $k => $v) {
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control" value="" autocomplete="off">
-                    <small><i>Leave this blank if you dont want to change the password.</i></small>
+                    <small><i>Leave this blank if you don't want to change the password.</i></small>
                 </div>
                 <div class="form-group">
                     <label for="" class="control-label">Avatar</label>

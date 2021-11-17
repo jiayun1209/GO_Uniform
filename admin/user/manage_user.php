@@ -34,7 +34,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" class="form-control" value="" autocomplete="off" <?php echo isset($meta['id']) ? "" : 'required' ?>>
                     <?php if (isset($_GET['id'])): ?>
-                        <small><i>Leave this blank if you dont want to change the password.</i></small>
+                        <small><i>Leave this blank if you don't want to change the password.</i></small>
                     <?php endif; ?>
                 </div>
                 <div class="form-group col-6">
