@@ -48,11 +48,11 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
         </div>
         <div class="form-group">
-            <label for="quantity" class="control-label">Quantity</label>
+            <label for="quantity" class="control-label">Quantity on hand</label>
             <input type="text" name="quantity" id="quantity" class="form-control rounded-0" value="<?php echo isset($quantity) ? $quantity :"" ?>" required>
         </div>
         <div class="form-group">
-            <label for="price" class="control-label">Price</label>
+            <label for="price" class="control-label">Price per unit</label>
             <input type="text" name="price" id="price" class="form-control rounded-0" value="<?php echo isset($price) ? $price :"" ?>" required>
         </div>
         <div class="form-group">

@@ -1,6 +1,6 @@
 <?php
 include_once("db_connect.php");
-$sqlEvents = "SELECT id, title, start_date, end_date FROM events LIMIT 20";
+$sqlEvents = "SELECT id, title, start_date, end_date, status FROM events WHERE status = 1 LIMIT 20";
 $resultset = mysqli_query($conn, $sqlEvents) or die("database error:". mysqli_error($conn));
 $calendar = array();
 while( $rows = mysqli_fetch_assoc($resultset) ) {	

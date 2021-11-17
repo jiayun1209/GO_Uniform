@@ -17,10 +17,10 @@
 				<colgroup>
 					<col width="5%">
 					<col width="15%">
+					<col width="10%">
+					<col width="10%">
 					<col width="15%">
 					<col width="15%">
-					<col width="15%">
-					<col width="5%">
                                         <col width="10%">
                                         <col width="10%">
                                         <col width="15%">
@@ -33,8 +33,8 @@
                                                 <th>Catalog ID</th>
                                                 <th>Item Name</th>
 						<th>Description</th>
-                                                <th>Qty</th>
-                                                <th>Price</th>
+                                                <th>Quantity on hand</th>
+                                                <th>Price per unit</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>

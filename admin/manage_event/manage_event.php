@@ -31,14 +31,14 @@ if (isset($_GET['id']) && $_GET['id'] != "") {
             <label for="description" class="control-label">Description</label>
             <input type ="text" name="description" id="description" class="form-control rounded-0" value="<?php echo isset($description) ? $description : " " ?>" required>
         </div>
-
+        
         <div class="form-group">
             <label for="start_date" class="control-label">Start Date</label>
-            <input type="text" name="start_date" id="start_date" class="form-control rounded-0" value="<?php echo isset($start_date) ? $start_date : " " ?>" required>
+            <input type="text" name="start_date" id="start_date" class="form-control rounded-0" value="<?php echo isset($start_date) ? $start_date : " " ?>" readonly>
         </div>
         <div class="form-group">
             <label for="end_date" class="control-label">End Date</label>
-            <input type="end_date" name="end_date" id="end_date" class="form-control rounded-0" value="<?php echo isset($end_date) ? $end_date : " " ?>" required>
+            <input type="end_date" name="end_date" id="end_date" class="form-control rounded-0" value="<?php echo isset($end_date) ? $end_date : " " ?>" readonly>
         </div>
 
         <div class="form-group">

@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT * from `purchase_requisitions` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `materials_requisitions` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -35,7 +35,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Update PR Details" : "New PR" ?></b> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update MR Details" : "New MR" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
@@ -43,7 +43,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="staff_id">Staff Name</label>
-                    <small><i>Please select the staff in charge.</i></small>
                     <select name="staff_id" id="staff_id" class="custom-select custom-select-sm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
@@ -52,12 +51,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                             <option value="<?php echo $row['id'] ?>" <?php echo isset($id) && $id == $row['id'] ? 'selected' : '' ?>><?php echo $row['username'] ?> <?php echo $row['lastname'] ?></option>
                         <?php endwhile; ?>
-                            
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
-                    <label for="pr_no">PR NO# <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="pr_no" name="pr_no" value="<?php echo isset($pr_no) ? $pr_no : '' ?>">
+                    <label for="mr_no">MR NO# <span class="po_err_msg text-danger"></span></label>
+                    <input type="text" class="form-control form-control-sm rounded-0" id="mr_no" name="mr_no" value="<?php echo isset($mr_no) ? $mr_no : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
 
@@ -88,7 +86,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_requisitions_details` o inner join inventory i on o.item_id = i.id where o.`pr_id` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `materials_requisitions_details` o inner join inventory i on o.item_id = i.id where o.`mr_id` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -134,15 +132,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <div class="row">
                         <div class="col-md-6">
                             <label for="remarks" class="control-label">Remarks</label>
-                            <small><i>Leave this blank for staff.</i></small>
                             <textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
                         </div>
-                        
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                            
+                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
+                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
                             </select>                          
                         </div>
 
@@ -154,7 +151,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </div>
     <div class="card-footer">
         <button class="btn btn-flat btn-primary" form="po-form">Save</button>
-        <a class="btn btn-flat btn-default" href="?page=purchase_r">Cancel</a>
+        <a class="btn btn-flat btn-default" href="?page=material_m">Cancel</a>
     </div>
 </div>
 <table class="d-none" id="item-clone">
@@ -277,14 +274,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();
-            $('[name="pr_no"]').removeClass('border-danger')
+            $('[name="mr_no"]').removeClass('border-danger')
             if ($('#item-list .po-item').length <= 0) {
                 alert_toast(" Please add at least 1 item on the list.", 'warning')
                 return false;
             }
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=save_pr",
+                url: _base_url_ + "classes/Master.php?f=save_mr",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -299,7 +296,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=purchase_r/view_pr&id=" + resp.id;
+                        location.href = "./?page=material_m/view_mr&id=" + resp.id;
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)
@@ -308,7 +305,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         $("html, body").animate({scrollTop: 0}, "fast");
                         end_loader()
                         if (resp.status == 'po_failed') {
-                            $('[name="pr_no"]').addClass('border-danger').focus()
+                            $('[name="mr_no"]').addClass('border-danger').focus()
                         }
                     } else {
                         alert_toast("An error occured", 'error');

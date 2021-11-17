@@ -749,7 +749,7 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
-    
+
     function save_pr() {
         extract($_POST);
         $data = "";
@@ -764,30 +764,30 @@ Class Master extends DBConnection {
             }
         }
         if (!empty($pr_no)) {
-            $check = $this->conn->query("SELECT * FROM `purchase_requisition` where `pr_no` = '{$pr_no}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+            $check = $this->conn->query("SELECT * FROM `purchase_requisitions` where `pr_no` = '{$pr_no}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
             if ($this->capture_err())
                 return $this->capture_err();
             if ($check > 0) {
-                $resp['status'] = 'pr_failed';
+                $resp['status'] = 'PR_failed';
                 $resp['msg'] = "PR Number already exist.";
                 return json_encode($resp);
                 exit;
             }
         } else {
-            $pr_np = "";
+            $pr_no = "";
             while (true) {
-                $q_ID = "20PR" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
-                $check = $this->conn->query("SELECT * FROM `purchase_requisition` where `pr_no` = '{$pr_no}'")->num_rows;
+                $pr_no = "20PR" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $check = $this->conn->query("SELECT * FROM `purchase_requisitions` where `pr_no` = '{$pr_no}'")->num_rows;
                 if ($check <= 0)
                     break;
             }
         }
-        $data .= ", pr_no = '{$pr_no}' ";
+        $data .= ",pr_no = '{$pr_no}' ";
 
         if (empty($id)) {
-            $sql = "INSERT INTO `purchase_requisition` set {$data} ";
+            $sql = "INSERT INTO `purchase_requisitions` set {$data} ";
         } else {
-            $sql = "UPDATE `purchase_requisition` set {$data} where id = '{$id}' ";
+            $sql = "UPDATE `purchase_requisitions` set {$data} where id = '{$id}' ";
         }
         $save = $this->conn->query($sql);
         if ($save) {
@@ -801,8 +801,8 @@ Class Master extends DBConnection {
                 $data .= "('{$pr_id}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
             }
             if (!empty($data)) {
-                $this->conn->query("DELETE FROM `purchase_requisition_details` where pr_id= '{$pr_id}'");
-                $save = $this->conn->query("INSERT INTO `purchase_requisition_details` (`pr_id`,`item_id`,`quantity_request`) VALUES {$data} ");
+                $this->conn->query("DELETE FROM `purchase_requisitions_details` where pr_id= '{$pr_id}'");
+                $save = $this->conn->query("INSERT INTO `purchase_requisitions_details` (`pr_id`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
             }
             if (empty($id))
                 $this->settings->set_flashdata('success', "PR successfully saved.");
@@ -817,10 +817,89 @@ Class Master extends DBConnection {
 
     function delete_pr() {
         extract($_POST);
-        $del = $this->conn->query("DELETE FROM `purchase_requisition` where id = '{$id}'");
+        $del = $this->conn->query("DELETE FROM `purchase_requisitions` where id = '{$id}'");
         if ($del) {
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "PR successfully deleted.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['error'] = $this->conn->error;
+        }
+        return json_encode($resp);
+    }
+
+    function save_mr() {
+
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (in_array($k, array('discount_amount', 'tax_amount')))
+                $v = str_replace(',', '', $v);
+            if (!in_array($k, array('id', 'mr_no')) && !is_array($_POST[$k])) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        if (!empty($mr_no)) {
+            $check = $this->conn->query("SELECT * FROM `materials_requisitions` where `mr_no` = '{$mr_no}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+            if ($this->capture_err())
+                return $this->capture_err();
+            if ($check > 0) {
+                $resp['status'] = 'po_failed';
+                $resp['msg'] = "MR Number already exist.";
+                return json_encode($resp);
+                exit;
+            }
+        } else {
+            $mr_no = "";
+            while (true) {
+                $mr_no = "20MR" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $check = $this->conn->query("SELECT * FROM `materials_requisitions` where `mr_no` = '{$mr_no}'")->num_rows;
+                if ($check <= 0)
+                    break;
+            }
+        }
+        $data .= ", mr_no = '{$mr_no}' ";
+
+        if (empty($id)) {
+            $sql = "INSERT INTO `materials_requisitions` set {$data} ";
+        } else {
+            $sql = "UPDATE `materials_requisitions` set {$data} where id = '{$id}' ";
+        }
+        $save = $this->conn->query($sql);
+        if ($save) {
+            $resp['status'] = 'success';
+            $mr_id = empty($id) ? $this->conn->insert_id : $id;
+            $resp['id'] = $mr_id;
+            $data = "";
+            foreach ($item_id as $k => $v) {
+                if (!empty($data))
+                    $data .= ",";
+                $data .= "('{$mr_id}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
+            }
+            if (!empty($data)) {
+                $this->conn->query("DELETE FROM `materials_requisitions_details` where mr_id= '{$mr_id}'");
+                $save = $this->conn->query("INSERT INTO `materials_requisitions_details` (`mr_id`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
+            }
+            if (empty($id))
+                $this->settings->set_flashdata('success', "MR successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "MR successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
+    function delete_mr() {
+        extract($_POST);
+        $del = $this->conn->query("DELETE FROM `materials_requisitions` where id = '{$id}'");
+        if ($del) {
+            $resp['status'] = 'success';
+            $this->settings->set_flashdata('success', "MR successfully deleted.");
         } else {
             $resp['status'] = 'failed';
             $resp['error'] = $this->conn->error;
@@ -909,11 +988,17 @@ switch ($action) {
     case 'delete_budget':
         echo $Master->delete_budget();
         break;
-     case 'save_pr':
+    case 'save_pr':
         echo $Master->save_pr();
         break;
     case 'delete_pr':
         echo $Master->delete_pr();
+        break;
+    case 'save_mr':
+        echo $Master->save_mr();
+        break;
+    case 'delete_mr':
+        echo $Master->delete_mr();
         break;
 
     default:

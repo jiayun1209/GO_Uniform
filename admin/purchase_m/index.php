@@ -5,9 +5,10 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of Approved Purchase Requisition</h3>
-                <div class="card-tools">
-                    <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Back</a>
+            <h3 class="card-title"><b>List of Purchase Requisition</b></h3>
+		<div class="card-tools">
+                  
+                                
 		</div>
 	</div>
 	<div class="card-body">
@@ -26,31 +27,32 @@
 				</colgroup>
 				<thead>
 					<tr class="bg-navy disabled">
-						<th>#</th>
-						<th>Date Created</th>
-						<th>PR #</th>
-						<th>Staff</th>
-						<th>Items</th>
-						<th>Quantity Request</th>
-						<th>Status</th>
-						<th>Action</th>
+                                            <th class="px-1 py-1 text-left">No. </th>
+						<th class="px-1 py-1 text-left">Date Created</th>
+						<th class="px-1 py-1 text-left">PR No.</th>
+						<th class="px-1 py-1 text-left">Staff Name</th>
+						<th class="px-1 py-1 text-center">Inventory Details</th>
+						<th class="px-1 py-1 text-right">Total Amount (RM)</th>
+						<th class="px-1 py-1 text-center">Status</th>
+						<th class="px-1 py-1 text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT pr.*, s.name as sname FROM `purchase_requisition` pr inner join `staff` s on pr.id  = s.id where status='1' order by unix_timestamp(po.date_updated) ");
+						$qry = $conn->query("SELECT p.*, s.firstname as sname FROM `purchase_requisitions` p inner join `staff` s on p.staff_id  = s.id order by unix_timestamp(p.date_updated) ");
 						while($row = $qry->fetch_assoc()):
-							
+							$row['item_count'] = $conn->query("SELECT * FROM purchase_requisitions_details where pr_id = '{$row['id']}'")->num_rows;
+							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_requisitions_details where pr_id = '{$row['id']}'")->fetch_array()['total'];
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-							<td class=""><?php echo $row['po_no'] ?></td>
-							<td class=""><?php echo $row['sname'] ?></td>
-							<td class="text-right"><?php echo number_format($row['item_count']) ?></td>
+							<td class=""><?php echo $row['pr_no'] ?></td>
+							<td class="text-left"><?php echo $row['sname'] ?></td>
+							<td class="text-center"><?php echo number_format($row['item_count']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-							<td>
+							<td class="text-center">
 								<?php 
 									switch ($row['status']) {
 										case '1':
@@ -58,9 +60,6 @@
 											break;
 										case '2':
 											echo '<span class="badge badge-danger">Rejected</span>';
-											break;
-                                                                                case '3':
-											echo '<span class="badge badge-warning text-danger">Cancelled</span>';
 											break;
 										default:
 											echo '<span class="badge badge-secondary">Pending</span>';
@@ -74,11 +73,9 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-								  	<a class="dropdown-item" href="?page=purchase_r/view_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+								  	<a class="dropdown-item" href="?page=purchase_m/view_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
 				                    <div class="dropdown-divider"></div>
-				                    <a class="dropdown-item" href="?page=purchase_r/manage_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-				                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="?page=purchase_r/send_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send PO</a>
+				                    <a class="dropdown-item" href="?page=purchase_m/manage_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
@@ -94,10 +91,10 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this PR permanently?","delete_PR",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this PR permanently?","delete_rent",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
-			uni_modal("Reservaton Details","purchase_r/view_details.php?id="+$(this).attr('data-id'),'mid-large')
+			uni_modal("Reservaton Details","purchase_m/view_pr.php?id="+$(this).attr('data-id'),'mid-large')
 		})
 		$('.renew_data').click(function(){
 			_conf("Are you sure to renew this rent data?","renew_rent",[$(this).attr('data-id')]);

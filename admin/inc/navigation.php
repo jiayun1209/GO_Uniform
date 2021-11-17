@@ -37,19 +37,19 @@
 
                             <?php if ($_settings->userdata('type') == 4): ?>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index_creation" class="nav-link nav-PR_Create">
+                                    <a href="<?php echo base_url ?>admin/?page=purchase_r" class="nav-link nav-PR_Create">
                                         <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>
-                                            Create PR   
+                                            Create Purchase Requisition
                                         </p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=material_requisition/index_creation" class="nav-link nav-MR_Create">
+                                    <a href="<?php echo base_url ?>admin/?page=material_r" class="nav-link nav-MR_Create">
                                         <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>
-                                            Create MR  
+                                            Create Material Requisition  
                                         </p>
                                     </a>
                                 </li>
@@ -103,7 +103,7 @@
                                     <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                                         <i class="nav-icon fas fa-boxes"></i>
                                         <p>
-                                            Item List
+                                            Inventory
                                         </p>
                                     </a>
                                 </li>
@@ -174,32 +174,44 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=purchase_r" class="nav-link nav-PR_Create">
+                                    <a href="<?php echo base_url ?>admin/?page=purchase_m" class="nav-link nav-PR_Create">
                                         <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>
                                             Purchase Requisition
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=purchase_requisition/index_creation" class="nav-link nav-PR_Create">
-                                        <i class="nav-icon fas fa-file-invoice"></i>
-                                        <p>
-                                            Purchase Requisition  
-                                        </p>
-                                    </a>
-                                </li>
 
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=material_requisition/index_creation" class="nav-link nav-MR_Create">
+                                    <a href="<?php echo base_url ?>admin/?page=material_m" class="nav-link nav-MR_Create">
                                         <i class="nav-icon fas fa-file-invoice"></i>
                                         <p>
                                             Material Requisition  
                                         </p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=alert_v/index" class="nav-link nav-system_alert">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Alert
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=budget_v/index" class="nav-link nav-system_budget">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Purchase Budget
+                                        </p>
+                                    </a>
+                                </li>
+
+
                                 <li class="nav-header">Maintenance</li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
@@ -222,7 +234,7 @@
                                     <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-system_events">
                                         <i class="nav-icon fas fa-cogs"></i>
                                         <p>
-                                            Manage Operation Events
+                                            Operation Calendar
                                         </p>
                                     </a>
                                 </li>
@@ -235,12 +247,29 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=budget/index" class="nav-link nav-system_budget">
                                         <i class="nav-icon fas fa-cogs"></i>
                                         <p>
                                             Manage Purchase Budget
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=import/import_pdf" class="nav-link nav-system_budget">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Import Inventory to PDF
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=export" class="nav-link nav-system_budget">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            Export Inventory to PDF
                                         </p>
                                     </a>
                                 </li>

@@ -43,7 +43,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="staff_id">Staff Name</label>
-                    <small><i>Please select the staff in charge.</i></small>
                     <select name="staff_id" id="staff_id" class="custom-select custom-select-sm rounded-0 select2">
                         <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
@@ -52,7 +51,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                             <option value="<?php echo $row['id'] ?>" <?php echo isset($id) && $id == $row['id'] ? 'selected' : '' ?>><?php echo $row['username'] ?> <?php echo $row['lastname'] ?></option>
                         <?php endwhile; ?>
-                            
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
@@ -134,15 +132,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <div class="row">
                         <div class="col-md-6">
                             <label for="remarks" class="control-label">Remarks</label>
-                            <small><i>Leave this blank for staff.</i></small>
                             <textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
                         </div>
-                        
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                            
+                                <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
+                                <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
                             </select>                          
                         </div>
 
@@ -154,7 +151,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </div>
     <div class="card-footer">
         <button class="btn btn-flat btn-primary" form="po-form">Save</button>
-        <a class="btn btn-flat btn-default" href="?page=purchase_r">Cancel</a>
+        <a class="btn btn-flat btn-default" href="?page=purchase_m">Cancel</a>
     </div>
 </div>
 <table class="d-none" id="item-clone">
@@ -299,7 +296,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=purchase_r/view_pr&id=" + resp.id;
+                        location.href = "./?page=purchase_m/view_pr&id=" + resp.id;
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)

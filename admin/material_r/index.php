@@ -5,9 +5,9 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-            <h3 class="card-title"><b>List of Purchase Requisition</b></h3>
+            <h3 class="card-title"><b>List of Material Requisition</b></h3>
 		<div class="card-tools">
-                    <a href="?page=purchase_r/manage_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create PR</a>
+                    <a href="?page=material_r/manage_mr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create MR</a>
                                 
 		</div>
 	</div>
@@ -29,7 +29,7 @@
 					<tr class="bg-navy disabled">
                                             <th class="px-1 py-1 text-left">No. </th>
 						<th class="px-1 py-1 text-left">Date Created</th>
-						<th class="px-1 py-1 text-left">PR No.</th>
+						<th class="px-1 py-1 text-left">MR No.</th>
 						<th class="px-1 py-1 text-left">Staff Name</th>
 						<th class="px-1 py-1 text-center">Inventory Details</th>
 						<th class="px-1 py-1 text-right">Total Amount (RM)</th>
@@ -40,15 +40,15 @@
 				<tbody>
 					<?php 
 					$i = 1;
-						$qry = $conn->query("SELECT p.*, s.firstname as sname FROM `purchase_requisitions` p inner join `staff` s on p.staff_id  = s.id order by unix_timestamp(p.date_updated) ");
+						$qry = $conn->query("SELECT m.*, s.firstname as sname FROM `materials_requisitions` m inner join `staff` s on m.staff_id  = s.id order by unix_timestamp(m.date_updated) ");
 						while($row = $qry->fetch_assoc()):
-							$row['item_count'] = $conn->query("SELECT * FROM purchase_requisitions_details where pr_id = '{$row['id']}'")->num_rows;
-							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_requisitions_details where pr_id = '{$row['id']}'")->fetch_array()['total'];
+							$row['item_count'] = $conn->query("SELECT * FROM materials_requisitions_details where mr_id = '{$row['id']}'")->num_rows;
+							$row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM materials_requisitions_details where mr_id = '{$row['id']}'")->fetch_array()['total'];
 					?>
 						<tr>
 							<td class="text-center"><?php echo $i++; ?></td>
 							<td class=""><?php echo date("M d,Y H:i",strtotime($row['date_created'])) ; ?></td>
-							<td class=""><?php echo $row['pr_no'] ?></td>
+							<td class=""><?php echo $row['mr_no'] ?></td>
 							<td class="text-left"><?php echo $row['sname'] ?></td>
 							<td class="text-center"><?php echo number_format($row['item_count']) ?></td>
 							<td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
@@ -73,8 +73,8 @@
 				                    <span class="sr-only">Toggle Dropdown</span>
 				                  </button>
 				                  <div class="dropdown-menu" role="menu">
-								  	<a class="dropdown-item" href="?page=purchase_r/view_pr&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
-				                   
+								  	<a class="dropdown-item" href="?page=material_r/view_mr&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+				                    
 				                    <div class="dropdown-divider"></div>
 				                    <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
 				                  </div>
@@ -90,10 +90,10 @@
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete this PR permanently?","delete_rent",[$(this).attr('data-id')])
+			_conf("Are you sure to delete this MR permanently?","delete_rent",[$(this).attr('data-id')])
 		})
 		$('.view_details').click(function(){
-			uni_modal("Reservaton Details","purchase_r/view_pr.php?id="+$(this).attr('data-id'),'mid-large')
+			uni_modal("Reservaton Details","material_r/view_mr.php?id="+$(this).attr('data-id'),'mid-large')
 		})
 		$('.renew_data').click(function(){
 			_conf("Are you sure to renew this rent data?","renew_rent",[$(this).attr('data-id')]);

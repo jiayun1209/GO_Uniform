@@ -5,7 +5,7 @@
 		view: 'month',
 		tmpl_path: 'tmpls/',
 		tmpl_cache: false,
-		day: '2021-10-28',
+		day: '2021-11-28',
 		onAfterEventsLoad: function(events) {
 			if(!events) {
 				return;
