@@ -4,6 +4,21 @@ include('header.php');
 ?>
 <title>GO Uniform Trading Sdn Bhd | Event Calendar</title>
 <link rel="stylesheet" href="css/calendar.css">
+<style>
+    body{
+        background: #f4f6f9;
+    }
+    .navbar {
+        background: #343a40;
+    }
+    .navbar .navbar-brand{
+        color: white;
+    }
+    
+    .cal-month-box{
+        background: white;
+    }
+</style>
 <?php include('container.php');?>
 <div class="container">	
 	<h2></h2>	

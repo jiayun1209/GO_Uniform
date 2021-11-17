@@ -5,6 +5,7 @@
 <?php endif;?>
 
 <style>
+ 
 	img#cimg{
 		height: 15vh;
 		width: 15vh;
@@ -17,6 +18,8 @@
 		object-fit: contain;
 		/* border-radius: 100% 100%; */
 	}
+        
+        
 </style>
 <div class="col-lg-12">
 	<div class="card card-outline card-primary">
