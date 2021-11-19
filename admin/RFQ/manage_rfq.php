@@ -56,10 +56,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <p  class="m-0"><b>PR No. #</b></p>
                         <?php
                         if (isset($id)):
-                            $q_qry = $conn->query("SELECT * FROM `quotation` where id = '$id'");
+                            $q_qry = $conn->query("SELECT * FROM `purchase_requisitions` where id = '$id'");
                             while ($row = $q_qry->fetch_assoc()):
                                 ?>
-                                <?php echo ($row['pr_ID']) ?>    
+                                <?php echo ($row['pr_no']) ?>    
                                 <?php
                             endwhile;
                         endif;
@@ -106,7 +106,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.* FROM `quotation` o , inventory i, purchase_requisitions_details p WHERE p.item_id = i.id AND p.pr_id = o.pr_ID AND o.`q_ID` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):

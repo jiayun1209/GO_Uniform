@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Approved RFQ</h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-flat btn-default" href="?page=rfq">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=Quotation">Back</a>
         </div>
     </div>
     <div class="card-body">
@@ -67,9 +67,9 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" href="?page=rfq/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>                                       
+                                        <a class="dropdown-item" href="?page=Quotation/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>                                       
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=rfq/send_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send Quotation</a>
+                                        <a class="dropdown-item" href="?page=Quotation/send_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send Quotation</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
                                     </div>

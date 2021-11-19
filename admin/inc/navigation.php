@@ -258,13 +258,22 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=" class="nav-link nav-">
+                                    <a href="<?php echo base_url ?>admin/?page=Quotation" class="nav-link nav-Quotation">
                                         <i class="nav-icon fas fa-file-alt"></i>
                                         <p>
                                             Maintain Quotation   
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=rating" class="nav-link nav-rating">
+                                        <i class="nav-icon fas fa-star-half-alt"></i>
+                                        <p>
+                                            Rating Measurement
+                                        </p>
+                                    </a>
+                                </li>
+
                                 <li class="nav-header"><b>PO Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=purchase_orders" class="nav-link nav-purchase_orders">
