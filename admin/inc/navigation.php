@@ -90,14 +90,16 @@
                                         </p>
                                     </a>
                                 </li>
+                               
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-suppliers">
+                                    <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-subcontractor">
                                         <i class="nav-icon fas fa-truck-loading"></i>
                                         <p>
                                             Manage Subcontractor   
                                         </p>
                                     </a>
                                 </li>
+                                
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-contract_mgm">
                                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -182,7 +184,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-suppliers">
+                                    <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-subcontractor">
                                         <i class="nav-icon fas fa-truck-loading"></i>
                                         <p>
                                             Subcontractor Maintenance   
