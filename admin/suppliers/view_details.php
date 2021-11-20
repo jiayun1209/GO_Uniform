@@ -45,8 +45,10 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != '') {
                     while ($row = $supplier_qry->fetch_assoc()):
                         ?>
                         <?php echo $row['rating_ID'] ?>&#9733; <?php echo isset($rating_ID) && $rating_ID == $row['rating_ID'] ? 'selected' : '' ?>                       
-                    <?php endwhile;
-                    endif ?></dd>
+                        <?php
+                    endwhile;
+                endif
+                ?></dd>
             <dt class="col-md-4">Rating Remarks</dt>
             <dd class="col-md-8">: 
                 <?php
@@ -55,8 +57,24 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != '') {
                     while ($row = $supplier_qry->fetch_assoc()):
                         ?>                     
                         <?php echo $row['remarks'] ?> <?php echo isset($rating_ID) && $rating_ID == $row['remarks'] ? 'selected' : '' ?>
-                    <?php endwhile;
-                    endif ?></dd>
+                        <?php
+                    endwhile;
+                endif
+                ?></dd>
+            <dt class="col-md-4">Documents</dt>
+            <dd class="col-md-8">: 
+                <?php
+                if (isset($vendor_ID)):
+                    $supplier_qry1 = $conn->query("SELECT c.company_code, v.company_code, v.vendor_ID, f.* FROM `company` c, vendor v, companyfile f WHERE c.company_code = v.company_code and c.company_code = f.company_code and v.vendor_ID ='$vendor_ID'");
+                    while ($row = $supplier_qry1->fetch_assoc()):
+                        ?>   
+                <li> <a href="../files/<?php echo $row['title']; ?>" target="_blank"><?php echo $row['title'] ?></a> </li>
+                    
+                    <?php
+                endwhile;
+            endif
+            ?>                       
+            </dd>
         </dl>
     </callout>
     <div class="row px-2 justify-content-end">
