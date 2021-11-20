@@ -96,7 +96,7 @@
 
                             <tr>
                                 <td class="text-center"><?php echo $i++; ?></td>
-                                <td class="">Supplier Approve List</td>
+                                <td class="">Supplier Approved List</td>
                                 <td align="center">
                                 <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>

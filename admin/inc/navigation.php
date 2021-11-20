@@ -44,7 +44,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=material_r" class="nav-link nav-material_r">
                                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -65,7 +64,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=material_m" class="nav-link nav-material_m">
                                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -202,7 +200,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=Import Export/export" class="nav-link nav-export">
                                         <i class="nav-icon fas fa-file-export"></i>
@@ -273,7 +270,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-header"><b>PO Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=purchase_orders" class="nav-link nav-purchase_orders">
