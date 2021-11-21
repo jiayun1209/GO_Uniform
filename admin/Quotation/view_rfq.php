@@ -5,155 +5,12 @@
 <?php endif; ?>
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT q.*, s.* from `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `quotation` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
         }
     }
-}
-?>
-<?php
-$sup_qry = $conn->query("SELECT q.*, s.* from `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID where id = '{$id}'");
-$supplier = $sup_qry->fetch_array();
-$order_items_qry = $conn->query("SELECT o.*,i.* FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
-$row = $order_items_qry->fetch_assoc();
-$comp_name = $_settings->info('company_name');
-$comp_add = $_settings->info('company_address');
-$comp_img = $_settings->info('logo');
-$name = $toEmail = $supplier["name"];
-$sup_code = $supplier['company_code'];
-$prod = $supplier['product'];
-$desc = $supplier['description'];
-$creation_date = $supplier['date_created'];
-$date = date("Y-m-d", strtotime($creation_date));
-$qty = $row['quantity'];
-$itemName = $row['name'];
-$itemCode = $row['item_code'];
-$itemDesc = $row['description'];
-$unitPrice = $row['unit_price'];
-$totalPrice = ($row['quantity'] * $row['unit_price']);
-$sub_total = 0;
-$sub_total = number_format($row['quantity'] * $row['unit_price']);
-$rem = $supplier['remarks'];
-$qNum = $supplier['q_ID'];
-
-if (isset($_POST['sendMailBtn'])) {
-    $fromEmail = $_settings->info('company_email');
-    $toEmail = $supplier['email'];
-
-
-    $to = "$toEmail";
-    $subject = "PO";
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= 'From: ' . $fromEmail . '<' . $fromEmail . '>' . "\r\n" . 'Reply-To: ' . $fromEmail . "\r\n" . 'X-Mailer: PHP/' . phpversion();
-    $message = '<!doctype html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport"
-					  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-				<meta http-equiv="X-UA-Compatible" content="ie=edge">
-				<title>Document</title>
-			</head>
-			<body>
-                        <div class="card card-outline card-info">
-    <div class="card-header">
-        <h3 class="card-title">Purchase Order Details</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-6 d-flex align-items-center">
-                <div>
-                    <p class="m-0">Company Name: ' . $comp_name . '</p>
-                    <p class="m-0">Email address: ' . $fromEmail . '</p>
-                    <p class="m-0">Delivery address:' . $comp_add . '</p>
-                </div>
-            </div>
-            <div class="col-6">
-                <center><img src="' . $comp_img . '" alt="" height="200px"></center>
-                <h2 class="text-center"><b>QUOTATION</b></h2>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-6">
-                <p class="m-0"><b>Vendor Details</b></p>
-                <div>
-                    <p>Vendor Name     : ' . $name . '</p>
-                    <p>Company Code    : ' . $sup_code . '</p>                   
-                    <p>Email address   :' . $toEmail . '</p>
-                </div>
-            </div>
-            <div class="col-6 row">
-                <div class="col-6">
-                    <p  class="m-0"><b>RFQ Number: ' . $qNum . '</b></p>
-                </div>
-                <div class="col-6">
-                    <p  class="m-0"><b>Date Created: ' . $date . '</b></p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-striped table-bordered">
-                    <colgroup>
-                        <col width="10%">
-                        <col width="20%">
-                        <col width="15%">
-                        <col width="20%">
-                        <col width="15%">
-                        <col width="15%">
-                    </colgroup>
-                    <thead>
-                        <tr class="bg-navy disabled" style="">
-                             <th class="px-1 py-1 text-center">Qty</th>
-                            <th class="px-1 py-1 text-center">Item Name</th>
-                            <th class="px-1 py-1 text-center">Item Code</th>
-                            <th class="px-1 py-1 text-center">Description</th>
-                            <th class="px-1 py-1 text-center">Unit Price (RM)</th>
-                            <th class="px-1 py-1 text-center">Sub Total (RM)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                                <tr class="po-item" data-id="">
-                                    <td class="align-middle p-0 text-center">' . $qty . '</td>
-                                    <td class="align-middle p-1">' . $itemName . '</td>
-                                        <td class="align-middle p-1">' . $itemCode . '</td>
-                                    <td class="align-middle p-1 item-description">' . $itemDesc . '</td>
-                                    <td class="align-middle p-1">' . $unitPrice . '</td>
-                                    <td class="align-middle p-1 text-right total-price">' . $sub_total . '</td>
-                                </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr class="bg-lightblue">                       
-                        <tr>
-                            <th class="p-1 text-right" colspan="4">Total</th>
-                            <th class="p-1 text-right">' . $totalPrice . '</th>
-                        </tr>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="row">
-                    <div class="col-6">
-                        <label>Remarks</label>
-                        <p>' . $remarks . '</p>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>   
-			<br/>
-                    Regards<br/>
-                  ' . $fromEmail . '
-				</div>
-			</body>
-			</html>';
-    $result = @mail($to, $subject, $message, $headers);
-
-    echo '<script>alert("This quotation has been sent successfully to the supplier!")</script>';
 }
 ?>
 <style>
@@ -181,47 +38,43 @@ if (isset($_POST['sendMailBtn'])) {
         width:5vw;
     }
 </style>
-
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Review Quotation</h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Quotation Details" : "New Quotation" ?></b></h3>
         <div class="card-tools">
-            <form action="" id="email-form" method="post" class="form-mail">
-                <button class="btn btn-sm btn-flat btn-info" id="sendMailBtn" name="sendMailBtn" type="submit"><i class="fa fa-envelope"></i> Confirm & Send</button>
-            </form>
-            <br>
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=Quotation">Back</a>
         </div>
     </div>
     <div class="card-body" id="out_print">
         <div class="row">
             <div class="col-6 d-flex align-items-center">
                 <div>
-                    <p class="m-0" name="fromEmail" id="fromEmail"><?php echo $_settings->info('company_name') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
                 </div>
             </div>
             <div class="col-6">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-                <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
+                <h2 class="text-center"><b>RFQ</b></h2>
             </div>
         </div>
         <div class="row mb-2">
             <div class="col-6">
-                <p class="m-0"><b>Vendor</b></p>
+                <p class="m-0"><b>Supplier Details</b></p>
                 <?php
-                $sup_qry = $conn->query("SELECT * FROM vendor where vendor_ID = '{$vendor_ID}'");
+                $sup_qry = $conn->query("SELECT v.*,c.* FROM `vendor` v inner join company c on v.company_code = c.company_code where v.`vendor_ID` = '{$vendor_ID}' ");
                 $supplier = $sup_qry->fetch_array();
                 ?>
                 <div>
-                    <p class="m-0"><?php echo $supplier['name'] ?></p>
-                    <p class="m-0"><?php echo $supplier['company_code'] ?></p>                   
-                    <p class="m-0" name="toEmail" id="toEmail"><?php echo $supplier['email'] ?></p>
+                    <p class="m-0"><?php echo $supplier['company_code'] ?> - <?php echo $supplier['name'] ?></p>                 
+                    <p class="m-0"><?php echo $supplier['email'] ?></p>
+                    <p class="m-0"><?php echo $supplier['address'] ?></p>
+
                 </div>
             </div>
-            <div class="col-6 row">
+         <div class="col-6 row">
                 <div class="col-6">
                     <p  class="m-0"><b>RFQ. #:</b></p>
                     <p><b><?php echo $q_ID ?></b></p>
@@ -229,13 +82,23 @@ if (isset($_POST['sendMailBtn'])) {
                 <div class="col-6">
                     <p  class="m-0"><b>Date Created</b></p>
                     <p><b><?php echo date("Y-m-d", strtotime($date_created)) ?></b></p>
+                </div>    
+             <div class="col-6">
+                    <p  class="m-0"><b>PR. #:</b></p>
+                    <p><b><?php echo $pr_ID ?></b></p>
+                </div>
+            <div class="col-6">
+                    <p  class="m-0"><b>Deadline</b></p>
+                    <p><b><?php echo date("Y-m-d", strtotime($deadline)) ?></b></p>               
+                    <p  class="m-0"><b>Delivery Date</b></p>
+                    <p><b><?php echo date("Y-m-d", strtotime($delivery_date)) ?></b></p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
-                   <colgroup>
+                    <colgroup>
                         <col width="10%">
                         <col width="20%">
                         <col width="15%">
@@ -275,7 +138,7 @@ if (isset($_POST['sendMailBtn'])) {
                         endif;
                         ?>
                     </tbody>
-                   <tfoot>                       
+                    <tfoot>                       
                         <tr>
                         <tr>
                             <th class="p-1 text-right" colspan="5">Total</th>
@@ -326,6 +189,7 @@ if (isset($_POST['sendMailBtn'])) {
             <input type="hidden" name="item_id[]">
             <input type="text" class="text-center w-100 border-0 item_id" required/>
         </td>
+        <td class="align-middle p-1 item-code"></td>
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>

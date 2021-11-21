@@ -44,7 +44,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=material_r" class="nav-link nav-material_r">
                                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -65,7 +64,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=material_m" class="nav-link nav-material_m">
                                         <i class="nav-icon fas fa-file-invoice"></i>
@@ -92,6 +90,16 @@
                                         </p>
                                     </a>
                                 </li>
+                               
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-subcontractor">
+                                        <i class="nav-icon fas fa-truck-loading"></i>
+                                        <p>
+                                            Manage Subcontractor   
+                                        </p>
+                                    </a>
+                                </li>
+                                
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-contract_mgm">
                                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -176,6 +184,15 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=subcontractor" class="nav-link nav-subcontractor">
+                                        <i class="nav-icon fas fa-truck-loading"></i>
+                                        <p>
+                                            Subcontractor Maintenance   
+                                        </p>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                                         <i class="nav-icon fas fa-boxes"></i>
                                         <p>
@@ -202,7 +219,6 @@
                                         </p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=Import Export/export" class="nav-link nav-export">
                                         <i class="nav-icon fas fa-file-export"></i>
@@ -244,7 +260,7 @@
                                     <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
                                         <i class="nav-icon fas fa-book-open"></i>
                                         <p>
-                                            Catalog
+                                            Manage Catalog
                                         </p>
                                     </a>
                                 </li>
@@ -258,10 +274,18 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=" class="nav-link nav-">
+                                    <a href="<?php echo base_url ?>admin/?page=Quotation" class="nav-link nav-Quotation">
                                         <i class="nav-icon fas fa-file-alt"></i>
                                         <p>
                                             Maintain Quotation   
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=rating" class="nav-link nav-rating">
+                                        <i class="nav-icon fas fa-star-half-alt"></i>
+                                        <p>
+                                            Rating Measurement
                                         </p>
                                     </a>
                                 </li>

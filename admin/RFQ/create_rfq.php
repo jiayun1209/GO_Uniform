@@ -53,7 +53,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <?php endwhile; ?>
                     </select>                                        
                     <label for="pr_ID">PR ID</label>
-                    <select name="pr_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select0">
+                    <select name="pr_ID" id="vendor_ID" id="pr_ID" class="custom-select custom-select-lsm rounded-0 select0" onclick="select_id_check_qty()">
                         <option value="" disabled <?php echo!isset($pr_ID) ? "selected" : '' ?>></option>
                         <?php
                         $pr_qry = $conn->query("SELECT p.*,q.* FROM `purchase_requisitions` p inner join purchase_requisitions_details q WHERE status = 1 AND p.id =q.pr_id");
@@ -103,7 +103,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.pr_id,p.quantity FROM `quotation` o , inventory i, purchase_requisitions_details p WHERE p.item_id = i.id AND p.pr_id = o.pr_ID AND o.pr_ID = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -114,7 +114,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"  value="<?php echo ($row['quantity']) ?>"/>
+                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
@@ -176,7 +176,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"/>
+            <input type="number" step="any" class="text-right w-100 border-0" name="quantity"/>
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
@@ -191,6 +191,15 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
+    function select_id_check_qty() {
+        var i = 0;
+        while (Array_account) {
+            if (Array_account[i][0].toString() === document.getElementById("pr_ID").value) {
+                document.getElementById("quantity").value = Array_account[i][1].toString();
+            }
+            i++;
+        }
+    }
     function rem_item(_this) {
         _this.closest('tr').remove()
     }
