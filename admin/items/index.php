@@ -7,6 +7,9 @@
 	<div class="card-header">
 		<h3 class="card-title">List of Items</h3>
 		<div class="card-tools">
+			<a id="btn-export" class="btn btn-flat btn-primary"><span class="fas fa-file-export"></span>
+                Export
+            </a>
 			<a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
 		</div>
 	</div>
@@ -83,6 +86,7 @@
 		</div>
 	</div>
 </div>
+<script src="../dist/js/xlsx.min.js"></script>
 <script>
 	$(document).ready(function(){
 		$('.delete_data').click(function(){
@@ -99,7 +103,57 @@
 		})
 		$('.table th,.table td').addClass('px-1 py-0 align-middle')
 		$('.table').dataTable();
+        
+        $("#btn-export").click(function(){
+            $.ajax({
+                url: _base_url_ + "admin/api/item/getList.php",
+                method:"POST",
+                dataType:"json",
+                error:err=>{
+                    console.log(err)
+                    alert_toast("An error occured.",'error');
+                    end_loader();
+                },
+                success:function(response){
+                    if(response == -1){
+                        alert_toast("An error occured.",'error');
+                        return;
+                    }
+                    
+                    var itemList = response;
+                    
+                    var data = itemList.map(function(item, index){
+                        var statusArr = ["Inactive", "Active"];
+                        return [++index, item["item_code"], item["name"], item["description"], item["quantity"], "RM "+item["price"], statusArr[item["status"]], item["date_created"]];
+                    });
+                    
+                    var filename = `inventory.xlsx`;
+                    var ws_name = "Inventory";
+                    
+                    data = [["No", "Item Code", "Name", "Description", "Quantity", "Price", "Status", "Date Created"], ...data];
+                    
+                    var wb = XLSX.utils.book_new();
+                    var ws = XLSX.utils.aoa_to_sheet(data);
+                    
+                    var wscols = [
+                        {wch: 3},
+                        {wch: 25},
+                        {wch: 25},
+                        {wch: 25},
+                        {wch: 25},
+                        {wch: 25},
+                        {wch: 25},
+                        {wch: 25}
+                    ];
+                    ws['!cols'] = wscols;
+                    
+                    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+                    XLSX.writeFile(wb, filename);
+                }
+            })
+        });
 	})
+    
 	function delete_item($id){
 		start_loader();
 		$.ajax({
