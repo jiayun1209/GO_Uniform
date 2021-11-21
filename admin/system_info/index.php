@@ -62,12 +62,12 @@
                 </div>
                 <div class="form-group">
                     <label for="company_postcode" class="control-label">Company Postcode</label>
-                    <input type="text" class="form-control form-control-sm" name="company_postcode" id="company_postcode" value="<?php echo $_settings->info('company_postcode') ?>">
+                    <input type="number" class="form-control form-control-sm" name="company_postcode" id="company_postcode" value="<?php echo $_settings->info('company_postcode') ?>">
                 </div>
 
                 <div class="form-group">
                     <label for="company_state" class="control-label">Company State</label>
-                    <select class="form-control" id="state">
+                    <select class="form-control" id="company_state" name="company_state">
                         <option value="1">Johor</option>
                         <option value="2">Kedah</option>
                         <option value="3">Kelantan</option>
@@ -168,6 +168,8 @@
                 ['table', ['table']],
                 ['view', ['undo', 'redo', 'fullscreen', 'codeview', 'help']]
             ]
-        })
+        });
+        
+        $("#company_state").val("<?php echo $_settings->info('company_state') ?>");
     })
 </script>

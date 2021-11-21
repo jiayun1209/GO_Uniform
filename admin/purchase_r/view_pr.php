@@ -50,10 +50,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     <div class="card-body" id="out_print">
         <div class="row">
             <div class="col-6 d-flex align-items-center">
-                <div>
+               <div>
+                    <?php 
+                        $comArray = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan", "Pahang", "Pulau Pinang","Perak", "Perlis", "Selangor", "Terengganu", "Sabah", "Sarawak", "Wilayah Persekutuan Kuala Lumpur", "Wilayah Persekutuan Kuala Labuan", "Wilayah Persekutuan Kuala Putrajaya"];
+                        $state = $comArray[$_settings->info('company_state')-1];
+                    ?>
                     <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_address_1') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_city') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_postcode').", ".$state ?></p>
                 </div>
             </div>
             <div class="col-6">
