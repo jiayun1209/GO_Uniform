@@ -80,6 +80,46 @@ Class Master extends DBConnection {
         return json_encode($resp);
     }
 
+    function save_rating() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, array('rating_ID'))) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        $check = $this->conn->query("SELECT * FROM `rating`  where `performance_ID` = '{$performance_ID}' " . (!empty($rating_ID) ? " and rating_ID != {$rating_ID} " : "") . " ")->num_rows;
+        if ($this->capture_err())
+            return $this->capture_err();
+        if ($check > 0) {
+            $resp['status'] = 'failed';
+            $resp['msg'] = "Rating already exist.";
+            return json_encode($resp);
+            exit;
+        }
+        if (empty($rating_ID)) {
+            $sql = "INSERT INTO `rating` set {$data} ";
+            $save = $this->conn->query($sql);
+        } else {
+            $sql = "UPDATE `rating` set {$data} where rating_ID = '{$rating_ID}' ";
+            $save = $this->conn->query($sql);
+        }
+        if ($save) {
+            $resp['status'] = 'success';
+            if (empty($rating_ID))
+                $this->settings->set_flashdata('success', "New Rating successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Rating successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
+
     function save_subcontractor() {
         extract($_POST);
         $data = "";
@@ -386,12 +426,22 @@ Class Master extends DBConnection {
         return json_encode($data);
     }
 
+    function search_rating() {
+        extract($_POST);
+        $qry = $this->conn->query("SELECT * FROM rating_measurement where `name` LIKE '%{$q}%'");
+        $data = array();
+        while ($row = $qry->fetch_assoc()) {
+            $data[] = array("label" => $row['performance_ID'], "performance_ID" => $row['performance_ID'], "remarks" => $row['remarks'], "performance_ID" => $row['performance_ID'], "point" => $row['point']);
+        }
+        return json_encode($data);
+    }
+
     function search_pr() {
         extract($_POST);
         $qry = $this->conn->query("SELECT * FROM purchase_requisitions_details where `quantity`");
         $data = array();
         while ($row = $qry->fetch_assoc()) {
-            $data[] = array("label" =>  $row['id'], "quantity" => $row['quantity'], "id" => $row['id'], "pr_id" => $row['pr_id']);
+            $data[] = array("label" => $row['id'], "quantity" => $row['quantity'], "id" => $row['id'], "pr_id" => $row['pr_id']);
         }
         return json_encode($data);
     }
@@ -1013,7 +1063,12 @@ switch ($action) {
     case 'delete_mr':
         echo $Master->delete_mr();
         break;
-
+    case 'save_rating':
+        echo $Master->save_rating();
+        break;
+    case 'search_rating':
+        echo $Master->search_rating();
+        break;
     default:
         // echo $sysset->index();
         break;
