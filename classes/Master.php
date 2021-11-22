@@ -94,12 +94,12 @@ Class Master extends DBConnection {
         $check = $this->conn->query("SELECT * FROM `rating`  where `performance_ID` = '{$performance_ID}' " . (!empty($rating_ID) ? " and rating_ID != {$rating_ID} " : "") . " ")->num_rows;
         if ($this->capture_err())
             return $this->capture_err();
-        if ($check > 0) {
-            $resp['status'] = 'failed';
-            $resp['msg'] = "Rating already exist.";
-            return json_encode($resp);
-            exit;
-        }
+        //if ($check > 0) {
+        //    $resp['status'] = 'failed';
+        //    $resp['msg'] = "Rating already exist.";
+        //    return json_encode($resp);
+        //    exit;
+        //}
         if (empty($rating_ID)) {
             $sql = "INSERT INTO `rating` set {$data} ";
             $save = $this->conn->query($sql);

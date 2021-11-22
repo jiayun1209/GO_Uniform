@@ -59,7 +59,7 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
             <select name="performance_ID" id="performance_ID" class="form-control rounded-0" required>
                 <?php
                 if (isset($vendor_ID)):
-                    $r_qry = $conn->query("SELECT r.*,v.*,m.* FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
+                    $r_qry = $conn->query("SELECT r.rating_ID,v.*,m.performance_ID FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
                     while ($row = $r_qry->fetch_assoc()):
                         ?>
                         <option value="P0000" <?php echo isset($performance_ID) && $performance_ID == 0 ? "selected" : "P0000" ?> >0&#9956</option>
