@@ -40,14 +40,44 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
+<!--        <div class="row">
+            <div class="col-md-3">
+                <p  class="m-0"><b>Start Date</b></p>
+                <input type="date" name="delivery_date" id="delivery_date" class="text-center w-100 border-1 delivery_date" placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
+            </div>
+
+            <div class="col-md-3">
+                <p  class="m-0"><b>End Date</b></p>
+                <input type="date" name="delivery_date" id="delivery_date" class="text-center w-100 border-1 delivery_date" placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
+            </div>
+            
+            <button type="submit"><i class="fa fa-search"></i></button>
+            
+            <div class="col-md-3">
+                <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="btn btn-primary"></i> Print</button>
+            <button class="btn btn-primary">Search</button>
+            </div>
+        </div>-->
+    
+<!--        <form method = post></form>
+        <input type="delivery_date" name="startdate">
+        <input type="delivery_date" name="enddate">
+            
+        </input>-->
+
+
+
+
+
+
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-default" href="?page=report/report_list">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
     </div>
 
     <div class="card-body" id="out_print">
-        <div class="row"><h3 class="card-title">Purchase Order Details Report</h3></div>
+        <div class="row"><h3 class="card-title"><b>Purchase Order Details Report</b></h3></div>
 
         <div class="row">
             <div class="col-9 d-flex align-items-center">
@@ -59,12 +89,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="col-3">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-
+                <br><br>
             </div>
         </div>
-        <!--        <div class="card-body">
-                        <div class="container-fluid">-->
-        <!--<div class="container-fluid">-->
+     
         <table class="table table-hover table-striped">
             <colgroup>
                 <col width="5%">
@@ -78,60 +106,56 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
-                    <th>#</th>
-                    <th>Date Created</th>
-                    <th>PO #</th>
-                    <th>Supplier</th>
-                    <th>Items</th>
-                    <th>Total Amount</th>
-                    <th>Status</th>
+                    <th class="px-1 py-1 text-center">No.</th>
+                    <th class="px-1 py-1 text-left">Date Created</th>
+                    <th class="px-1 py-1 text-left">PO No.</th>
+                    <th class="px-1 py-1 text-left">Supplier Name</th>
+                    <th class="px-1 py-1 text-center">Items</th>
+                    <th class="px-1 py-1 text-right">Total Amount</th>
+                    <th class="px-1 py-1 text-center">Status</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $i = 1;
-                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
-                while ($row = $qry->fetch_assoc()):
-                    $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
-                    ?>
-                    <tr>
-                        <td class="text-center"><?php echo $i++; ?></td>
-                        <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
-                        <td class=""><?php echo $row['po_no'] ?></td>
-                        <td class=""><?php echo $row['sname'] ?></td>
-                        <td class="text-right"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-                        <td>
-                            <?php
-                            switch ($row['status']) {
-                                case '1':
-                                    echo '<span class="badge badge-success">Approved</span>';
-                                    break;
-                                case '2':
-                                    echo '<span class="badge badge-danger">Rejected</span>';
-                                    break;
-                                case '3':
-                                    echo '<span class="badge badge-warning text-danger">Cancelled</span>';
-                                    break;
-                                default:
-                                    echo '<span class="badge badge-secondary">Pending</span>';
-                                    break;
-                            }
+                        $i = 1;
+                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
+                        while ($row = $qry->fetch_assoc()):
+                            $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
+                            $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
                             ?>
-                        </td>
-                        
-                    </tr>
-                <?php endwhile; ?>
+                            <tr>
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                                <td class=""><?php echo $row['po_no'] ?></td>
+                                <td class="text-left"><?php echo $row['sname'] ?></td>
+                                <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                                <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                                <td class="text-center">
+                                    <?php
+                                    switch ($row['status']) {
+                                        case '1':
+                                            echo '<span class="badge badge-success">Approved</span>';
+                                            break;
+                                        case '2':
+                                            echo '<span class="badge badge-danger">Rejected</span>';
+                                            break;
+                                        case '3':
+                                            echo '<span class="badge badge-warning text-danger">Cancelled</span>';
+                                            break;
+                                        default:
+                                            echo '<span class="badge badge-secondary">Pending</span>';
+                                            break;
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
             </tbody>
         </table>
     </div>
 </div>
-<!--</div>-->
 
-<!--    </div>
-</div>-->
 <table class="d-none" id="item-clone">
     <tr class="po-item" data-id="">
         <td class="align-middle p-1 text-center">

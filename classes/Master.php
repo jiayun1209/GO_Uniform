@@ -425,6 +425,16 @@ Class Master extends DBConnection {
         }
         return json_encode($data);
     }
+    
+    function search_name() {
+        extract($_POST);
+        $qry = $this->conn->query("SELECT * FROM vendor where `name` LIKE '%{$q}%'");
+        $data = array();
+        while ($row = $qry->fetch_assoc()) {
+            $data[] = array("label" => $row['name'], "vendor_ID" => $row['vendor_ID'], "name" => $row['name']);
+        }
+        return json_encode($data);
+    }
 
     function search_rating() {
         extract($_POST);
@@ -472,7 +482,7 @@ Class Master extends DBConnection {
         } else {
             $po_no = "";
             while (true) {
-                $po_no = "PO-" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+                $po_no = "21PO" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
                 $check = $this->conn->query("SELECT * FROM `purchase_order` where `po_no` = '{$po_no}'")->num_rows;
                 if ($check <= 0)
                     break;

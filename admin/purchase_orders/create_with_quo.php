@@ -35,12 +35,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?></b> </h3>
+        <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order With Reference" ?></b> </h3>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="q_ID">Quotation Number</label>
+                    <select name="q_ID" id="q_ID" class="custom-select custom-select-sm rounded-0 select2">
+                        <option value="" disabled <?php echo!isset($q_ID) ? "selected" : '' ?>></option>
+                        <?php
+                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status!=2");
+                        while ($r = $q_qry->fetch_assoc()):
+                            ?>
+                            <option value="<?php echo $r['q_ID'] ?>" <?php echo isset($$q_ID) && $$q_ID == $r['q_ID'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
                 <div class="col-md-6 form-group">
                     <label for="delivery_date">Delivery Date</label>
                     <input type="date" name="delivery_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
@@ -48,16 +60,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
-                        <?php
-                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
-                        while ($row = $supplier_qry->fetch_assoc()):
-                            ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?>
-                    </select>
+                    <label for="name">Supplier Name  <span class="po_err_msg text-danger"></span></label>
+                    <span class='form-control form-control-sm rounded-0'></span>   
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
@@ -150,45 +154,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
-                            
-                            <?php if ($_settings->userdata('type') == 3): ?>
-                                <?php
-                                switch ($status) {
-                                    case 1:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Approved</span>";
-                                        break;
-                                    case 2:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Rejected</span>";
-                                        break;
-                                    case 3:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Cancelled</span>";
-                                        break;
-                                    default:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Pending</span>";
-                                        break;
-                                }
-                                ?>
-                            <?php endif; ?>
-                           
-                            <?php if ($_settings->userdata('type') == 2): ?>
-                                <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()"> 
-                                    <option value="0" hidden="" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                    <?php if ($status == 0): ?>
-                                        <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                        <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 1): ?>
-                                        <option value="1" disabled="" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                        <option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 2): ?>
-                                        <option value="2" disabled="" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 3): ?>
-                                        <option value="3" disabled="" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
-                                    <?php endif; ?>
-                                </select>
-                            <?php endif; ?>
+                            <span class='form-control form-control-sm rounded-0'>Pending</span>
                             <br>
                             <label for="cancel_reason" class="control-label">Cancellation Reason</label>
                             <textarea name="cancel_reason" disabled id="cancel_reason" cols="10" rows="2" class="form-control rounded-0"><?php echo isset($cancel_reason) ? $cancel_reason : '' ?></textarea>
@@ -281,6 +247,29 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
+            }
+        })
+    }
+    function _autofill(_name) {
+        _name.find('.vendor_ID').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: _base_url_ + "classes/Master.php?f=search_name",
+                    method: 'POST',
+                    data: {q: request.term},
+                    dataType: 'json',
+                    error: err => {
+                        console.log(err)
+                    },
+                    success: function (resp) {
+                        response(resp)
+                    }
+                })
+            },
+            select: function (event, ui) {
+                console.log(ui)
+                _item.find('input[name="vendor_ID[]"]').val(ui.vendor.vendor_ID)
+                _item.find('.name').text(ui.vendor.name)
             }
         })
     }

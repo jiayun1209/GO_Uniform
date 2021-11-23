@@ -50,7 +50,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Purchase Order Outstanding Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"> <span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/view_outstanding"> <span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -58,7 +58,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Purchase Quotation Comparison Report</td>
                                 <td align="center">
-                                    <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                    <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -66,7 +66,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Total Purchase by Vendor Analysis Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -74,7 +74,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Supplier Performance Rating Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -82,7 +82,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Supplier Price Performance Analysis Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -90,7 +90,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Supplier Purchase Summary Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -98,7 +98,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Supplier Approved List</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/view_approveList"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 
@@ -106,7 +106,7 @@
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="">Purchase Requisition Report</td>
                                 <td align="center">
-                                <a class="btn btn-sm btn-flat btn-info" href="?page=report/report_list"><span class="fa fa-eye text-light"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-info" href="?page=report"><span class="fa fa-eye text-light"></span> View</a>        
                                 </td>
                             </tr>
 

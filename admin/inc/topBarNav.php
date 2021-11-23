@@ -19,7 +19,18 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name'):$_settings->info('short_name'); ?> - Admin</a>
+              <?php if ($_settings->userdata('type') == 1): ?>
+                  <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Admin</a>
+              <?php endif; ?>
+              <?php if ($_settings->userdata('type') == 2): ?>
+                  <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Manager</a>
+              <?php endif; ?>
+              <?php if ($_settings->userdata('type') == 3): ?>
+                  <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Staff</a>
+              <?php endif; ?>
+              <?php if ($_settings->userdata('type') == 4): ?>
+                  <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Branches</a>
+              <?php endif; ?>
           </li>
         </ul>
         <!-- Right navbar links -->
