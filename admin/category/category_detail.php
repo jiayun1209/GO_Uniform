@@ -87,87 +87,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<html>
-    <body class="hold-transition sidebar-mini layout-fixed" onload="loadform()">
-        <div class="wrapper">
-            <div class="content-wrapper">
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0 text-dark">Category detail</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="category_list.php">Category list</a></li>
-                                    <li class="breadcrumb-item active">Category detail</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <section class="content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card card-dark">
-
-                                <div class="card-header">
-                                    <h3 class="card-title" id="titleid">Category Id : <?php
+<div class="card card-outline card-primary">
+	<div class="card-header">
+		<h3 class="card-title">Category ID : <?php
                                         if (isset($current_data)) {
-                                            echo $current_data["id"];
+                                            echo $current_data["catalog_ID"];
                                         } else {
                                             echo "(New)" . $newid;
                                         }
                                         ?></h3>
-                                </div>
-                                <div class="card-body">
-                                    <form method="post" id="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label>Category : </label>
-                                                <div class="form-group">                                             
-                                                    <input class="form-control" value="<?php
-                                                    if (isset($current_data)) {
-                                                        echo $current_data["name"];
-                                                    }
-                                                    ?>" name="name">
-                                                </div>
-                                                <input value="" name="action" id="action" style="display: none">
-                                            </div>
-                                        </div>
-                                       
-                                    </form>
-                                </div>
-
-                                <div class="card-footer">
-                                    <div class="row">
-
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <button class="btn btn-dark" style="width:100%" id="btnback" onclick="window.location.href = 'category_list.php'">Back</button>
-                                            </div>
-                                        </div>
-                                         <div class="col-md-9"></div>
-
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <button class="btn btn-danger" style="width:100%" id="btndelete" onclick="submitForm('delete')">Delete</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <button class="btn btn-dark" style="width:100%" id="btnsave" onclick="submitForm('save')">Save</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
+            <br>
+            <h4 class="card-title">Category Name : <?php
+                                        if (isset($current_data)) {
+                                            echo $current_data["description"];
+                                        } else {
+                                            echo "(New)" . $newid;
+                                        }
+                                        ?></h4>
+		
+	</div>
+	<div class="col-md-12">
                             <div class="card card-dark">
 
                                 <div class="card-header">
@@ -181,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 10%">
-                                                            Product Id
+                                                            Product Id / Code
                                                         </th>
                                                         <th style="width: 35%">
                                                             Name
@@ -189,9 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         <th style="width: 10%">
                                                             Category
                                                         </th>
-                                                        <th style="width: 15%">
-                                                            Date release
-                                                        </th>
+                                                        
                                                         <th style="width: 10%">
                                                             Price(RM)
                                                         </th>
@@ -206,26 +143,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <tbody>
                                                     <?php
                                                     if (isset($current_data)) {
-                                                        $sql = "SELECT * FROM product WHERE category = '" . $current_data["name"] . "'";
+                                                        $sql = "SELECT * FROM inventory WHERE catalog_ID = '" . $current_data["id"] . "'";
                                                         $result = $conn->query($sql);
                                                         if ($result->num_rows > 0) {
                                                             while ($row = $result->fetch_assoc()) {
-                                                                if ($row["activation"] == true) {
-                                                                    $active = "Active";
+                                                                if ($row["status"] == true) {
+                                                                    $active = 1;
                                                                     $color = "green";
                                                                 } else {
-                                                                    $active = "Inactive";
+                                                                    $active = 0;
                                                                     $color = "red";
                                                                 }
-                                                                echo "<tr><td><a>" . $row["productid"] . "</a></td>"
-                                                                . "<td><a>" . $row["productname"] . "</a></td>"
-                                                                . "<td><a>" . $row["category"] . "</a></td>"
-                                                                . "<td><a>" . $row["daterelease"] . "</a></td>"
+                                                                echo "<tr><td><a>" . $row["item_code"] . "</a></td>"
+                                                                . "<td><a>" . $row["name"] . "</a></td>"
+                                                                . "<td><a>" . $row["catalog_ID"] . "</a></td>"
                                                                 . "<td><a>" . $row["price"] . "</a></td>"
-                                                                . "<td><a value =" . $row["activation"] . "  style=" . "'color:" . $color . "'" . ">" . $active . "</a></td>"
-                                                                . "<td class='project-actions text-right'>"
-                                                                . "<a class=" . "'btn btn-dark btn-sm'" . "href=" . "'product_detail.php?id=" . $row["productid"] . "'>"
-                                                                . "</i> View Details</a></td></tr>";
+                                                                . "<td><a value =" . $row["status"] . "  style=" . "'color:" . $color . "'" . ">" . $active . "</a></td>"
+                                                                . "<td class='project-actions text-right'>";
+                                                               // . "<a class=" . "'btn btn-dark btn-sm'" . "href=" . "'product_detail.php?id=" . $row["productid"] . "'>"
+                                                               // . "</i> View Details</a></td></tr>";
                                                             }
                                                         }
                                                     }
@@ -239,12 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             </div>
                         </div>
-                    </div>
-            </div>
-        </section>
-    </div>
-</body>
-</html>
+</div>
 
 <script>
     $('#producttable').DataTable({
