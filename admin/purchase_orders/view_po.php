@@ -61,6 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <h2 class="text-center"><b>PURCHASE ORDER</b></h2>
             </div>
         </div>
+        <br>
         <div class="row mb-2">
             <div class="col-6">
                 <p class="m-0"><b>Supplier Details</b></p>
@@ -76,13 +77,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
             </div>
             <div class="col-6 row">
-                <div class="col-6">
-                    <p  class="m-0"><b>PO Number: </b></p>
-                    <p><?php echo $po_no ?></p>
+                <div class="col-4">
+                    <p  class="m-0 text-center"><b>PO Number: </b></p>
+                    <p class="text-center"><?php echo $po_no ?></p>
                 </div>
-                <div class="col-6">
-                    <p  class="m-0"><b>Date Created</b></p>
-                    <p><?php echo date("Y-m-d", strtotime($date_created)) ?></p>
+                <div class="col-4">
+                    <p class="m-0 text-center"><b>Date Created</b></p>
+                    <p class="text-center"><?php echo date("Y-m-d", strtotime($date_created)) ?></p>
+                </div>
+                <div class="col-4">
+                    <p  class="m-0 text-center"><b>Delivery Date</b></p>
+                    <p class="text-center"><?php echo date("Y-m-d", strtotime($delivery_date)) ?></p>
                 </div>
             </div>
         </div>

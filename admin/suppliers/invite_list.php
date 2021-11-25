@@ -1,20 +1,6 @@
-<?php if ($_settings->chk_flashdata('success')): ?>
-    <script>
-        alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
-    </script>
-<?php endif; ?>
 <?php
-if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] > 0) {
-    $qry = $conn->query("SELECT v.*, c.* from `vendor` v inner join `company` c on v.company_code  = c.company_code where vendor_ID = '{$_GET['vendor_ID']}' ");
-    if ($qry->num_rows > 0) {
-        foreach ($qry->fetch_assoc() as $k => $v) {
-            $$k = $v;
-        }
-    }
-}
-?>
-    <?php
 if (isset($_POST['sendMailBtn'])) {
+    require_once '../classes/DBConnection.php';
     $fromEmail = $_POST['fromEmail'];
     $toEmail = $_POST['toEmail'];
     $toName = $_POST['toName'];
@@ -48,10 +34,17 @@ if (isset($_POST['sendMailBtn'])) {
 			</body>
 			</html>';
     $result = @mail($to, $subject, $message, $headers);
+    $company_code = "Random-" . (sprintf("%'.011d", mt_rand(1, 99999999999)));
+    $name = "$toName";
+    $address = "Update when company registered !";
+    $currency = "Update when company registered !";
+    $language = "Update when company registered !";
     $company_name = $_POST['toCName'];
     $registration_status = "3";
-    $query = mysqli_query($conn, "UPDATE vendor set registration_status = '$registration_status' where vendor_ID = '{$vendor_ID}'");
-    if ($query){
+    $product = "Product";
+    $query = mysqli_query($conn, "insert into company(company_code,company_name,address,currency,language) values('$company_code','$company_name','$address','$currency','$language')");
+    $query2 = mysqli_query($conn, "insert into vendor(name,company_code,registration_status,email,product,description) values('$name','$company_code','$registration_status','$to','$product','$messages')"); 
+    if ($query && $query2){
         echo "<script>alert('You are successfully invited');</script>";
         echo '<script>alert("Email sent successfully !")</script>';
     } else {
@@ -62,7 +55,6 @@ if (isset($_POST['sendMailBtn'])) {
 }
 
 ?>
-
 <style>
         span.select2-selection.select2-selection--single {
         border-radius: 0;
@@ -76,7 +68,7 @@ if (isset($_POST['sendMailBtn'])) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Invite</h3>
+        <h3 class="card-title">Invite Vendors</h3>
         <div class="card-tools">
             <a class="btn btn-sm btn-flat btn-default" href="?page=suppliers">Back</a>
         </div>
@@ -88,22 +80,16 @@ if (isset($_POST['sendMailBtn'])) {
     </div> <br/>
     <div class="form-label-group">
         <label for="inputEmail">Email <span style="color: #FF0000">*</span></label>
-        <?php
-                        $i = 1;
-                        $qry = $conn->query("SELECT v.*, c.company_name from `vendor` v inner join `company` c on v.company_code = c.company_code where vendor_ID = '{$_GET['vendor_ID']}'");
-                        while ($row = $qry->fetch_assoc()):
-                            ?>
-        <input type="text" name="toEmail" id="toEmail" class="form-control" value="<?php echo $row['email'] ?>" readonly required autofocus>
+        <input type="text" name="toEmail" id="toEmail" class="form-control" placeholder="Email address" required autofocus>
     </div> <br/>
      <div class="form-label-group">
         <label for="inputCName">Company <span style="color: #FF0000">*</span></label>
-        <input type="text" name="toCName" id="toCName" class="form-control"  value="<?php echo $row['company_name'] ?>" readonly required autofocus>
+        <input type="text" name="toCName" id="toCName" class="form-control" placeholder="Company Name" required autofocus>
     </div> <br/>
     <div class="form-label-group">
         <label for="inputName">To <span style="color: #FF0000">*</span></label>
-        <input type="text" name="toName" id="toName" class="form-control" value="<?php echo $row['name'] ?>" readonly required autofocus>
+        <input type="text" name="toName" id="toName" class="form-control" placeholder="Name" required autofocus>
     </div> <br/>
-    <?php endwhile; ?>
     <label for="inputPassword">Subject <span style="color: #FF0000">*</span></label>
     <div class="form-label-group">
         <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required>
@@ -114,3 +100,4 @@ if (isset($_POST['sendMailBtn'])) {
     </div> <br/>
     <button type="submit" name="sendMailBtn" class="btn btn-lg btn-primary btn-block text-uppercase" >Send Email</button>
 </form>
+ 

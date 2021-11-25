@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">List of Suppliers</h3>
         <div class="card-tools">
-            <a href="javascript:void(0)" data-id = "" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+            <a href="?page=suppliers/invite_list" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Invite Vendor</a>
         </div>
     </div>
     <div class="card-body">
@@ -73,11 +73,6 @@
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['vendor_ID'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
                                         <div class="dropdown-divider"></div>
-                                            <?php 
-                                        if ($row['registration_status'] != 1 && $row['registration_status'] != 2 && $row['registration_status'] != 3): ?>
-                                            <a class="dropdown-item" href="?page=suppliers/invite_list&vendor_ID=<?php echo $row['vendor_ID'] ?>"><span class="fa fa-envelope text-primary"></span> Invite</a>
-                                        <div class="dropdown-divider"></div>
-                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
@@ -93,9 +88,9 @@
         $('.delete_data').click(function () {
             _conf("Are you sure to delete this Supplier permanently?", "delete_supplier", [$(this).attr('data-id')])
         })
-        $('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "suppliers/create_supplier.php")
-        })
+       // $('#create_new').click(function () {
+       //     uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "suppliers/create_supplier.php")
+      //  })
         $('.view_data').click(function () {
             uni_modal("<i class='fa fa-info-circle'></i> Supplier's Details", "suppliers/view_details.php?vendor_ID=" + $(this).attr('data-id'), "")
         })

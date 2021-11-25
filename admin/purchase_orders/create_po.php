@@ -36,6 +36,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 <div class="card card-outline card-info">
     <div class="card-header">
         <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?></b> </h3>
+        <div class="card-tools">
+            <a href="?page=purchase_orders/create_with_quo" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  With Reference</a>
+                        <a href="?page=purchase_orders/create_with_template" class="btn btn-flat btn-info"><span class="fas fa-plus"></span>  With Template</a>
+        </div>
     </div>
     <div class="card-body">
         <form action="" id="po-form">
@@ -150,45 +154,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
-                            
-                            <?php if ($_settings->userdata('type') == 3): ?>
-                                <?php
-                                switch ($status) {
-                                    case 1:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Approved</span>";
-                                        break;
-                                    case 2:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Rejected</span>";
-                                        break;
-                                    case 3:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Cancelled</span>";
-                                        break;
-                                    default:
-                                        echo "<span class='form-control form-control-sm rounded-0'>Pending</span>";
-                                        break;
-                                }
-                                ?>
-                            <?php endif; ?>
-                           
-                            <?php if ($_settings->userdata('type') == 2): ?>
-                                <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()"> 
-                                    <option value="0" hidden="" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                    <?php if ($status == 0): ?>
-                                        <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                        <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 1): ?>
-                                        <option value="1" disabled="" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
-                                        <option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 2): ?>
-                                        <option value="2" disabled="" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
-                                    <?php endif; ?>
-                                    <?php if ($status == 3): ?>
-                                        <option value="3" disabled="" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
-                                    <?php endif; ?>
-                                </select>
-                            <?php endif; ?>
+                            <span class='form-control form-control-sm rounded-0'>Pending</span>
                             <br>
                             <label for="cancel_reason" class="control-label">Cancellation Reason</label>
                             <textarea name="cancel_reason" disabled id="cancel_reason" cols="10" rows="2" class="form-control rounded-0"><?php echo isset($cancel_reason) ? $cancel_reason : '' ?></textarea>

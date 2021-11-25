@@ -3,8 +3,8 @@
 <aside class="main-sidebar sidebar-dark-secondary bg-navy elevation-4 sidebar-no-expand">
     <!-- Brand Logo -->
     <a href="<?php echo base_url ?>admin" class="brand-link bg-secondary text-sm">
-        <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3 bg-light" style="width: 1.75rem;height: 1.75rem;max-height: unset">
-        <span class="brand-text font-weight-normal"><?php echo $_settings->info('short_name') ?></span>
+        <img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="Store Logo" class="brand-image img-circle elevation-3 bg-light" style="width: 2.05rem;height: 2.05rem;max-height: unset">
+        <span class="brand-text font-weight-normal text-md"><?php echo $_settings->info('short_name') ?></span>
 
 
     </a>
@@ -81,6 +81,15 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=category" class="nav-link nav-catalog">
+                                        <i class="nav-icon fas fa-book-open"></i>
+                                        <p>
+                                            Manage Category
+                                        </p>
+                                    </a>
+                                </li>
+
                                 <li class="nav-header"><b>Supplier Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=suppliers" class="nav-link nav-suppliers">
@@ -92,7 +101,7 @@
                                 </li>
                                
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-subcontractor">
+                                    <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-Subcontractor">
                                         <i class="nav-icon fas fa-truck-loading"></i>
                                         <p>
                                             Manage Subcontractor   

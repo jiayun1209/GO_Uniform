@@ -32,6 +32,23 @@ if (isset($_POST['submit'])) {
     $querySub = "";
     $query1 = "";
     $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
+    $sql_u = "SELECT * FROM vendor WHERE name='$fullName'";
+    $sql_e = "SELECT * FROM subcontractor WHERE name='$fullName'";
+    $res_u = mysqli_query($dbc, $sql_u);
+    $res_e = mysqli_query($dbc, $sql_e);
+
+    if (mysqli_num_rows($res_u) > 0) {
+        $checked = mysqli_query($dbc, "DELETE from vendor where name = '$fullName' ");
+    } else if (mysqli_num_rows($res_e) > 0) {
+        $checked = mysqli_query($dbc, "DELETE from subcontractor where name = '$fullName' ");
+    } else{
+        $checked = "";
+    }
+    
+    if ($checked) {
+    echo "<script>alert('Checked existing db');</script>";
+}
+
     if ($productGrp == "others") {
         $querySub = mysqli_query($dbc, "insert into subcontractor(name,company_code,email,registration_status,description) values('$fullName','$companyReg','$supplierEmail','$sub_status','$description')");
     } else {
@@ -53,25 +70,23 @@ if (isset($_POST['submit'])) {
         //    echo "File too large!";
         //} else {
         // move the uploaded (temporary) file to the specified destination
-         
-            if (move_uploaded_file($_FILES['file']['tmp_name'][$i],'files/'.$fileName)) {
-                $query2 = mysqli_query($dbc, "insert into companyfile(company_code,title,file) values('$companyReg','$fileName','$fileName')");
-        //        if (mysqli_query($conn, $sql)) {
-        //            echo "File uploaded successfully";
-                }
+
+        if (move_uploaded_file($_FILES['file']['tmp_name'][$i], 'files/' . $fileName)) {
+            $query2 = mysqli_query($dbc, "insert into companyfile(company_code,title,file) values('$companyReg','$fileName','$fileName')");
+            //        if (mysqli_query($conn, $sql)) {
+            //            echo "File uploaded successfully";
+        }
         //    } else {
         //        echo "Failed to upload file.";
         //    }
     }
-
-    
 }
+
 if ($query && $query2 && ($querySub || $query1)) {
     echo "<script>alert('You are successfully register');</script>";
 } else {
     echo "<script>alert('Not register something went worng');</script>";
 }
-
 ?>
 <!DOCTYPE html>
 <!--

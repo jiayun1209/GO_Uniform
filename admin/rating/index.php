@@ -69,16 +69,16 @@
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {
-            _conf("Are you sure to delete this Supplier permanently?", "delete_supplier", [$(this).attr('data-id')])
+            _conf("Are you sure to delete this rating permanently?", "delete_supplier", [$(this).attr('data-id')])
         })
         $('#create_new').click(function () {
-            uni_modal("<i class='fa fa-plus'></i> Register New Supplier", "rating/create_supplier.php")
+            uni_modal("<i class='fa fa-plus'></i> Create New Rating for Supplier", "rating/new_rating.php")
         })
         $('.view_data').click(function () {
             uni_modal("<i class='fa fa-info-circle'></i> Rating's Details", "rating/view_details.php?vendor_ID=" + $(this).attr('data-id'), "")
         })
         $('.edit_data').click(function () {
-            uni_modal("<i class='fa fa-edit'></i> Edit Supplier's Details", "rating/manage_supplier.php?vendor_ID=" + $(this).attr('data-id'))
+            uni_modal("<i class='fa fa-edit'></i> Edit Rating's Details", "rating/manage_rating.php?vendor_ID=" + $(this).attr('data-id'))
         })
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
