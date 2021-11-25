@@ -1,0 +1,26 @@
+<?php
+
+class Alert{
+    
+    function add_alert($name, $description, $type, $userID, $url){
+        include("config.php");
+        
+        $sql = "insert into alert (alert_name, description, type, userID, url, date_alert) values (:alert_name, :description, :type, :userID, :url, now())";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(":alert_name", $name, PDO::PARAM_STR);
+        $stmt->bindParam(":description", $description, PDO::PARAM_STR);
+        $stmt->bindParam(":type", $type, PDO::PARAM_INT);
+        $stmt->bindParam(":userID", $userID, PDO::PARAM_INT);
+        $stmt->bindParam(":url", $url, PDO::PARAM_STR);
+
+        if($stmt->execute())
+		{
+            return "success";
+		}
+        
+        return "fail";
+    }
+}
+
+

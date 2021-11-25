@@ -1,6 +1,7 @@
 <?php
 
 require_once('../config.php');
+require_once("alert.php");
 
 Class Master extends DBConnection {
 
@@ -796,8 +797,16 @@ Class Master extends DBConnection {
 
         if (empty($id)) {
             $sql = "INSERT INTO `purchase_requisitions` set {$data} ";
+             
+            $alert = new Alert();
+            $alert->add_alert("Purchase Requisition", "You receive a pending PR",1, 5, "http://localhost/GO_Uniform/admin/?page=purchase_m");
+
         } else {
             $sql = "UPDATE `purchase_requisitions` set {$data} where id = '{$id}' ";
+            
+             $alert = new Alert();
+            $alert->add_alert("Purchase Requisition", "You receive a updated PR",2, 10, "http://localhost/GO_Uniform/admin/?page=purchase_r");
+
         }
         $save = $this->conn->query($sql);
         if ($save) {
@@ -875,8 +884,16 @@ Class Master extends DBConnection {
 
         if (empty($id)) {
             $sql = "INSERT INTO `materials_requisitions` set {$data} ";
+            
+            $alert = new Alert();
+            $alert->add_alert("Material Requisition", "You receive a pending MR",1, 5, "http://localhost/GO_Uniform/admin/?page=material_m");
+
         } else {
             $sql = "UPDATE `materials_requisitions` set {$data} where id = '{$id}' ";
+             
+            $alert = new Alert();
+            $alert->add_alert("Material Requisition", "You receive a updated MR",2, 10, "http://localhost/GO_Uniform/admin/?page=material_r");
+
         }
         $save = $this->conn->query($sql);
         if ($save) {
@@ -901,6 +918,7 @@ Class Master extends DBConnection {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
         }
+        
         return json_encode($resp);
     }
 
@@ -908,6 +926,11 @@ Class Master extends DBConnection {
         extract($_POST);
         $del = $this->conn->query("DELETE FROM `materials_requisitions` where id = '{$id}'");
         if ($del) {
+            
+            $alert = new Alert();
+            $alert->add_alert("Material Requisition", "You MR been rejected",3, 10, "http://localhost/GO_Uniform/admin/?page=material_r");
+            
+            
             $resp['status'] = 'success';
             $this->settings->set_flashdata('success', "MR successfully deleted.");
         } else {

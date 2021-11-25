@@ -229,7 +229,7 @@
                                 </li>
                                 <li class="nav-header"><b>Alert Management</b></li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=alert_v" class="nav-link nav-alert_v">
+                                    <a href="<?php echo base_url ?>admin/?page=alert" class="nav-link nav-alert_v">
                                         <i class="nav-icon fas fa-bell"></i>
                                         <p>
                                             Manage Alert Settings

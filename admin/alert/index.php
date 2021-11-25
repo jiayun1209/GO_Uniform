@@ -6,9 +6,7 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">List of Alert</h3>
-        <div class="card-tools">
-            <a href="javascript:void(0)" data-id = "" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
-        </div>
+        
     </div>
     <div class="card-body">
         <div class="container-fluid">
@@ -17,11 +15,13 @@
                     <colgroup>
 
                         <col width="5%">
+                        <col width="5%">
                         <col width="10%">
-                        <col width="15%">
                         <col width="30%">
-                        <col width="20%">
-                        <col width="20%">
+                        <col width="25%">
+                        <col width="5%">
+                        <col width="5%">
+                        <col width="15">
                     </colgroup>
                     <thead>
                         <tr class="bg-navy disabled">
@@ -29,8 +29,11 @@
                             <th>Alert ID</th>
                             <th>Alert Name</th>
                             <th>Description</th>
+                            <th>Type</th>
+                            <th>Viewed</th>
+                            <th>User ID</th>
                             <th>Date Created</th>
-                            <th>Action</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -38,31 +41,20 @@
                         $i = 1;
                         $cnt = 1;
                         $qry = $conn->query("SELECT * from `alert` order by (`alert_id`) asc ");
+                        $statusArr = ["Pending", "Approved", "Rejected"];
+                        
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
 
                                 <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
                                 <td><?php echo $row['alert_id'] ?></td>
-                                <td><?php echo $row['alert_name'] ?></td>
+                                <td><a href="<?php echo $row['url']?>"><?php echo $row['alert_name'] ?></a></td>
                                 <td><?php echo $row['description'] ?></td>
+                                <td><?php echo $statusArr[$row['type']-1] ?></td>
+                                <td><?php echo $row['viewed'] ?></td>
+                                <td><?php echo $row['userID'] ?></td>
                                 <td class=""><?php echo $row['date_alert'] ?></td>
-
-
-
-                                <td align="center">
-                                    <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon py-0" data-toggle="dropdown">
-                                        Action
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item view_data" href="javascript:void(0)" data-id = "<?php echo $row['alert_id'] ?>"><span class="fa fa-info text-primary"></span> View</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['alert_id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['alert_id'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
-                                    </div>
-                                </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>

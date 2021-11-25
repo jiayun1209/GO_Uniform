@@ -154,6 +154,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <button class="btn btn-flat btn-primary" form="po-form">Save</button>
         <a class="btn btn-flat btn-default" href="?page=material_r">Cancel</a>
     </div>
+
 </div>
 <table class="d-none" id="item-clone">
     <tr class="po-item" data-id="">
