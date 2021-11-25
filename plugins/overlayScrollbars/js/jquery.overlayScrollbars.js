@@ -1304,7 +1304,7 @@
                             if (_supportResizeObserver) {
                                 var element = targetElement.addClass('observed').append(generateDiv(_classNameResizeObserverElement)).contents()[0];
                                 var observer = element[_strResizeObserverProperty] = new resizeObserver(callback);
-                                observer.observe(element);
+//                                observer.observe(element);
                             }
                             else {
                                 if (_msieVersion > 9 || !_autoUpdateRecommended) {

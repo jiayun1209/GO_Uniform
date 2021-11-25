@@ -799,13 +799,13 @@ Class Master extends DBConnection {
             $sql = "INSERT INTO `purchase_requisitions` set {$data} ";
              
             $alert = new Alert();
-            $alert->add_alert("Purchase Requisition", "You receive a pending PR",1, 5, "http://localhost/GO_Uniform/admin/?page=purchase_m");
+            $alert->add_alert("Purchase Requisition", "You receive a pending PR",1, 2, "http://localhost/GO_Uniform/admin/?page=purchase_m");
 
         } else {
             $sql = "UPDATE `purchase_requisitions` set {$data} where id = '{$id}' ";
             
              $alert = new Alert();
-            $alert->add_alert("Purchase Requisition", "You receive a updated PR",2, 10, "http://localhost/GO_Uniform/admin/?page=purchase_r");
+            $alert->add_alert("Purchase Requisition", "You receive a updated PR",2, 4, "http://localhost/GO_Uniform/admin/?page=purchase_r");
 
         }
         $save = $this->conn->query($sql);
@@ -886,13 +886,13 @@ Class Master extends DBConnection {
             $sql = "INSERT INTO `materials_requisitions` set {$data} ";
             
             $alert = new Alert();
-            $alert->add_alert("Material Requisition", "You receive a pending MR",1, 5, "http://localhost/GO_Uniform/admin/?page=material_m");
+            $alert->add_alert_group("Material Requisition", "You receive a pending MR",1, 2, "http://localhost/GO_Uniform/admin/?page=material_m");
 
         } else {
             $sql = "UPDATE `materials_requisitions` set {$data} where id = '{$id}' ";
              
             $alert = new Alert();
-            $alert->add_alert("Material Requisition", "You receive a updated MR",2, 10, "http://localhost/GO_Uniform/admin/?page=material_r");
+            $alert->add_alert_group("Material Requisition", "You receive a updated MR",2, 4, "http://localhost/GO_Uniform/admin/?page=material_r");
 
         }
         $save = $this->conn->query($sql);
@@ -928,7 +928,7 @@ Class Master extends DBConnection {
         if ($del) {
             
             $alert = new Alert();
-            $alert->add_alert("Material Requisition", "You MR been rejected",3, 10, "http://localhost/GO_Uniform/admin/?page=material_r");
+            $alert->add_alert("Material Requisition", "You MR been rejected",3, 4, "http://localhost/GO_Uniform/admin/?page=material_r");
             
             
             $resp['status'] = 'success';

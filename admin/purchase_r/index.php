@@ -104,7 +104,7 @@
 	function delete_rent($id){
 		start_loader();
 		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_po",
+			url:_base_url_+"classes/Master.php?f=delete_pr",
 			method:"POST",
 			data:{id: $id},
 			dataType:"json",

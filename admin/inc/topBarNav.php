@@ -64,11 +64,14 @@
         </button> -->
             </div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item nav-item-alert">
              <span style="display: inline-block;margin-right: 1em;">
                 <a class="btn" data-toggle="collapse" href="#alert" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <i class="fa fa-bell" style="color: #666"></i>
                 </a>
+                <span class="alert-count">
+                   0
+                </span>
             </span>
             <div class="collapse" id="alert" style=" position: absolute; right: 1em; ">
                 <div class="card card-body">
@@ -103,9 +106,15 @@
                                                 </div>`;
                                     });
                     $("#alert").find(".card-body").html(alertHtml);
+                    $(".nav-item-alert").find(".alert-count").text(alertList.length);
+                    
+                    OverlayScrollbars($("#alert").find(".card-body")[0]);
                 }
             }
         });
+        
+        
+
     })
 </script>
 <!-- /.navbar -->
