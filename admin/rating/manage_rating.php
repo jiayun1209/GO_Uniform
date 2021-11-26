@@ -29,65 +29,70 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
         </div> 
         <div class="form-group">
             <label for="po" class="control-label">Completed Purchase Order</label>  <br> 
-            
-            <?php if (isset($vendor_ID)):
+           <textarea name="po" id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <?php
+            if (isset($vendor_ID)):
                 $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 4 and r.vendor_ID ='$vendor_ID'");
                 while ($row = $supplier_qry->fetch_assoc()):
                     ?> 
-PO Number > <?php echo $row['po_no'] ?>     
-Remarks > <?php echo $row['remarks'] ?> 
+ PO Number > <?php echo $row['po_no'] ?>     
+ Remarks > <?php echo $row['remarks'] ?> 
                         <?php
                     endwhile;
                 endif
                 ?>         
-        </div>   
+            </textarea>  
+        </div>
         <div class="form-group">
             <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
-            <?php if (isset($vendor_ID)):
+            <textarea name="po" id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <?php
+            if (isset($vendor_ID)):
                 $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 3 and r.vendor_ID ='$vendor_ID'");
-                while ($row = $supplier_qry->fetch_assoc()):
-                    ?> 
-            PO Number > <?php echo $row['po_no'] ?> <br>    
-            Cancel Reason > <?php echo $row['cancel_reason'] ?> <br> <br>
+                while ($row = $supplier_qry->fetch_assoc()):?> 
+PO Number > <?php echo $row['po_no'] ?>    
+Cancel Reason > <?php echo $row['cancel_reason'] ?>
+
                         <?php
                     endwhile;
                 endif
                 ?>            
-        </div>    
-        <div class="form-group">
-            <label for="rating_ID" class="control-label">Rating ID</label>  <br>         
+            </textarea>   
+    </div> 
+    <div class="form-group">
+        <label for="rating_ID" class="control-label">Rating ID</label>  <br>         
+        <?php
+        if (isset($vendor_ID)):
+            $supplier_qry = $conn->query("SELECT r.*,v.*,m.* FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
+            while ($row = $supplier_qry->fetch_assoc()):
+                ?>                     
+                <input type="text" name="rating_ID" id="rating_ID" class="form-control rounded-0" value="<?php echo $row['rating_ID'] ?>" readonly> 
+                <?php
+            endwhile;
+        endif
+        ?>        
+    </div>      
+    <div class="form-group">
+        <label for="performance_ID" class="control-label">Rating Status</label>
+        <select name="performance_ID" id="performance_ID" class="form-control rounded-0" required>
             <?php
             if (isset($vendor_ID)):
-                $supplier_qry = $conn->query("SELECT r.*,v.*,m.* FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
-                while ($row = $supplier_qry->fetch_assoc()):
-                    ?>                     
-                    <input type="text" name="rating_ID" id="rating_ID" class="form-control rounded-0" value="<?php echo $row['rating_ID'] ?>" readonly> 
+                $r_qry = $conn->query("SELECT r.rating_ID,v.*,m.performance_ID FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
+                while ($row = $r_qry->fetch_assoc()):
+                    ?>
+                    <option value="P0000" <?php echo isset($performance_ID) && $performance_ID == 0 ? "selected" : "P0000" ?> >0&#9956</option>
+                    <option value="P0001" <?php echo isset($performance_ID) && $performance_ID == 1 ? "selected" : "P0001" ?>>1&#9956</option>
+                    <option value="P0002" <?php echo isset($performance_ID) && $performance_ID == 2 ? "selected" : "P0002" ?>>2&#9956</option>
+                    <option value="P0003" <?php echo isset($performance_ID) && $performance_ID == 3 ? "selected" : "P0003" ?>>3&#9956</option>
+                    <option value="P0004" <?php echo isset($performance_ID) && $performance_ID == 4 ? "selected" : "P0004" ?>>4&#9956</option>
+                    <option value="P0005" <?php echo isset($performance_ID) && $performance_ID == 5 ? "selected" : "P0005" ?>>5&#9956</option>                    
                     <?php
                 endwhile;
             endif
-            ?>        
-        </div>      
-        <div class="form-group">
-            <label for="performance_ID" class="control-label">Rating Status</label>
-            <select name="performance_ID" id="performance_ID" class="form-control rounded-0" required>
-                <?php
-                if (isset($vendor_ID)):
-                    $r_qry = $conn->query("SELECT r.rating_ID,v.*,m.performance_ID FROM `rating_measurement` m, vendor v, rating r WHERE r.vendor_ID = v.vendor_ID and r.performance_ID = m.performance_ID and v.vendor_ID ='$vendor_ID'");
-                    while ($row = $r_qry->fetch_assoc()):
-                        ?>
-                        <option value="P0000" <?php echo isset($performance_ID) && $performance_ID == 0 ? "selected" : "P0000" ?> >0&#9956</option>
-                        <option value="P0001" <?php echo isset($performance_ID) && $performance_ID == 1 ? "selected" : "P0001" ?>>1&#9956</option>
-                        <option value="P0002" <?php echo isset($performance_ID) && $performance_ID == 2 ? "selected" : "P0002" ?>>2&#9956</option>
-                        <option value="P0003" <?php echo isset($performance_ID) && $performance_ID == 3 ? "selected" : "P0003" ?>>3&#9956</option>
-                        <option value="P0004" <?php echo isset($performance_ID) && $performance_ID == 4 ? "selected" : "P0004" ?>>4&#9956</option>
-                        <option value="P0005" <?php echo isset($performance_ID) && $performance_ID == 5 ? "selected" : "P0005" ?>>5&#9956</option>                    
-                        <?php
-                    endwhile;
-                endif
-                ?>
-            </select>
-        </div>            
-    </div>   
+            ?>
+        </select>
+    </div>            
+</div>   
 </form>
 <script>
     $(function () {

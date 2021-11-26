@@ -1,4 +1,14 @@
 <?php
+$Array_account = array();
+$sql = "SELECT * FROM quotation";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while ($row = mysqli_fetch_array($result)) {
+        array_push($Array_account, $row);
+    }
+}
+echo '<script>var Array_account = ' . json_encode($Array_account) . ';</script>';
+
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT * from `quotation` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
@@ -53,14 +63,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <?php endwhile; ?>
                     </select>                                        
                     <label for="pr_ID">PR ID</label>
-                    <select name="pr_ID" id="vendor_ID" id="pr_ID" class="custom-select custom-select-lsm rounded-0 select0" onclick="select_id_check_qty()">
-                        <option value="" disabled <?php echo!isset($pr_ID) ? "selected" : '' ?>></option>
+                    <select name="pr_ID" id="pr_ID" class="custom-select custom-select-lsm rounded-0 select0" onclick="select_id_check_qty() onchange ="select_id_check_qty()">
                         <?php
-                        $pr_qry = $conn->query("SELECT p.*,q.* FROM `purchase_requisitions` p inner join purchase_requisitions_details q WHERE status = 1 AND p.id =q.pr_id");
-                        while ($row = $pr_qry->fetch_assoc()):
-                            ?>
-                            <option value="<?php echo $row['pr_no'] ?>" <?php echo isset($pr_no) && $pr_no == $row['pr_no'] ? 'selected' : '' ?>> <?php echo $row['pr_no'] ?></option>
-                        <?php endwhile; ?>
+                        $sql = "SELECT p.*,d.* FROM purchase_requisitions p, purchase_requisitions_details d where p.id = d.pr_id AND p.status != 0";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo"<option value=" . $row["id"] . ">" . $row["pr_no"] . "</option>";
+                            }
+                        } else {
+                            echo '<script>alert("Invalid input !")</script>';
+                        }
+                        ?>
                     </select>
                 </div> 
                 <div class="col-md-6 form-group">
