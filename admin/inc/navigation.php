@@ -143,7 +143,7 @@
                                     <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-manage_event">
                                         <i class="nav-icon fas fa-calendar-alt"></i>
                                         <p>
-                                            Manage Events
+                                            Operation Calendar
                                         </p>
                                     </a>
                                 </li>
