@@ -34,29 +34,29 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
     <input type="hidden" name="vendor_ID" value="" readonly>
     <div class="container-fluid">             
         <div class="form-group">
-            <label for="vendor_ID" id="vendor_ID" name="vendor_ID[]" >Supplier Name</label>
-            <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-lsm rounded-0 select2" onchange="select_id_check_name()" onclick="select_id_check_name()">
-                <?php
-                $sql = "SELECT p.vendor_ID, p.remarks,p.status,p.po_no,p.cancel_reason,v.vendor_ID,v.registration_status,v.company_code,v.name FROM purchase_order p, vendor v WHERE v.vendor_ID = p.vendor_ID AND v.registration_status = 1";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    while ($row = mysqli_fetch_array($result)) {
-                        echo "<option value=" . $row["vendor_ID"] . ">" . $row["company_code"] ." ". $row["name"] . "</option>";
-                    }
-                } else {
-                    echo '<script>alert("Invalid input !")</script>';
-                }
-                ?>
-            </select>  
+            <label for="vendor_ID" id="vendor_ID" name="vendor_ID" >Supplier Name</label>
+            <select class="form-control" name="vid" id="vid" onchange="select_id_check_name()" onclick="select_id_check_name()">
+        <?php
+        $sql = "SELECT * FROM vendor";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            while ($row = mysqli_fetch_array($result)) {
+                echo "<option value=" . $row["vendor_ID"] . ">" . $row["vendor_ID"] . "</option>";
+            }
+        } else {
+            echo '<script>alert("Invalid input !")</script>';
+        }
+        ?>
+    </select>
         </div>
         <div class="form-group" border-style: dotted>
             <label for="po_no" class="control-label">Completed Purchase Order</label>  <br>     
-            <textarea name="po_no" id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <textarea type= "text" class="form-control" name="po" id="po" placeholder="" readOnly/>
             </textarea>    
         </div>   
         <div class="form-group" border-style: dotted>
             <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
-            <textarea name="po_no" id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <textarea type= "text" name="po_no" id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
             </textarea> 
         </div>    
         <div class="form-group">
@@ -76,12 +76,14 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
     function select_id_check_name() {
         var i = 0;
         while (Array_account) {
-            if (Array_account[i][3].toString() === document.getElementById("vendor_ID").value) {
-                document.getElementById("po_no").value = Array_account[i][1].toString();
+            if (Array_account[i][0] === document.getElementById("vid").value) {
+                document.getElementById("po").value = Array_account[i][1].toString();
             }
             i++;
         }
     }
+
+
     $(function () {
         $('#supplier-form').submit(function (e) {
             e.preventDefault();

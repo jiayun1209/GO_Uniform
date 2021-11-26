@@ -159,9 +159,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 . "<td><a>" . $row["catalog_ID"] . "</a></td>"
                                                                 . "<td><a>" . $row["price"] . "</a></td>"
                                                                 . "<td><a value =" . $row["status"] . "  style=" . "'color:" . $color . "'" . ">" . $active . "</a></td>"
-                                                                . "<td class='project-actions text-right'>";
-                                                               // . "<a class=" . "'btn btn-dark btn-sm'" . "href=" . "'product_detail.php?id=" . $row["productid"] . "'>"
-                                                               // . "</i> View Details</a></td></tr>";
+                                                                . "<td class='project-actions text-right'>"
+                                                                . "<a class=" . "'btn btn-dark btn-sm'" . "href=" . "'?page=category/product_detail&id=" . $row["id"] . "'>"
+                                                                . "</i> View Details</a></td></tr>";
                                                             }
                                                         }
                                                     }
