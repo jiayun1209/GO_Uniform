@@ -82,7 +82,7 @@ Class Master extends DBConnection {
     }
 
     function save_rating() {
-        extract($_POST);
+       extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
             if (!in_array($k, array('rating_ID'))) {

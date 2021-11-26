@@ -28,19 +28,32 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
             <input type="text" name="vendor_ID" id="vendor_ID" class="form-control rounded-0" value="<?php echo($vendor_ID) ? $vendor_ID : "" ?>"readonly>
         </div> 
         <div class="form-group">
-            <label for="po" class="control-label">Purchase Order</label>  <br>         
-            <?php
-            if (isset($vendor_ID)):
+            <label for="po" class="control-label">Completed Purchase Order</label>  <br> 
+            
+            <?php if (isset($vendor_ID)):
                 $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 4 and r.vendor_ID ='$vendor_ID'");
                 while ($row = $supplier_qry->fetch_assoc()):
-                    ?>                     
-                    PO Number > <?php echo $row['po_no'] ?> <br>    
-                    Remarks > <?php echo $row['remarks'] ?><br><br>           
-                    <?php
-                endwhile;
-            endif
-            ?>        
-        </div>      
+                    ?> 
+PO Number > <?php echo $row['po_no'] ?>     
+Remarks > <?php echo $row['remarks'] ?> 
+                        <?php
+                    endwhile;
+                endif
+                ?>         
+        </div>   
+        <div class="form-group">
+            <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
+            <?php if (isset($vendor_ID)):
+                $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 3 and r.vendor_ID ='$vendor_ID'");
+                while ($row = $supplier_qry->fetch_assoc()):
+                    ?> 
+            PO Number > <?php echo $row['po_no'] ?> <br>    
+            Cancel Reason > <?php echo $row['cancel_reason'] ?> <br> <br>
+                        <?php
+                    endwhile;
+                endif
+                ?>            
+        </div>    
         <div class="form-group">
             <label for="rating_ID" class="control-label">Rating ID</label>  <br>         
             <?php
