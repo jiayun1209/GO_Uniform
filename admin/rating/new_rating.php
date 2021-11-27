@@ -34,29 +34,29 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
     <input type="hidden" name="vendor_ID" value="" readonly>
     <div class="container-fluid">             
         <div class="form-group">
-            <label for="vendor_ID" id="vendor_ID" name="vendor_ID" >Supplier Name</label>
-            <select class="form-control" name="vid" id="vid" onchange="select_id_check_name()" onclick="select_id_check_name()">
-        <?php
-        $sql = "SELECT * FROM vendor";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            while ($row = mysqli_fetch_array($result)) {
-                echo "<option value=" . $row["vendor_ID"] . ">" . $row["vendor_ID"] . "</option>";
-            }
-        } else {
-            echo '<script>alert("Invalid input !")</script>';
-        }
-        ?>
-    </select>
+            <label for="vendor_ID" >Supplier Name</label>
+            <select class="form-control" name="vendor_ID" id="vendor_ID" onchange="select_id_check_name()" onclick="select_id_check_name()">
+                <?php
+                $sql = "SELECT * FROM vendor";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = mysqli_fetch_array($result)) {
+                        echo "<option value=" . $row["vendor_ID"] . ">" . $row["vendor_ID"] . "</option>";
+                    }
+                } else {
+                    echo '<script>alert("Invalid input !")</script>';
+                }
+                ?>
+            </select>
         </div>
         <div class="form-group" border-style: dotted>
-            <label for="po_no" class="control-label">Completed Purchase Order</label>  <br>     
-            <textarea type= "text" class="form-control" name="po" id="po" placeholder="" readOnly/>
+            <label for="po" class="control-label">Completed Purchase Order</label>  <br>     
+            <textarea type= "text" class="form-control" id="po" cols="10" rows="6" placeholder="" readOnly/>
             </textarea>    
         </div>   
         <div class="form-group" border-style: dotted>
             <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
-            <textarea type= "text" name="po_no" id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <textarea type= "text"  id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
             </textarea> 
         </div>    
         <div class="form-group">
@@ -74,20 +74,27 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
 </form>
 <script>
     function select_id_check_name() {
-        var i = 0;
-        while (Array_account) {
-            if (Array_account[i][0] === document.getElementById("vid").value) {
-                document.getElementById("po").value = Array_account[i][1].toString();
+        var str = "";
+        for (i = 0; i < Array_account.length; i++) {
+            if (Array_account[i][3] === document.getElementById("vendor_ID").value && Array_account[i][9] === '4') {
+                str += Array_account[i][1].toString() + " " + Array_account[i][8].toString() + '\r\n';
             }
-            i++;
         }
+        document.getElementById("po").value = str;
+        var str = "";
+        for (i = 0; i < Array_account.length; i++) {
+            if (Array_account[i][3] === document.getElementById("vendor_ID").value && Array_account[i][9] === '3') {
+                str += Array_account[i][1].toString() + " " + Array_account[i][13].toString() + '\r\n';
+            }
+        }
+        document.getElementById("po_no").value = str;
     }
 
 
     $(function () {
         $('#supplier-form').submit(function (e) {
             e.preventDefault();
-            var _this = $(this)
+            var _this = $(this);
             $('.err-msg').remove();
             start_loader();
             $.ajax({

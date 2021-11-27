@@ -60,7 +60,7 @@ if (isset($_POST['sendMailBtn'])) {
 			<body>
                         <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Purchase Order Details</h3>
+        <h3 class="card-title">Quotation Details</h3>
     </div>
     <div class="card-body">
         <div class="row">

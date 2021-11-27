@@ -7,7 +7,8 @@
 	<div class="card-header">
             <h3 class="card-title"><b>List of RFQ</b></h3>
 		<div class="card-tools">
-                    <a href="?page=RFQ/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create Quotation</a>                                      
+                    <a href="?page=RFQ/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create RFQ</a>  
+                     <a href="?page=RFQ/create_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create RFQ with PR</a> 
 		</div>
 	</div>
 	<div class="card-body">
