@@ -73,7 +73,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <p class="m-0"><?php echo $supplier['company_code'] ?> - <?php echo $supplier['name'] ?></p>                 
                     <p class="m-0"><?php echo $supplier['email'] ?></p>
                     <p class="m-0"><?php echo $supplier['address'] ?></p>
-
                 </div>
             </div>
             <div class="col-6 row">
@@ -91,6 +90,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
             </div>
         </div>
+        <br>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" id="item-list">
@@ -124,7 +124,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 $sub_total += ($row['quantity'] * $row['unit_price']);
                                 ?>
                                 <tr class="po-item" data-id="">
-                                    <td class="align-middle p-0 text-center"><?php echo $i++?></td>
+                                    <td class="align-middle p-0 text-center"><?php echo $i++ ?></td>
                                     <td class="align-middle p-0 text-center"><?php echo $row['quantity'] ?></td>
                                     <td class="align-middle p-1 text-center"><?php echo $row['name'] ?></td>
                                     <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
@@ -132,7 +132,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <td class="align-middle p-1 text-right"><?php echo number_format($row['unit_price']) ?></td>
                                     <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
                                 </tr>
-                            <?php endwhile;
+                                <?php
+                            endwhile;
                         endif;
                         ?>
                     </tbody>
