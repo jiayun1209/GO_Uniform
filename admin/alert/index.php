@@ -15,8 +15,8 @@
                     <colgroup>
 
                         <col width="5%">
-                        <col width="5%">
-                        <col width="10%">
+                        
+                        <col width="15%">
                         <col width="30%">
                         <col width="25%">
                         <col width="5%">
@@ -26,7 +26,7 @@
                     <thead>
                         <tr class="bg-navy disabled">
                             <th>No</th>
-                            <th>Alert ID</th>
+                            
                             <th>Alert Name</th>
                             <th>Description</th>
                             <th>Type</th>
@@ -48,7 +48,7 @@
                             <tr>
 
                                 <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
-                                <td><?php echo $row['alert_id'] ?></td>
+                                
                                 <td><a href="<?php echo $row['url']?>"><?php echo $row['alert_name'] ?></a></td>
                                 <td><?php echo $row['description'] ?></td>
                                 <td><?php echo $statusArr[$row['type']-1] ?></td>

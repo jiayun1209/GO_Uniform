@@ -6,6 +6,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $meta[$k] = $v;
     }
 }
+
+$stmt = $conn->query("SELECT * FROM general_setting where meta_field ='pwd_min'");
+$meta["min-length"] = $stmt->fetch_array()["meta_value"];
+ 
 ?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
@@ -89,6 +93,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
     $('#manage-user').submit(function (e) {
         e.preventDefault();
+        
+        var password = $("#password").val();
+        var minlength = <?php echo $meta['min-length']?>;
+        
+        if(password.length < minlength){
+            $('#msg').html(`<div class="alert alert-danger">Password length must exceed ${minlength}!</div>`);
+            return;
+        }
         var _this = $(this)
         start_loader()
         $.ajax({

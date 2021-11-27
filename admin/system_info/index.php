@@ -24,7 +24,7 @@
 <div class="col-lg-12">
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h5 class="card-title">System Information</h5>
+            <h5 class="card-title">User Company Details</h5>
             <!-- <div class="card-tools">
                     <a class="btn btn-block btn-sm btn-default btn-flat border-primary new_department" href="javascript:void(0)"><i class="fa fa-plus"></i> Add New</a>
             </div> -->

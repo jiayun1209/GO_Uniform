@@ -139,7 +139,28 @@
                             <?php endif; ?>
 
                             <?php if ($_settings->userdata('type') == 1): ?>
+                               
+                                <li class="nav-header"><b>System Initialization</b></li>
+
+                                 <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
+                                        <i class="nav-icon fas fa-building"></i>
+                                        <p>
+                                            User Company Details
+                                        </p>
+                                    </a>
+                                </li>
+                                
                                 <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=setting" class="nav-link nav-">
+                                        <i class="nav-icon fas fa-cogs"></i>
+                                        <p>
+                                            General Settings
+                                        </p>
+                                    </a>
+                                </li>
+
+                              <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-manage_event">
                                         <i class="nav-icon fas fa-calendar-alt"></i>
                                         <p>
@@ -147,33 +168,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-header"><b>System Initialization</b></li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=" class="nav-link nav-">
-                                        <i class="nav-icon fas fa-building"></i>
-                                        <p>
-                                            User Company Details
-                                        </p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
-                                        <i class="nav-icon fas fa-cogs"></i>
-                                        <p>
-                                            General Settings
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php" class="nav-link nav-PR_Create">
-                                        <i class="nav-icon fas fa-calendar"></i>
-                                        <p>
-                                            Operation Calendar   
-                                        </p>
-                                    </a>
-                                </li>
+                                
                                 <li class="nav-header"><b>Setups</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
@@ -218,24 +213,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-header"><b>Data Import & Export</b></li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=Import Export/import_pdf" class="nav-link nav-import">
-                                        <i class="nav-icon fas fa-file-import"></i>
-                                        <p>
-                                            Import Data
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=Import Export/export" class="nav-link nav-export">
-                                        <i class="nav-icon fas fa-file-export"></i>
-                                        <p>
-                                            Export Data
-                                        </p>
-                                    </a>
-                                </li>
+                                
                                 <li class="nav-header"><b>Alert Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=alert" class="nav-link nav-alert_v">
