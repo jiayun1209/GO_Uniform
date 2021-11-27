@@ -63,7 +63,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <?php endwhile; ?>
                     </select>                                        
                     <label for="pr_ID">PR ID</label>
-                    <select class="form-control" name="vid" id="vid" onchange="select_id_check_qty()" onclick="select_id_check_qty()">
+                    <select class="form-control" name="pr_ID" id="pid" onchange="select_id_check_qty()" required>
                         <option value=""> </option>
                         <?php
                         $sql = "SELECT * FROM purchase_requisitions where status != 0 ";
@@ -125,10 +125,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity"  value="<?php echo ($row['quantity']) ?>"/>
+                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity[]"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
-                                        <td class="align-middle p-1">                                          
-                                            <input type="text" class="text-center w-100 border-0" id="item_id" name="item_id" value="<?php echo $row['item_id'] ?>" required/>
+                                       <td class="align-middle p-1">
+                                           <input type="text" class="text-center w-100 border-0 item_id" name="item_id" value="<?php echo $row['item_id'] ?>" required/>
                                         </td>                                                                
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -160,7 +160,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
-                            <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
+                            <select name="status" id="status" class="form-control form-control-sm rounded-0"">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
                                 <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                 <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Inactive</option>
@@ -184,10 +184,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="quantity"/>
+            <input type="number" step="any" class="text-right w-100 border-0" name="quantity[]"/>
         </td>
         <td class="align-middle p-1">         
-            <input type="text" class="text-center w-100 border-0" name="item_id" required/>
+            <input type="text" class="text-center w-100 border-0 item_id"  name="item_id" required/>
         </td>        
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
@@ -196,21 +196,44 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
+    var c = false;
     function select_id_check_qty() {
+        var elmtTable = document.getElementById('item-list');
+        var tableRows = elmtTable.getElementsByTagName('tr');
+        var rowCount = tableRows.length;
+        for (var x = rowCount - 3; x > 0; x--) {
+            document.getElementById("item-list").deleteRow(1);
+        }
         for (i = 0; i < Array_account.length; i++) {
-            if (Array_account[i][0] === document.getElementById("vid").value) {
-                var table = document.getElementById("item-list");
-                var row = table.insertRow(0);
-                var cell1 = row.insertCell(1);
-                var cell2 = row.insertCell(2);
-                var cell3 = row.insertCell(3);
-                var cell4 = row.insertCell(4);
-                var cell5 = row.insertCell(5);
-                cell1.innerHTML = '<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>';
-                cell2.innerHTML = '<input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity"  value="' + Array_account[i][3] + '"/>';
-                cell3.innerHTML = '<input type="text" class="text-center w-100 border-0" id="item_id" name="item_id" value="' + Array_account[i][1] + '"/>';
-                cell4.innerHTML = ' <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="' + Array_account[i][2] + '"/>';
-                cell5.innerHTML = '<td class="align-middle p-1 text-right total-price">';
+            if (Array_account[i][0] === document.getElementById("pid").value) {
+                var total = Array_account[i][3] * Array_account[i][2];
+                var tr = '<tr class="po-item" data-id="">';
+                tr += '<td class="align-middle p-1 text-center">';
+                tr += '<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button></td>';
+                tr += ' <td class="align-middle p-1">';
+                tr += '<input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity[]" onchange="calculate()" value="'+Array_account[i][3]+'"/></td>';
+                tr += '<td class="align-middle p-1">';
+                tr += '<input type="text" class="text-center w-100 border-0 item_id"  name="item_id" value="'+Array_account[i][1]+'" required/>';
+                tr += '<td class="align-middle p-1">';
+                tr += '<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" onchange="calculate()" value="'+Array_account[i][2]+'"/></td>';
+                tr += ' <td class="align-middle p-1 text-right total-price">'+ total +'</td> </tr>';
+                            
+                $('#item-list tbody').append(tr); 
+                                
+                /*     console.log(Array_account[i]);
+                 var table = document.getElementById("item-list");
+                 var row = table.insertRow(1);
+                 var cell1 = row.insertCell(0);
+                 var cell2 = row.insertCell(1);
+                 var cell3 = row.insertCell(2);
+                 var cell4 = row.insertCell(3);
+                 var cell5 = row.insertCell(4);
+                 var total = Array_account[i][3] * Array_account[i][2];
+                 cell1.innerHTML = '<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>';
+                 cell2.innerHTML = '<input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity[]" onkeypress="calculate()"  value="' + Array_account[i][3] + '"/>';
+                 cell3.innerHTML = '<input type="text" class="text-center w-100 border-0" id="item_id" name="item_id" value="' + Array_account[i][1] + '"/>';
+                 cell4.innerHTML = '<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="' + Array_account[i][2] + '"/>';
+                 cell5.innerHTML = '<td class="align-middle p-1 text-right total-price">' + total + '</td>';*/
             }
         }
     }
@@ -220,7 +243,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     function calculate() {
         var _total = 0
         $('.po-item').each(function () {
-            var qty = $(this).find("[name='quantity']").val()
+            var qty = $(this).find("[name='quantity[]']").val()
             var unit_price = $(this).find("[name='unit_price[]']").val()
             var row_total = 0;
             if (qty > 0 && unit_price > 0) {
@@ -278,7 +301,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             var tr = $('#item-clone tr').clone()
             $('#item-list tbody').append(tr)
             _autocomplete(tr)
-            tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+            tr.find('[name="quantity[]"],[name="unit_price[]"]').on('input keypress', function (e) {
                 calculate()
             })
             $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
@@ -289,13 +312,13 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             $('#item-list .po-item').each(function () {
                 var tr = $(this)
                 _autocomplete(tr)
-                tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+                tr.find('[name=quantity[]"],[name="unit_price[]"]').on('input keypress', function (e) {
                     calculate()
                 })
                 $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
                     calculate()
                 })
-                tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
+                tr.find('[name="quantity[]"],[name="unit_price[]"]').trigger('keypress')
             })
         } else {
             $('#add_row').trigger('click')

@@ -5,11 +5,9 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title"><b>List of RFQ</b></h3>
+        <h3 class="card-title">List of Approved RFQ</h3>
         <div class="card-tools">
-            <a href="?page=RFQ/create_rfq" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create RFQ</a>  
-            <a href="?page=RFQ/create_rfq_pr" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create RFQ with PR</a>
-            <a href="?page=RFQ/pending_rfq" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>  Send Quotation</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=rfq">Back</a>
         </div>
     </div>
     <div class="card-body">
@@ -41,7 +39,7 @@
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID order by unix_timestamp(q.date_updated) ");
+                        $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID where status='0' order by unix_timestamp(q.date_updated) ");
                         while ($row = $qry->fetch_assoc()):
                             $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
                             $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
@@ -56,15 +54,10 @@
                                 <td class="text-center">
                                     <?php
                                     switch ($row['status']) {
-                                        case '1':
-                                            echo '<span class="badge badge-success">Approved</span>';
-                                            break;
-                                        case '2':
-                                            echo '<span class="badge badge-danger">Rejected</span>';
-                                            break;
-                                        default:
+                                        case '0':
                                             echo '<span class="badge badge-secondary">Pending</span>';
                                             break;
+                                      
                                     }
                                     ?>
                                 </td>
@@ -74,9 +67,9 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" href="?page=RFQ/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>
+                                        <a class="dropdown-item" href="?page=rfq/view_quotation&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>                                       
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=RFQ/manage_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>				                   
+                                        <a class="dropdown-item" href="?page=rfq/send_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send Quotation</a>                                       
                                     </div>
                                 </td>
                             </tr>
@@ -90,10 +83,10 @@
 <script>
     $(document).ready(function () {
         $('.delete_data').click(function () {
-            _conf("Are you sure to delete this RFQ permanently?", "delete_rfq", [$(this).attr('data-id')])
+            _conf("Are you sure to delete this RFQ permanently?", "delete_rent", [$(this).attr('data-id')])
         })
         $('.view_details').click(function () {
-            uni_modal("Reservaton Details", "RFQ/view_rfq.php?id=" + $(this).attr('data-id'), 'mid-large')
+            uni_modal("Reservaton Details", "purchase_orders/view_rfq.php?id=" + $(this).attr('data-id'), 'mid-large')
         })
         $('.renew_data').click(function () {
             _conf("Are you sure to renew this rent data?", "renew_rent", [$(this).attr('data-id')]);
@@ -101,7 +94,7 @@
         $('.table th,.table td').addClass('px-1 py-0 align-middle')
         $('.table').dataTable();
     })
-    function delete_rfq($id) {
+    function delete_rent($id) {
         start_loader();
         $.ajax({
             url: _base_url_ + "classes/Master.php?f=delete_rfq",

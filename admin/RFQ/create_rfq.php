@@ -1,14 +1,4 @@
 <?php
-$Array_account = array();
-$sql = "SELECT * FROM purchase_requisitions_details";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = mysqli_fetch_array($result)) {
-        array_push($Array_account, $row);
-    }
-}
-echo '<script>var Array_account = ' . json_encode($Array_account) . ';</script>';
-
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT * from `quotation` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
