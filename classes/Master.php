@@ -534,6 +534,64 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+    
+    function save_template() {
+        extract($_POST);
+        $data = "";
+        foreach ($_POST as $k => $v) {
+            if (in_array($k, array('discount_amount', 'tax_amount')))
+                $v = str_replace(',', '', $v);
+            if (!in_array($k, array('id', 'tem_name')) && !is_array($_POST[$k])) {
+                $v = addslashes(trim($v));
+                if (!empty($data))
+                    $data .= ",";
+                $data .= " `{$k}`='{$v}' ";
+            }
+        }
+        if (!empty($tem_name)) {
+            $check = $this->conn->query("SELECT * FROM `purchase_order_template` where `tem_name` = '{$tem_name}' " . ($id > 0 ? " and id != '{$id}' " : ""))->num_rows;
+            if ($this->capture_err())
+                return $this->capture_err();
+            if ($check > 0) {
+                $resp['status'] = 'po_failed';
+                $resp['msg'] = "Template Name already exist.";
+                return json_encode($resp);
+                exit;
+            }
+        } 
+        
+        $data .= ", tem_name = '{$tem_name}' ";
+
+        if (empty($id)) {
+            $sql = "INSERT INTO `purchase_order_template` set {$data} ";
+        } else {
+            $sql = "UPDATE `purchase_order_template` set {$data} where id = '{$id}' ";
+        }
+        $save = $this->conn->query($sql);
+        if ($save) {
+            $resp['status'] = 'success';
+            $tem_id = empty($id) ? $this->conn->insert_id : $id;
+            $resp['id'] = $tem_id;
+            $data = "";
+            foreach ($item_id as $k => $v) {
+                if (!empty($data))
+                    $data .= ",";
+                $data .= "('{$tem_id}','{$v}','{$unit_price[$k]}','{$qty[$k]}')";
+            }
+            if (!empty($data)) {
+                $this->conn->query("DELETE FROM `purchase_order_tem_details` where tem_id = '{$tem_id}'");
+                $save = $this->conn->query("INSERT INTO `purchase_order_tem_details` (`tem_id`,`item_id`,`unit_price`,`quantity`) VALUES {$data} ");
+            }
+            if (empty($id))
+                $this->settings->set_flashdata('success', "Template successfully saved.");
+            else
+                $this->settings->set_flashdata('success', "Template successfully updated.");
+        } else {
+            $resp['status'] = 'failed';
+            $resp['err'] = $this->conn->error . "[{$sql}]";
+        }
+        return json_encode($resp);
+    }
 
     function get_price() {
         extract($_POST);
@@ -1050,6 +1108,9 @@ switch ($action) {
         break;
     case 'save_po':
         echo $Master->save_po();
+        break;
+    case 'save_template':
+        echo $Master->save_template();
         break;
     case 'delete_po':
         echo $Master->delete_po();

@@ -42,14 +42,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="q_ID">Template Name</label>
-                    <select name="q_ID" id="q_ID" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($q_ID) ? "selected" : '' ?>></option>
+                    <label for="id">Template Name</label>
+                    <select name="id" id="id" class="custom-select custom-select-sm rounded-0 select2">
+                        <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
-                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status!=2");
+                        $q_qry = $conn->query("SELECT * FROM `purchase_order_template`");
                         while ($r = $q_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $r['q_ID'] ?>" <?php echo isset($$q_ID) && $$q_ID == $r['q_ID'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
+                            <option value="<?php echo $r['id'] ?>" <?php echo isset($id) && $id == $r['id'] ? 'selected' : '' ?>><?php echo $r['tem_name'] ?></option>
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -60,16 +60,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
-                        <?php
-                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
-                        while ($row = $supplier_qry->fetch_assoc()):
-                            ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?>
-                    </select>
+                    <label for="name">Supplier Name  <span class="po_err_msg text-danger"></span></label>
+                    <span class='form-control form-control-sm rounded-0'></span>   
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>

@@ -82,7 +82,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=category" class="nav-link nav-catalog">
+                                    <a href="<?php echo base_url ?>admin/?page=category" class="nav-link nav-category">
                                         <i class="nav-icon fas fa-book-open"></i>
                                         <p>
                                             Manage Category
