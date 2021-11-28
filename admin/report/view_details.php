@@ -40,36 +40,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-<!--        <div class="row">
-            <div class="col-md-3">
-                <p  class="m-0"><b>Start Date</b></p>
-                <input type="date" name="delivery_date" id="delivery_date" class="text-center w-100 border-1 delivery_date" placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
-            </div>
-
-            <div class="col-md-3">
-                <p  class="m-0"><b>End Date</b></p>
-                <input type="date" name="delivery_date" id="delivery_date" class="text-center w-100 border-1 delivery_date" placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
-            </div>
-            
-            <button type="submit"><i class="fa fa-search"></i></button>
-            
-            <div class="col-md-3">
-                <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="btn btn-primary"></i> Print</button>
-            <button class="btn btn-primary">Search</button>
-            </div>
-        </div>-->
-    
-<!--        <form method = post></form>
-        <input type="delivery_date" name="startdate">
-        <input type="delivery_date" name="enddate">
-            
-        </input>-->
-
-
-
-
-
-
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
@@ -77,14 +47,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </div>
 
     <div class="card-body" id="out_print">
-        <div class="row"><h3 class="card-title"><b>Purchase Order Details Report</b></h3></div>
+        <div class="row align-middle"><h3 class="card-title text-lg"><b>Purchase Order Details Report</b></h3></div>
 
         <div class="row">
             <div class="col-9 d-flex align-items-center">
                 <div>
                     <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                    <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_address') . " " . $_settings->info('company_address_1') . " " . $_settings->info('company_postcode') . " " . $_settings->info('company_city') ?></p>
                 </div>
             </div>
             <div class="col-3">
@@ -92,7 +62,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <br><br>
             </div>
         </div>
-     
+
         <table class="table table-hover table-striped">
             <colgroup>
                 <col width="5%">
@@ -118,39 +88,39 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </thead>
             <tbody>
                 <?php
-                        $i = 1;
-                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
-                        while ($row = $qry->fetch_assoc()):
-                            $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-                            $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
+                $i = 1;
+                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID order by unix_timestamp(po.date_updated) ");
+                while ($row = $qry->fetch_assoc()):
+                    $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
+                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
+                    ?>
+                    <tr>
+                        <td class="text-center"><?php echo $i++; ?></td>
+                        <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                        <td class=""><?php echo $row['po_no'] ?></td>
+                        <td class="text-left"><?php echo $row['sname'] ?></td>
+                        <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                        <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                        <td class="text-center">
+                            <?php
+                            switch ($row['status']) {
+                                case '1':
+                                    echo '<span class="badge badge-success">Approved</span>';
+                                    break;
+                                case '2':
+                                    echo '<span class="badge badge-danger">Rejected</span>';
+                                    break;
+                                case '3':
+                                    echo '<span class="badge badge-warning text-danger">Cancelled</span>';
+                                    break;
+                                default:
+                                    echo '<span class="badge badge-secondary">Pending</span>';
+                                    break;
+                            }
                             ?>
-                            <tr>
-                                <td class="text-center"><?php echo $i++; ?></td>
-                                <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
-                                <td class=""><?php echo $row['po_no'] ?></td>
-                                <td class="text-left"><?php echo $row['sname'] ?></td>
-                                <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                                <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
-                                <td class="text-center">
-                                    <?php
-                                    switch ($row['status']) {
-                                        case '1':
-                                            echo '<span class="badge badge-success">Approved</span>';
-                                            break;
-                                        case '2':
-                                            echo '<span class="badge badge-danger">Rejected</span>';
-                                            break;
-                                        case '3':
-                                            echo '<span class="badge badge-warning text-danger">Cancelled</span>';
-                                            break;
-                                        default:
-                                            echo '<span class="badge badge-secondary">Pending</span>';
-                                            break;
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
             </tbody>
         </table>
     </div>
