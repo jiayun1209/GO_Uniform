@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly update !");</script>';
+            echo '<script>alert("Successfuly update !");window.location.href = "?page=category/product_detail&id=' . $currentID . '";</script>';
         } else {
             echo $sql;
         }
