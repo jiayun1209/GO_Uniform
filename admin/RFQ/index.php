@@ -20,8 +20,8 @@
                         <col width="5%">
                         <col width="15%">
                         <col width="15%">
-                        <col width="20%">
-                        <col width="10%">
+                        <col width="15%">
+                        <col width="15%">
                         <col width="15%">
                         <col width="10%">
                         <col width="10%">
@@ -32,7 +32,7 @@
                             <th class="px-1 py-1 text-left">Date Created</th>
                             <th class="px-1 py-1 text-left">RFQ No.</th>
                             <th class="px-1 py-1 text-left">Supplier Name</th>
-                            <th class="px-1 py-1 text-center">Material Details</th>
+                            <th class="px-1 py-1 text-center">Requested Items Count</th>
                             <th class="px-1 py-1 text-right">Total Amount (RM)</th>
                             <th class="px-1 py-1 text-center">Status</th>
                             <th class="px-1 py-1 text-center">Action</th>

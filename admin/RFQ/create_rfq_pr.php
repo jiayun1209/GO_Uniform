@@ -125,10 +125,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity[]"  value="<?php echo ($row['quantity']) ?>"/>
+                                            <input type="number" step="any" class="text-right w-100 border-0" id="qty[]" name="qty[]"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
-                                       <td class="align-middle p-1">
-                                           <input type="text" class="text-center w-100 border-0 item_id" name="item_id" value="<?php echo $row['item_id'] ?>" required/>
+                                        <td class="align-middle p-1">
+                                            <input type="number" class="text-center w-100 border-0" name="item_id[]" value="<?php echo $row['item_id'] ?>" required/>
                                         </td>                                                                
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -184,10 +184,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="quantity[]"/>
+            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"/>
         </td>
         <td class="align-middle p-1">         
-            <input type="text" class="text-center w-100 border-0 item_id"  name="item_id" required/>
+            <input type="number" class="text-center w-100 border-0" name="item_id[]" required/>
         </td>        
         <td class="align-middle p-1">
             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
@@ -207,22 +207,29 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         for (i = 0; i < Array_account.length; i++) {
             if (Array_account[i][0] === document.getElementById("pid").value) {
                 var total = Array_account[i][3] * Array_account[i][2];
+
                 var tr = '<tr class="po-item" data-id="">';
                 tr += '<td class="align-middle p-1 text-center">';
                 tr += '<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button></td>';
                 tr += ' <td class="align-middle p-1">';
-                tr += '<input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity[]" onchange="calculate()" value="'+Array_account[i][3]+'"/></td>';
+                tr += '<input type="number" step="any" class="text-right w-100 border-0" id="qty[]" name="qty[]" onchange="calculate()" value="' + Array_account[i][3] + '"/></td>';
                 tr += '<td class="align-middle p-1">';
-                tr += '<input type="text" class="text-center w-100 border-0 item_id"  name="item_id" value="'+Array_account[i][1]+'" required/>';
+                tr += '<input type="number" class="text-center w-100 border-0" name="item_id[]" value="' + Array_account[i][1] + '" required/>';
                 tr += '<td class="align-middle p-1">';
-                tr += '<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" onchange="calculate()" value="'+Array_account[i][2]+'"/></td>';
-                tr += ' <td class="align-middle p-1 text-right total-price">'+ total +'</td> </tr>';
-                            
-                $('#item-list tbody').append(tr); 
-                                
+                tr += '<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" onchange="calculate()" value="' + Array_account[i][2] + '"/></td>';
+                tr += ' <td class="align-middle p-1 text-right total-price">' + total + '</td> </tr>';
+                $('#item-list tbody').append(tr);
+                
+                var total1 = sum(Array_account[i][3] * Array_account[i][2]);
+                tr += '<tr class="bg-lightblue">';
+                tr += '<tr><th class="p-1 text-right" colspan="4"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></tr>';
+                tr += '<tr><th class="p-1 text-right" colspan="4">Total</th>';
+                tr += '<th class="p-1 text-right" id="total">' + total1 + '</th></tr>';
+
+
                 /*     console.log(Array_account[i]);
                  var table = document.getElementById("item-list");
-                 var row = table.insertRow(1);
+                 var row = table.insertRow(1);j
                  var cell1 = row.insertCell(0);
                  var cell2 = row.insertCell(1);
                  var cell3 = row.insertCell(2);
@@ -243,7 +250,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     function calculate() {
         var _total = 0
         $('.po-item').each(function () {
-            var qty = $(this).find("[name='quantity[]']").val()
+            var qty = $(this).find("[name='qty[]']").val()
             var unit_price = $(this).find("[name='unit_price[]']").val()
             var row_total = 0;
             if (qty > 0 && unit_price > 0) {
@@ -301,7 +308,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             var tr = $('#item-clone tr').clone()
             $('#item-list tbody').append(tr)
             _autocomplete(tr)
-            tr.find('[name="quantity[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+            tr.find('[name="qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
                 calculate()
             })
             $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
@@ -312,13 +319,13 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             $('#item-list .po-item').each(function () {
                 var tr = $(this)
                 _autocomplete(tr)
-                tr.find('[name=quantity[]"],[name="unit_price[]"]').on('input keypress', function (e) {
+                tr.find('[name=qty[]"],[name="unit_price[]"]').on('input keypress', function (e) {
                     calculate()
                 })
                 $('#item-list tfoot').find('[name="discount_percentage"],[name="tax_percentage"]').on('input keypress', function (e) {
                     calculate()
                 })
-                tr.find('[name="quantity[]"],[name="unit_price[]"]').trigger('keypress')
+                tr.find('[name="qty[]"],[name="unit_price[]"]').trigger('keypress')
             })
         } else {
             $('#add_row').trigger('click')
