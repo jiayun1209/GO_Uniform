@@ -42,14 +42,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="q_ID">Quotation Number</label>
-                    <select name="q_ID" id="q_ID" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($q_ID) ? "selected" : '' ?>></option>
+                    <label for="q_id">Quotation Number</label>
+                    <select name="id[]" id="id" class="custom-select custom-select-sm rounded-0 select2 id">
+                        <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
                         $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status!=2");
                         while ($r = $q_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $r['q_ID'] ?>" <?php echo isset($$q_ID) && $$q_ID == $r['q_ID'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
+                            <option value="<?php echo $r['id'] ?>" onchange="_autofill(_details)" <?php echo isset($id) && $id == $r['q_ID'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -61,7 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="name">Supplier Name  <span class="po_err_msg text-danger"></span></label>
-                    <span class='form-control form-control-sm rounded-0'></span>   
+                    <input type="text" class="form-control form-control-sm rounded-0 vendor-name" required/>
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
@@ -250,8 +250,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
         })
     }
-    function _autofill(_name) {
-        _name.find('.vendor_ID').autocomplete({
+    function _autofill(_details) {
+        _details.find('.id').autocomplete({
             source: function (request, response) {
                 $.ajax({
                     url: _base_url_ + "classes/Master.php?f=search_name",
@@ -268,8 +268,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             },
             select: function (event, ui) {
                 console.log(ui)
-                _item.find('input[name="vendor_ID[]"]').val(ui.vendor.vendor_ID)
-                _item.find('.name').text(ui.vendor.name)
+                _details.find('input[name="id[]"]').val(ui.quotation.id)
+                _details.find('.vendor-name').text(ui.vendor.name)
             }
         })
     }

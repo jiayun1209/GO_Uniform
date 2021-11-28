@@ -430,10 +430,10 @@ Class Master extends DBConnection {
 
     function search_name() {
         extract($_POST);
-        $qry = $this->conn->query("SELECT * FROM vendor where `name` LIKE '%{$q}%'");
+        $qry = $this->conn->query("SELECT v.*, q.* FROM `vendor` v inner join `quotation` q on q.vendor_ID = v.vendor_ID where `q_ID` LIKE '%{$q}%'");
         $data = array();
         while ($row = $qry->fetch_assoc()) {
-            $data[] = array("label" => $row['name'], "vendor_ID" => $row['vendor_ID'], "name" => $row['name']);
+            $data[] = array("label" => $row['q_ID'], "id" => $row['id'], "name" => $row['name']);
         }
         return json_encode($data);
     }
@@ -1099,6 +1099,9 @@ switch ($action) {
         break;
     case 'search_items':
         echo $Master->search_items();
+        break;
+    case 'search_name':
+        echo $Master->search_name();
         break;
     case 'search_pr':
         echo $Master->search_pr();
