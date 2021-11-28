@@ -106,8 +106,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         ?></h4>
 		
 	</div>
-	<div class="col-md-12">
-                            <div class="card card-dark">
+	
+                        
 
                                 <div class="card-header">
                                     <h3 class="card-title" id="titleid">Product that related to this category</h3>
@@ -173,9 +173,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
-</div>
+                            
+                       
+
 
 <script>
     $('#producttable').DataTable({
