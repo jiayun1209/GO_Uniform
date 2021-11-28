@@ -60,7 +60,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?>
+                        <?php endwhile; ?><
                     </select>
                 </div>
                 <div class="col-md-6 form-group">

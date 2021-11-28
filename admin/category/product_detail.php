@@ -1,14 +1,9 @@
-<?php
-
-$category_array = array();
-$sql = "SELECT item_code FROM inventory";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = mysqli_fetch_array($result)) {
-        $category_array[] = $row['item_code'];
-    }
-}
-
+<?php if ($_settings->chk_flashdata('success')): ?>
+    <script>
+        alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
+    </script>
+<?php endif; ?>
+    <?php
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM inventory WHERE id = '$id' LIMIT 1";
@@ -22,21 +17,21 @@ if (isset($_GET['id'])) {
         echo '<script>alert("Error !\nPlease try again");window.location.href = "product_detail.php";</script>';
     }
 } else {
-    $sql = "SELECT id FROM inventory ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT item_code FROM inventory ORDER BY item_code DESC LIMIT 1";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_array($result)) {
             $latestnum = ((int) substr($row['id'], 1)) + 1;
             if ($latestnum < 10) {
-                $newid = "P0000{$latestnum}";
+                $newid = "IC0000{$latestnum}";
             } else if ($latestnum < 100) {
-                $newid = "P000{$latestnum}";
+                $newid = "IC000{$latestnum}";
             } else if ($latestnum < 1000) {
-                $newid = "P00{$latestnum}";
+                $newid = "IC00{$latestnum}";
             } else if ($latestnum < 10000) {
-                $newid = "P0{$latestnum}";
+                $newid = "IC0{$latestnum}";
             } else if ($latestnum < 10000) {
-                $newid = "P{$latestnum}";
+                $newid = "IC{$latestnum}";
             }
             break;
         }
@@ -51,40 +46,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $newimg = $current_data["img"];
         }
-
-        $sql = "UPDATE `product`"
-                . " SET img='" . $newimg . "',"
-                . "productname='" . $_POST['productname'] . "',"
-                . "daterelease='" . $_POST['daterelease'] . "',"
-                . "price='" . $_POST['price'] . "',"
-                . "quantity='" . $_POST['quantity'] . "',"
-                . "category='" . $_POST['category'] . "',"
-                . "description='" . $_POST['description'] . "',"
-                . "activation='" . $_POST['activation'] . "'"
-                . " WHERE productid ='" . $current_data["productid"] . "'";
+        
+        $name = $_POST['name'];
+        $item_code = $_POST['item_code'];
+        $description =$_POST['description'] ;
+        $quantity = $_POST['quantity'];
+        $img = $newimg;
+        $price = $_POST['price'];
+        $status = $_POST['activation'];
+        $date_created = $_POST['date_created'];
+        $catalog_ID = $_POST['category'];
+        $vendor_ID = $_POST['vendor'];
+        $currentID = $current_data["id"];
+        
+        $sql = "UPDATE `inventory` SET name = '$name', item_code = '$item_code', img ='$img', description='$description', quantity=$quantity, price=$price,status=$status, date_created ='$date_created', catalog_ID=$catalog_ID, vendor_ID=$vendor_ID where id = $currentID ";
 
         if ($conn->query($sql)) {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly update !");var currentURL = window.location.href;window.location.href = currentURL;</script>';
+            echo '<script>alert("Successfuly update !");</script>';
         } else {
-            echo $sql ;
+            echo $sql;
         }
-    }
-    else {
+    } else {
         $img = $_FILES['img']['name'];
         if ($img) {
             $newimg = "../photo/$img";
         } else {
-            $newimg =null;
+            $newimg = null;
         }
 
         $sql = "INSERT INTO `product`(`productid`, `img`, `productname`, `daterelease`, `price`, `quantity`, `category`, `description`, `activation`) VALUES("
                 . "'" . $_POST['productid'] . "',"
                 . "'" . $newimg . "',"
                 . "'" . $_POST['productname'] . "',"
-                . "'" . $_POST['daterelease'] . "',"
+                . "'" . $_POST['datecreated'] . "',"
                 . $_POST['price'] . ","
                 . $_POST['quantity'] . ","
                 . "'" . $_POST['category'] . "',"
@@ -97,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             echo '<script>alert("Successfuly insert !");window.location.href = "product_detail.php?id=' . $_POST['productid'] . '";</script>';
         } else {
-            echo '<script>alert("'.$sql.'")</script>';
+            echo '<script>alert("' . $sql . '")</script>';
         }
     }
 }
@@ -106,40 +103,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <html>
     <div class="card card-outline card-info">
-    <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Item Details" : "New Item" ?></b> </h3>
-    </div>
-    <body class="hold-transition sidebar-mini layout-fixed" onload="addnew()">
-        <div class="wrapper">
-            <div class="content-wrapper">
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0 text-dark">Product detail</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="product_list.php">Product List</a></li>
-                                    <li class="breadcrumb-item active">Product detail</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="card-header">
+            <h3 class="card-title"><b><?php echo isset($id) ? "Item Details" : "New Item" ?></b> </h3>
+        </div>
+        <body class="hold-transition sidebar-mini layout-fixed" onload="addnew()">
+            <div>
                 <section class="content">
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card card-dark">
 
                                 <div class="card-header">
-                                    <h3 class="card-title" id="titleid">Product id : <?php
+                                    <h3 class="card-title" id="id" name="id">Product id : <?php
                                         if (isset($current_data)) {
-                                            echo $current_data["productid"];
+                                            echo $current_data["id"];
                                         } else {
-                                            echo "(New) " . $newid;
+                                            echo "(New)";
                                         }
                                         ?></h3>
                                 </div>
@@ -174,29 +153,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <div class="row">
 
                                                     <div class="col-md-12">
-                                                        <label>Product id : </label>
+                                                        <label>Product Code : </label>
                                                         <div class="form-group">                                             
                                                             <input class="form-control"  value="<?php
                                                             if (isset($current_data)) {
-                                                                echo $current_data["productid"];
+                                                                echo $current_data["item_code"];
                                                             } else {
                                                                 echo $newid;
                                                             }
-                                                            ?>" name="productid">
+                                                            ?>" name="item_code">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-12">
                                                         <label>Name : </label>
                                                         <div class="form-group">                                             
-                                                            <input class="form-control" id="name" name="productname"  value="<?php
+                                                            <input class="form-control" id="name" name="name"  value="<?php
                                                             if (isset($current_data)) {
-                                                                echo $current_data["productname"];
+                                                                echo $current_data["name"];
                                                             }
                                                             ?>">
                                                         </div>
                                                     </div>
                                                     
+                                                    <div class="col-md-12">
+                                                        <label>Vendor :</label>
+                                                        <div class="form-group">
+                                                            <select name="vendor" id="vendor" class="custom-select custom-select-sm rounded-0 select2">
+                                                                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                                                                <?php
+                                                                $vendor_qry = $conn->query("SELECT * FROM `vendor`");
+                                                                while ($row = $vendor_qry->fetch_assoc()):
+                                                                    ?>
+                                                                    <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($id) && $id == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                                                                <?php endwhile; ?>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    
+
                                                     <div class="col-md-12">
                                                         <label>Date release :</label>
                                                         <div class="input-group">
@@ -205,12 +202,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             </div>
                                                             <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="release_date" maxlength="10" value="<?php
                                                             if (isset($current_data)) {
-                                                                echo $current_data["daterelease"];
+                                                                echo $current_data["date_created"];
                                                             }
-                                                            ?>" readOnly name="daterelease">
+                                                            ?>" readOnly name="date_created">
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="col-md-12">
                                                         <label>Price(RM) :</label>
                                                         <div class="form-group">                                             
@@ -236,19 +233,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <div class="col-md-12">
                                                         <label>Category :</label>
                                                         <div class="form-group">
-                                                            <select class="custom-select" id="category" name="category">
-                                                                <option value="">--Select--</option>
+                                                            <select name="category" id="category" class="custom-select custom-select-sm rounded-0 select2">
+                                                                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                                                                 <?php
-                                                                foreach ($category_array as $selection) {
-                                                                    $selected = ($current_data["category"] == $selection) ? "selected" : "";
-                                                                    echo '<option ' . $selected . ' value="' . $selection . '">' . $selection . '</option>';
-                                                                }
-                                                                echo '</select>';
-                                                                ?>
+                                                                $catalog_qry = $conn->query("SELECT * FROM `catalog`");
+                                                                while ($row = $catalog_qry->fetch_assoc()):
+                                                                    ?>
+                                                                    <option value="<?php echo $row['id'] ?>" <?php echo isset($id) && $id == $row['id'] ? 'selected' : '' ?>><?php echo $row['description'] ?></option>
+                                                                <?php endwhile; ?>
+
                                                             </select>
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <div class="col-md-12">
                                                         <label>Activation :</label>
                                                         <div class="form-group row" style="padding-left: 5px">   
@@ -256,7 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             <div class="custom-control custom-radio col-md-6">
                                                                 <input class="custom-control-input" type="radio" id="customRadio1" name="activation" value="1"  <?php
                                                                 if (isset($current_data)) {
-                                                                    if ($current_data["activation"] == 1) {
+                                                                    if ($current_data["status"] == 1) {
                                                                         echo 'checked';
                                                                     }
                                                                 }
@@ -267,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             <div class="custom-control custom-radio col-md-6">
                                                                 <input class="custom-control-input" type="radio" id="customRadio2" name="activation" value="0"  <?php
                                                                 if (isset($current_data)) {
-                                                                    if ($current_data["activation"] == 0) {
+                                                                    if ($current_data["status"] == 0) {
                                                                         echo 'checked';
                                                                     }
                                                                 }
@@ -281,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <div class="col-md-12">
                                                         <label>Description :</label>
                                                         <div class="form-group">
-                                                            <textarea class="form-control" rows="10" id="description" name="description"><?php
+                                                            <textarea class="form-control" rows="5" id="description" name="description"><?php
                                                                 if (isset($current_data)) {
                                                                     echo $current_data["description"];
                                                                 }
@@ -324,10 +321,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
             </div>
-        </section>
+            </section>
     </div>
-</div>
+
 </body>
+
 </html>
 
 <script>
@@ -338,10 +336,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var btnoption = document.getElementById("btnsave").textContent;
         if (btnoption === "Save") {
             if (confirm("Confirm to unsave ?")) {
-                window.location.href = "product_list.php";
+                window.location.href = "?page=category/";
             }
         } else {
-            window.location.href = "product_list.php";
+            window.location.href = "?page=category/";
         }
     }
 
@@ -401,17 +399,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     function editorsave() {
-        if(document.getElementById("btnsave").textContent === "Save" ){
-            document.getElementById ("form").submit();
-        }else{
+        if (document.getElementById("btnsave").textContent === "Save") {
+            document.getElementById("form").submit();
+        } else {
             editable();
         }
-        
-        
+
+
     }
 
     function isNumberKey(evt) {
-        
+
         var charCode = (evt.which) ? evt.which : event.keyCode;
         if (charCode > 31 && (charCode !== 46 && (charCode < 48 || charCode > 57)))
             return false;
@@ -425,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 return false;
         }
         return true;
-        
+
     }
 
     var loadFile = function (event) {
