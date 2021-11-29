@@ -38,7 +38,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?></b> </h3>
         <div class="card-tools">
             <a href="?page=purchase_orders/create_with_quo" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  With Reference</a>
-                        <a href="?page=purchase_orders/create_with_template" class="btn btn-flat btn-info"><span class="fas fa-plus"></span>  With Template</a>
+            <a href="?page=purchase_orders/create_with_template" class="btn btn-flat btn-info"><span class="fas fa-plus"></span>  With Template</a>
         </div>
     </div>
     <div class="card-body">

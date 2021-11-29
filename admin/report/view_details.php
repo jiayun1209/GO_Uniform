@@ -40,6 +40,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
+        <div class="row">
+            <div class="col-md-3">
+                <label>From: </label>
+                <input type="date" name="start_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="Start Date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
+            </div>
+            <div class="col-md-3 form-group">
+                <label for="end_date">End Date</label>
+                <input type="date" name="end_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="End Date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
+            </div>
+
+            <div class="col-md-3 form-group">
+                <button class="btn btn-sm btn-flat btn-primary" name="search" type="button" href="?page=report/view_details"><i class="fa fa-search"></i> Search</button>
+            </div>
+        </div>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
@@ -47,7 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </div>
 
     <div class="card-body" id="out_print">
-        <div class="row align-middle"><h3 class="card-title text-lg"><b>Purchase Order Details Report</b></h3></div>
+        <div class="row"><h2 class="text-center"><b>PURCHASE ORDER DETAILS REPORT</b></h2></div>
 
         <div class="row">
             <div class="col-9 d-flex align-items-center">
@@ -76,13 +90,13 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
-                    <th class="px-1 py-1 text-center">No.</th>
-                    <th class="px-1 py-1 text-left">Date Created</th>
-                    <th class="px-1 py-1 text-left">PO No.</th>
-                    <th class="px-1 py-1 text-left">Supplier Name</th>
-                    <th class="px-1 py-1 text-center">Items</th>
-                    <th class="px-1 py-1 text-right">Total Amount</th>
-                    <th class="px-1 py-1 text-center">Status</th>
+                    <th class="text-center">No.</th>
+                    <th class="text-left">Date Created</th>
+                    <th class="text-left">PO No.</th>
+                    <th class="text-left">Supplier Name</th>
+                    <th class="text-center">Items</th>
+                    <th class="text-right">Total Amount</th>
+                    <th class="text-center">Status</th>
 
                 </tr>
             </thead>
@@ -96,8 +110,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
-                        <td class=""><?php echo $row['po_no'] ?></td>
+                        <td class="text-left"><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                        <td class="text-left"><?php echo $row['po_no'] ?></td>
                         <td class="text-left"><?php echo $row['sname'] ?></td>
                         <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
                         <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>

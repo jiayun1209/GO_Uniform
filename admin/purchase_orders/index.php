@@ -49,7 +49,7 @@
                             ?>
                             <tr>
                                 <td class="text-center"><?php echo $i++; ?></td>
-                                <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                                <td class=""><?php echo date("d-m-Y H:i", strtotime($row['date_created'])); ?></td>
                                 <td class=""><?php echo $row['po_no'] ?></td>
                                 <td class="text-left"><?php echo $row['sname'] ?></td>
                                 <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
