@@ -10,7 +10,7 @@
 			<a id="btn-export" class="btn btn-flat btn-primary"><span class="fas fa-file-export"></span>
                 Export
             </a>
-			<a href="?page=category/product_detail" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
+			<a href="?page=catalog/product_detail" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
 		</div>
 	</div>
 	<div class="card-body">

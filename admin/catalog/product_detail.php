@@ -11,6 +11,8 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_array($result)) {
             $current_data = $row;
+            $vendor_ID =  $current_data["vendor_ID"];
+            $catalog_ID =  $current_data["catalog_ID"];
             break;
         }
     } else {
@@ -23,12 +25,10 @@ if (isset($_GET['id'])) {
         while ($row = mysqli_fetch_array($result)) {
             $latestnum = ((int) substr($row['item_code'], 2)) + 1;
             if ($latestnum < 10) {
-                $newid = "IC0000{$latestnum}";
-            } else if ($latestnum < 100) {
                 $newid = "IC000{$latestnum}";
-            } else if ($latestnum < 1000) {
+            } else if ($latestnum < 100) {
                 $newid = "IC00{$latestnum}";
-            } else if ($latestnum < 10000) {
+            } else if ($latestnum < 1000) {
                 $newid = "IC0{$latestnum}";
             } else if ($latestnum < 10000) {
                 $newid = "IC{$latestnum}";
@@ -76,13 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newimg = null;
         }
 
-        $sql = "INSERT INTO `inventory`(`item_code`, `name`, `img`, `description`, `quantity`, `price`, `status`, `date_created`, `catalog_ID`,`vendor_ID`) VALUES('$item_code','$name','$newimg','$description',$quantity,$price,$status,'$date_created',$catalog_ID,$vendor_ID)";
+        $sql = "INSERT INTO `inventory`(`item_code`, `name`, `img`, `description`, `quantity`, `price`, `status`, `catalog_ID`,`vendor_ID`) VALUES('$item_code','$name','$newimg','$description',$quantity,$price,$status,$catalog_ID,$vendor_ID)";
 
         if ($conn->query($sql)) {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly insert !");window.location.href = "?page=catalog/";</script>';
+            echo '<script>alert("Successfuly insert!");window.location.href = "?page=inventory/";</script>';
         } else {
             echo '<script>alert("' . $sql . '")</script>';
         }
@@ -169,17 +169,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <div class="col-md-12">
                                                         <label>Vendor :</label>
                                                         <div class="form-group">
-                                                            <select name="vendor" id="vendor" class="custom-select custom-select-sm rounded-0 select2">
-                                                                
-                                                                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                                                            <select name="vendor" id="vendor" class="custom-select custom-select-lsm rounded-0 select2">
+                                                                <option value="" disabled <?php echo!isset ($current_data["vendor_ID"]) ? "selected" : '' ?>></option>
                                                                 <?php
-                                                                $vendor_qry = $conn->query("SELECT * FROM `vendor`");
-                                                                while ($row = $vendor_qry->fetch_assoc()):
+                                                                $supplier_qry = $conn->query("SELECT * FROM `vendor`");
+                                                                while ($row = $supplier_qry->fetch_assoc()):
                                                                     ?>
-                                                                    <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($id) && $id == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                                                                    <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
                                                                 <?php endwhile; ?>
-
-                                                            </select>
+                                                            </select>   
                                                         </div>
                                                     </div>
 
@@ -191,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                                             </div>
-                                                            <input type="text" class="form-control" placeholder="dd/mm/yyyy" id="release_date" maxlength="10" value="<?php
+                                                            <input type="text" class="form-control" placeholder="Leave blank will autogenerate" id="release_date" maxlength="10" value="<?php
                                                             if (isset($current_data)) {
                                                                 echo $current_data["date_created"];
                                                             }
@@ -224,16 +222,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <div class="col-md-12">
                                                         <label>Category :</label>
                                                         <div class="form-group">
-                                                            <select name="category" id="category" class="custom-select custom-select-sm rounded-0 select2">
-                                                                <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                                                            <select name="category" id="category" class="custom-select custom-select-lsm rounded-0 select2">
+                                                                <option value="" disabled <?php echo!isset ($current_data["catalog_ID"]) ? "selected" : '' ?>></option>
                                                                 <?php
-                                                                $catalog_qry = $conn->query("SELECT * FROM `catalog`");
-                                                                while ($row = $catalog_qry->fetch_assoc()):
+                                                                $supplier_qry = $conn->query("SELECT * FROM `catalog`");
+                                                                while ($row = $supplier_qry->fetch_assoc()):
                                                                     ?>
-                                                                    <option value="<?php echo $row['id'] ?>" <?php echo isset($id) && $id == $row['id'] ? 'selected' : '' ?>><?php echo $row['description'] ?></option>
+                                                                    <option value="<?php echo $row['id'] ?>" <?php echo isset($catalog_ID) && $catalog_ID == $row['id'] ? 'selected' : '' ?>><?php echo $row['catalog_ID'] ?> <?php echo $row['description'] ?></option>
                                                                 <?php endwhile; ?>
-
-                                                            </select>
+                                                            </select> 
                                                         </div>
                                                     </div>
 

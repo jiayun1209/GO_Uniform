@@ -117,7 +117,7 @@ if (isset($_GET['id'])) {
                                     <div class="dropdown-menu" role="menu">
                                         <a class="dropdown-item view_data" href="?page=catalog/product_detail&id=<?php echo $row['id'] ?>" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-info text-primary"></span> View</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item edit_data" href="?page=catalog/category_detail&id=<?php echo $row['id'] ?>" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                        <a class="dropdown-item edit_data" href="?page=catalog/product_detail&id=<?php echo $row['id'] ?>" data-id = "<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
                                     </div>
                                 </td>
