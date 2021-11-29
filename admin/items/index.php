@@ -7,7 +7,13 @@
 	<div class="card-header">
 		<h3 class="card-title">List of Items</h3>
 		<div class="card-tools">
-			<a id="btn-export" class="btn btn-flat btn-primary"><span class="fas fa-file-export"></span>
+			<a id="btn-import" class="btn btn-flat btn-primary">
+                <span class="fas fa-file-import"></span>
+                Import
+                <input id="file-upload" type="file" style="display:none" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+            </a>
+			<a id="btn-export" class="btn btn-flat btn-primary">
+                <span class="fas fa-file-export"></span>
                 Export
             </a>
 			<a href="?page=catalog/product_detail" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Create New</a>
@@ -124,19 +130,21 @@
                     
                     var data = itemList.map(function(item, index){
                         var statusArr = ["Inactive", "Active"];
-                        return [++index, item["item_code"], item["name"], item["description"], item["quantity"], "RM "+item["price"], statusArr[item["status"]], item["date_created"]];
+                        return [++index, item["item_code"], item["name"], item["description"], item["quantity"], "RM "+item["price"], statusArr[item["status"]], item["catalog_name"], item["catalog_ID"], item["date_created"]];
                     });
                     
                     var filename = `inventory.xlsx`;
                     var ws_name = "Inventory";
                     
-                    data = [["No", "Item Code", "Name", "Description", "Quantity", "Price", "Status", "Date Created"], ...data];
+                    data = [["No", "Item Code", "Name", "Description", "Quantity", "Price", "Status", "Catalog Name", "Catalog ID", "Date Created"], ...data];
                     
                     var wb = XLSX.utils.book_new();
                     var ws = XLSX.utils.aoa_to_sheet(data);
                     
                     var wscols = [
                         {wch: 3},
+                        {wch: 25},
+                        {wch: 25},
                         {wch: 25},
                         {wch: 25},
                         {wch: 25},
@@ -151,6 +159,42 @@
                     XLSX.writeFile(wb, filename);
                 }
             })
+        });
+        
+        $("#btn-import").click(function(){
+            $("#file-upload")[0].click();
+        });
+        
+        $("#file-upload").on("change", function(e){
+            var elFile = this.files[0];
+
+            var reader = new FileReader();
+            reader.readAsDataURL(elFile);
+            reader.onload = function (){
+                e.currentTarget.file = reader.result;
+                
+                var data = {
+                    file: $("#file-upload")[0].file
+                }
+
+                $.ajax({
+                    url: _base_url_ + "admin/api/item/import.php",
+                    method: "POST",
+                    data: data,
+                    error:err=>{
+                        console.log(err);
+                        alert_toast("An error occured.",'error');
+                        end_loader();
+                    },
+                    success:function(response){
+                        if(response == 1){
+                            location.reload();
+                        }
+                    }
+                })
+            };
+            
+            
         });
 	})
     
