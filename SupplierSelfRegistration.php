@@ -29,29 +29,38 @@ if (isset($_POST['submit'])) {
     $sub_status = "registered";
     $productGrp = $_POST['productGrp'];
     $description = $_POST['description'];
-    $querySub = "";
-    $query1 = "";
-    $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
-    $sql_u = "SELECT * FROM vendor WHERE name='$fullName'";
-    $sql_e = "SELECT * FROM subcontractor WHERE name='$fullName'";
+    
+    
+    $sql_u = "SELECT * FROM vendor WHERE email='$supplierEmail'";
+    $sql_e = "SELECT * FROM subcontractor WHERE email='$supplierEmail'";
+    
     $res_u = mysqli_query($dbc, $sql_u);
     $res_e = mysqli_query($dbc, $sql_e);
 
     if (mysqli_num_rows($res_u) > 0) {
-        $checked = mysqli_query($dbc, "DELETE from vendor where name = '$fullName' ");
+        $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
+        $checked = mysqli_query($dbc, "DELETE from vendor where email='$supplierEmail'");
     } else if (mysqli_num_rows($res_e) > 0) {
-        $checked = mysqli_query($dbc, "DELETE from subcontractor where name = '$fullName' ");
+        $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
+        $checked = mysqli_query($dbc, "DELETE from subcontractor where email='$supplierEmail'");
     } else{
+        $checkedCom = "";
         $checked = "";
     }
     
-    if ($checked) {
+    if ($checkedCom && $checked) {
     echo "<script>alert('Checked existing db');</script>";
 }
 
+    $querySub = "";
+    $query1 = "";
+    $query = "";
+
     if ($productGrp == "others") {
+        $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
         $querySub = mysqli_query($dbc, "insert into subcontractor(name,company_code,email,registration_status,description) values('$fullName','$companyReg','$supplierEmail','$sub_status','$description')");
     } else {
+        $query = mysqli_query($dbc, "insert into company(company_code,company_name,address,currency,language) values('$companyReg','$companyName','$address','$currency','$language')");
         $query1 = mysqli_query($dbc, "insert into vendor(name,company_code,registration_status,email,product,description) values('$fullName','$companyReg','$status','$supplierEmail','$productGrp','$description')");
     }
     $fileCount = count($_FILES['file']['name']);
@@ -80,13 +89,15 @@ if (isset($_POST['submit'])) {
         //        echo "Failed to upload file.";
         //    }
     }
-}
-
-if ($query && $query2 && ($querySub || $query1)) {
+    
+    if ($query2 && $query && ($querySub || $query1)) {
     echo "<script>alert('You are successfully register');</script>";
 } else {
     echo "<script>alert('Not register something went worng');</script>";
 }
+}
+
+
 ?>
 <!DOCTYPE html>
 <!--

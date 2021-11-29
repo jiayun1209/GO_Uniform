@@ -8,7 +8,6 @@ if (isset($_POST['sendMailBtn'])) {
     $message = $_POST['message'];
     $message1 = $_POST['message'];
     $messages = "$message1";
-
     $to = "$toEmail";
     $subject = "$subjectName";
     $headers = "MIME-Version: 1.0" . "\r\n";
