@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly insert!");window.location.href = "?page=inventory/";</script>';
+            echo '<script>alert("Successfuly insert!");window.location.href = "?page=items/";</script>';
         } else {
             echo '<script>alert("' . $sql . '")</script>';
         }
