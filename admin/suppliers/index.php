@@ -71,8 +71,7 @@
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['vendor_ID'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="'<?php echo $row['vendor_ID'] ?>'"><span class="fa fa-trash text-danger"></span> Delete</a>
-                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="?page=suppliers/send_supplier&id=<?php echo $row['vendor_ID'] ?>"><span class="fa fa-envelope text-primary"></span> Send Email</a>                                       
                                     </div>
                                 </td>
                             </tr>
