@@ -130,13 +130,13 @@
                     
                     var data = itemList.map(function(item, index){
                         var statusArr = ["Inactive", "Active"];
-                        return [++index, item["item_code"], item["name"], item["description"], item["quantity"], "RM "+item["price"], statusArr[item["status"]], item["catalog_name"], item["catalog_ID"], item["date_created"]];
+                        return [++index, item["item_code"], item["name"], item["img"], item["description"], item["quantity"], "RM "+item["price"], statusArr[item["status"]], item["catalog_name"], item["catalog_ID"], item["vendor_ID"],item["date_created"]];
                     });
                     
                     var filename = `inventory.xlsx`;
                     var ws_name = "Inventory";
                     
-                    data = [["No", "Item Code", "Name", "Description", "Quantity", "Price", "Status", "Catalog Name", "Catalog ID", "Date Created"], ...data];
+                    data = [["No", "Item Code", "Name", "IMG", "Description", "Quantity", "Price", "Status", "Catalog Name", "Catalog ID","Vendor ID", "Date Created"], ...data];
                     
                     var wb = XLSX.utils.book_new();
                     var ws = XLSX.utils.aoa_to_sheet(data);

@@ -18,13 +18,15 @@
                 'id' => $row['id'],
                 'item_code' => $row['item_code'],
                 'name' => $row['name'],
+                'img' => $row['img'],
                 'description' => $row['description'],
                 'quantity' => $row['quantity'],
                 'price' => $row['price'],
                 'status' => $row['status'],
                 'date_created' => $row['date_created'],
                 'catalog_ID' => $row['catalog_ID'],
-                'catalog_name' => $row['name']
+                'catalog_name' => $row['name'],
+                'vendor_ID' => $row['vendor_ID']
             ];
         }
         
