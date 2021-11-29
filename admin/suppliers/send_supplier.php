@@ -21,11 +21,11 @@ $comp_add = $_settings->info('company_address');
 $comp_img = $_settings->info('logo');
 $name = $toEmail = $supplier["name"];
 $sup_code = $supplier['company_code'];
-$status = $supplier['registration_status'];
-if ($status == 1) {
+$status = $_settings->info('registration_status');
+if ($status == '1') {
    $newstatus = "Congratulation, Your application is *Approved*!";
-} else if ($status == 2) {
-   $newstatus = "unfortunately, Your application is *Rejected*!";
+} else {
+   $newstatus = "Unfortunately, Your application is *Rejected*!";
 }
 
 $prod = $supplier['product'];
@@ -171,9 +171,9 @@ if (isset($_POST['sendMailBtn'])) {
                 <p class="m-0">: <?php echo $supplier['description'] ?></p>
                 <p class="m-0">: 
                     <?php
-                    if ($supplier['registration_status'] == 1) {
+                    if ($supplier['registration_status'] == '1') {
                         echo "Approved";
-                    } else if ($supplier['registration_status'] == 2) {
+                    } else if ($supplier['registration_status'] == '0') {
                         echo "Rejected";
                     }
                     ?></p>

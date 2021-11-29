@@ -3,7 +3,7 @@
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
     </script>
 <?php endif; ?>
-    <?php
+<?php
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM inventory WHERE id = '$id' LIMIT 1";
@@ -17,11 +17,11 @@ if (isset($_GET['id'])) {
         echo '<script>alert("Error !\nPlease try again");window.location.href = "product_detail.php";</script>';
     }
 } else {
-    $sql = "SELECT item_code FROM inventory ORDER BY item_code DESC LIMIT 1";
+    $sql = "SELECT item_code FROM `inventory` ORDER BY item_code DESC LIMIT 1";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = mysqli_fetch_array($result)) {
-            $latestnum = ((int) substr($row['id'], 1)) + 1;
+            $latestnum = ((int) substr($row['item_code'], 2)) + 1;
             if ($latestnum < 10) {
                 $newid = "IC0000{$latestnum}";
             } else if ($latestnum < 100) {
@@ -39,6 +39,17 @@ if (isset($_GET['id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $item_code = $_POST['item_code'];
+    $description = $_POST['description'];
+    $quantity = $_POST['quantity'];
+    $price = $_POST['price'];
+    $status = $_POST['activation'];
+    $date_created = $_POST['date_created'];
+    $catalog_ID = $_POST['category'];
+    $vendor_ID = $_POST['vendor'];
+    $currentID = $current_data["id"];
+
     if (isset($_GET['id'])) {
         $img = $_FILES['img']['name'];
         if ($img) {
@@ -46,28 +57,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $newimg = $current_data["img"];
         }
-        
-        $name = $_POST['name'];
-        $item_code = $_POST['item_code'];
-        $description =$_POST['description'] ;
-        $quantity = $_POST['quantity'];
-        $img = $newimg;
-        $price = $_POST['price'];
-        $status = $_POST['activation'];
-        $date_created = $_POST['date_created'];
-        $catalog_ID = $_POST['category'];
-        $vendor_ID = $_POST['vendor'];
-        $currentID = $current_data["id"];
-        
-        $sql = "UPDATE `inventory` SET name = '$name', item_code = '$item_code', img ='$img', description='$description', quantity=$quantity, price=$price,status=$status, date_created ='$date_created', catalog_ID=$catalog_ID, vendor_ID=$vendor_ID where id = $currentID ";
+
+        $sql = "UPDATE `inventory` SET name = '$name', item_code = '$item_code', img ='$newimg', description='$description', quantity=$quantity, price=$price,status=$status, date_created ='$date_created', catalog_ID=$catalog_ID, vendor_ID=$vendor_ID where id = $currentID ";
 
         if ($conn->query($sql)) {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly update !");window.location.href = "?page=category/product_detail&id=' . $currentID . '";</script>';
+            echo '<script>alert("Successfuly update !");window.location.href = "?page=catalog/product_detail&id=' . $currentID . '";</script>';
         } else {
-            echo $sql;
+            echo '<script>alert("' . $sql . '")</script>';
         }
     } else {
         $img = $_FILES['img']['name'];
@@ -77,22 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newimg = null;
         }
 
-        $sql = "INSERT INTO `product`(`productid`, `img`, `productname`, `daterelease`, `price`, `quantity`, `category`, `description`, `activation`) VALUES("
-                . "'" . $_POST['productid'] . "',"
-                . "'" . $newimg . "',"
-                . "'" . $_POST['productname'] . "',"
-                . "'" . $_POST['datecreated'] . "',"
-                . $_POST['price'] . ","
-                . $_POST['quantity'] . ","
-                . "'" . $_POST['category'] . "',"
-                . "'" . $_POST['description'] . "',"
-                . "'" . $_POST['activation'] . "')";
+        $sql = "INSERT INTO `inventory`(`item_code`, `name`, `img`, `description`, `quantity`, `price`, `status`, `date_created`, `catalog_ID`,`vendor_ID`) VALUES('$item_code','$name','$newimg','$description',$quantity,$price,$status,'$date_created',$catalog_ID,$vendor_ID)";
 
         if ($conn->query($sql)) {
             if ($img) {
                 move_uploaded_file($_FILES['img']['tmp_name'], "../photo/$img");
             }
-            echo '<script>alert("Successfuly insert !");window.location.href = "product_detail.php?id=' . $_POST['productid'] . '";</script>';
+            echo '<script>alert("Successfuly insert !");window.location.href = "?page=catalog/";</script>';
         } else {
             echo '<script>alert("' . $sql . '")</script>';
         }
@@ -175,11 +165,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             ?>">
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="col-md-12">
                                                         <label>Vendor :</label>
                                                         <div class="form-group">
                                                             <select name="vendor" id="vendor" class="custom-select custom-select-sm rounded-0 select2">
+                                                                
                                                                 <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                                                                 <?php
                                                                 $vendor_qry = $conn->query("SELECT * FROM `vendor`");
@@ -192,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         </div>
                                                     </div>
 
-                                                    
+
 
                                                     <div class="col-md-12">
                                                         <label>Date release :</label>
@@ -245,7 +236,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="col-md-12">
                                                         <label>Activation :</label>
                                                         <div class="form-group row" style="padding-left: 5px">   
@@ -336,10 +327,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var btnoption = document.getElementById("btnsave").textContent;
         if (btnoption === "Save") {
             if (confirm("Confirm to unsave ?")) {
-                window.location.href = "?page=category/";
+                window.location.href = "?page=catalog/";
             }
         } else {
-            window.location.href = "?page=category/";
+            window.location.href = "?page=catalog/";
         }
     }
 
@@ -374,7 +365,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         document.getElementById("btncancel").disabled = false;
         document.getElementById("img").disabled = false;
         document.getElementById("name").readOnly = false;
-        document.getElementById("release_date").readOnly = false;
+        document.getElementById("date_created").readOnly = false;
         document.getElementById("price").readOnly = false;
         document.getElementById("discount").readOnly = false;
         document.getElementById("quantity").readOnly = false;
