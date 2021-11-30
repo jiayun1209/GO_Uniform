@@ -46,6 +46,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="text" class="form-control form-control-sm rounded-0" id="tem_name" name="tem_name" required value="<?php echo isset($tem_name) ? $tem_name : '' ?>">
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier Name</label>
