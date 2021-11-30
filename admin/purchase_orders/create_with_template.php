@@ -298,7 +298,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _item.find('.item_id').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _base_url_ + "classes/Master.php?f=search_items",
+                    url: base_url + "classes/Master.php?f=search_items",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -322,7 +322,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _name.find('.vendor_ID').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: _base_url_ + "classes/Master.php?f=search_name",
+                    url: base_url + "classes/Master.php?f=search_name",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -388,7 +388,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=save_po",
+                url: base_url + "classes/Master.php?f=save_po",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
