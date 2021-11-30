@@ -1,3 +1,34 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@ClementSee 
+jiayun1209
+/
+GO_Uniform
+Public
+1
+0
+1
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+GO_Uniform/admin/api/SimpleXLSX.php /
+
+suefa import and export
+Latest commit a403e7d yesterday
+ History
+ 0 contributors
+1116 lines (940 sloc)  28.6 KB
+   
 <?php
 /**
  *    SimpleXLSX php class
@@ -256,7 +287,6 @@ class SimpleXLSX {
 		}
 		// Cut end of central directory
 		/*		$aE = explode("\x50\x4b\x05\x06", $vZ);
-
 				if (count($aE) == 1) {
 					$this->error('Unknown format');
 					return false;
@@ -839,7 +869,6 @@ class SimpleXLSX {
 		/*
 		if ( $ref !== '' ) { // 0.6.8
 			$index = $this->getIndex( $ref );
-
 			return [ $index[0] + 1, $index[1] + 1 ];
 		}
 		*/
