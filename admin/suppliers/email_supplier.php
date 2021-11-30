@@ -6,9 +6,8 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">List of Suppliers</h3>
-        <div class="card-tools">
-            <a href="?page=suppliers/invite_list" id="create_new" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  Invite Vendor</a>
-             <a href="?page=suppliers/email_supplier" class="btn btn-flat btn-info"><span class="fas fa-envelope"></span>  Send Email</a>
+        <div class="card-tools">           
+             <a class="btn btn-sm btn-flat btn-default" href="?page=suppliers">Back</a>
         </div>
     </div>
     <div class="card-body">
@@ -40,7 +39,7 @@
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT * from `vendor` order by (`vendor_ID`) asc ");
+                        $qry = $conn->query("SELECT * from `vendor` WHERE registration_status = 1 || registration_status = 0 order by (`vendor_ID`) asc ");
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
@@ -50,12 +49,8 @@
                                 <td class="text-center">
                                     <?php if ($row['registration_status'] == 1): ?>
                                         <span class="badge badge-success">Approved</span>
-                                    <?php elseif ($row['registration_status'] == 2): ?>
-                                        <span class="badge badge-warning">Registered</span>
-                                            <?php elseif ($row['registration_status'] == 3): ?>
-                                        <span class="badge badge-secondary">Invited</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-dark">Rejected</span>
+                                    <?php elseif ($row['registration_status'] == 0): ?>
+                                        <span class="badge badge-warning">Rejected</span>                                            
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo $row['email'] ?></td>
@@ -72,6 +67,7 @@
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item edit_data" href="javascript:void(0)" data-id = "<?php echo $row['vendor_ID'] ?>"><span class="fa fa-edit text-primary"></span> Edit</a>
                                         <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="?page=suppliers/send_supplier&id=<?php echo $row['vendor_ID'] ?>"><span class="fa fa-envelope text-primary"></span> Send Email</a>                                       
                                     </div>
                                 </td>
                             </tr>

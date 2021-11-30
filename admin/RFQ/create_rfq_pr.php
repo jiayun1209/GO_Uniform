@@ -196,7 +196,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
-    var c = false;
+
     function select_id_check_qty() {
         var elmtTable = document.getElementById('item-list');
         var tableRows = elmtTable.getElementsByTagName('tr');
@@ -204,10 +204,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         for (var x = rowCount - 3; x > 0; x--) {
             document.getElementById("item-list").deleteRow(1);
         }
+        var totalsum = 0;
         for (i = 0; i < Array_account.length; i++) {
             if (Array_account[i][0] === document.getElementById("pid").value) {
                 var total = Array_account[i][3] * Array_account[i][2];
-
+                totalsum += total;
                 var tr = '<tr class="po-item" data-id="">';
                 tr += '<td class="align-middle p-1 text-center">';
                 tr += '<button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button></td>';
@@ -219,13 +220,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 tr += '<input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" onchange="calculate()" value="' + Array_account[i][2] + '"/></td>';
                 tr += ' <td class="align-middle p-1 text-right total-price">' + total + '</td> </tr>';
                 $('#item-list tbody').append(tr);
-                
-                var total1 = sum(Array_account[i][3] * Array_account[i][2]);
-                tr += '<tr class="bg-lightblue">';
-                tr += '<tr><th class="p-1 text-right" colspan="4"><span><button class="btn btn btn-sm btn-flat btn-primary py-0 mx-1" type="button" id="add_row">Add Row</button></tr>';
-                tr += '<tr><th class="p-1 text-right" colspan="4">Total</th>';
-                tr += '<th class="p-1 text-right" id="total">' + total1 + '</th></tr>';
-
 
                 /*     console.log(Array_account[i]);
                  var table = document.getElementById("item-list");
@@ -243,6 +237,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                  cell5.innerHTML = '<td class="align-middle p-1 text-right total-price">' + total + '</td>';*/
             }
         }
+        document.getElementById("total").textContent = totalsum;       
     }
     function rem_item(_this) {
         _this.closest('tr').remove();

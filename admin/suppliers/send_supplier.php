@@ -23,9 +23,9 @@ $name = $toEmail = $supplier["name"];
 $sup_code = $supplier['company_code'];
 $status = $_settings->info('registration_status');
 if ($status == '1') {
-   $newstatus = "Congratulation, Your application is *Approved*!";
+    $newstatus = "Congratulation, Your application is *Approved*!";
 } else {
-   $newstatus = "Unfortunately, Your application is *Rejected*!";
+    $newstatus = "Unfortunately, Your application is *Rejected*!";
 }
 
 $prod = $supplier['product'];
@@ -74,12 +74,14 @@ if (isset($_POST['sendMailBtn'])) {
                 <p class="m-0"><b>Vendor Application Details</b></p>
                 <div>
                     <p>Vendor Name     : ' . $name . '</p>
-                    <p>Company Code    : ' . $sup_code . '</p>  
-                    <p>Registration Status    : ' . $newstatus . '</p>  
+                    <p>Company Code    : ' . $sup_code . '</p>                      
                     <p>Email address   :' . $toEmail . '</p>
                     <p>Product offered :' . $product . ' </p>
                     <p>Description     : ' . $desc . '</p>
+                    <p>Registration Status    : ' . $newstatus . '</p>  
                 </div>
+                <br>
+                 <small> Thanks for register this application as supplier to our <b> GO Uniform Sdn Bhd</b> company! </small>
             </div>           
         </div>      
 			<br/>
