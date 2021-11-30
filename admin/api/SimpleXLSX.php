@@ -1,4 +1,3 @@
-
 <?php
 /**
  *    SimpleXLSX php class
