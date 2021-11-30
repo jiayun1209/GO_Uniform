@@ -61,7 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 
 
     <div class="card-body ml-5 mr-5" id="out_print">
-        <div class="row"><h2 class="text-center"><b>CANCELLED PURCHASE ORDER REPORT</b></h2></div>
+        <div class="row"><h2 class="text-center"><b>SUPPLIER APPROVED LIST</b></h2></div>
 
         <div class="row">
             <div class="col-9 d-flex align-items-center">
@@ -77,45 +77,38 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
         </div>
 
-        <table class="table table-hover table-striped" id="datatables">
+        <table class="table table-hover table-striped">
             <colgroup>
                 <col width="5%">
-                <col width="16%">
-                <col width="14%">
-                <col width="17%">
-                <col width="5%">
-                <col width="21%">
-                <col width="22%">
-
+                <col width="20%">
+                <col width="20%">
+                <col width="15%">
+                <col width="20%">
+                <col width="20%">
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
-                    <th class="text-center">No.</th>
-                    <th class="text-left">Delivery Date</th>
-                    <th class="text-left">PO No.</th>
-                    <th class="text-left">Supplier Name</th>
-                    <th class="text-center">Items</th>
-                    <th class="text-right">Total Amount (RM)</th>
-                    <th class="text-left">Cancellation Reason</th>
-
+                    <th class="px-1 py-1 text-center">No.</th>
+                    <th class="px-1 py-1 text-left">Company</th>
+                    <th class="px-1 py-1 text-left">Supplier Name</th>
+                    <th class="px-1 py-1 text-left">Email Address</th>
+                    <th class="px-1 py-1 text-left">Products Offered</th>
+                    <th class="px-1 py-1 text-left">Description</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status=3 order by unix_timestamp(po.date_updated) ");
+                $qry = $conn->query("SELECT c.*, s.* FROM `company` c inner join `vendor` s on s.company_code  = c.company_code where `registration_status` =1");
                 while ($row = $qry->fetch_assoc()):
-                    $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo date("d-m-Y", strtotime($row['delivery_date'])); ?></td>
-                        <td class="text-left"><?php echo $row['po_no'] ?></td>
-                        <td class="text-left"><?php echo $row['sname'] ?></td>
-                        <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
-                        <td class="text-left"><?php echo $row['cancel_reason'] ?></td>
+                        <td class=""><?php echo ($row['company_code']) . " - " . ($row['company_name']); ?></td>
+                        <td class=""><?php echo $row['name'] ?></td>
+                        <td class="text-left"><?php echo $row['email'] ?></td>
+                        <td class="text-left"><?php echo $row['product'] ?></td>
+                        <td class="text-left"><?php echo $row['description'] ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

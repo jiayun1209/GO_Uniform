@@ -39,28 +39,28 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
 </style>
 <div class="card card-outline card-info">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-3">
-                <label>From: </label>
-                <input type="date" name="start_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="Start Date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
-            </div>
-            <div class="col-md-3 form-group">
-                <label for="end_date">End Date</label>
-                <input type="date" name="end_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="End Date" value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
-            </div>
-
-            <div class="col-md-3 form-group">
-                <button class="btn btn-sm btn-flat btn-primary" name="search" type="button" href="?page=report/view_details"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
+    <div class="card-header ml-5 mr-5 mt-3 mb-2">
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
+        <div class="row date">
+            <label class="py-2">From: </label>
+            <div class="col-md-3 form-group">
+                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
+            </div>
+            <label class="px-2 py-2 text-center">To: </label>
+            <div class="col-md-3 form-group">
+                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
+            </div>
+        </div>
     </div>
 
-    <div class="card-body" id="out_print">
+
+    <div class="card-body ml-5 mr-5" id="out_print">
         <div class="row"><h2 class="text-center"><b>PURCHASE ORDER DETAILS REPORT</b></h2></div>
 
         <div class="row">
@@ -77,25 +77,25 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
         </div>
 
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped" id="datatables">
             <colgroup>
                 <col width="5%">
                 <col width="15%">
                 <col width="15%">
                 <col width="20%">
                 <col width="10%">
+                <col width="20%">
                 <col width="15%">
-                <col width="10%">
 
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
                     <th class="text-center">No.</th>
-                    <th class="text-left">Date Created</th>
+                    <th class="text-left">Delivery Date</th>
                     <th class="text-left">PO No.</th>
                     <th class="text-left">Supplier Name</th>
                     <th class="text-center">Items</th>
-                    <th class="text-right">Total Amount</th>
+                    <th class="text-right">Total Amount (RM)</th>
                     <th class="text-center">Status</th>
 
                 </tr>
@@ -110,11 +110,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                        <td class="text-left"><?php echo date("d-m-Y", strtotime($row['delivery_date'])); ?></td>
                         <td class="text-left"><?php echo $row['po_no'] ?></td>
                         <td class="text-left"><?php echo $row['sname'] ?></td>
                         <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                        <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                         <td class="text-center">
                             <?php
                             switch ($row['status']) {
@@ -185,5 +185,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 }, 300);
             }, 200);
         })
+    })
+    $(document).ready(function () {
+        $('.delete_data').click(function () {
+            _conf("Are you sure to delete this rent permanently?", "delete_rent", [$(this).attr('data-id')])
+        })
+        $('.view_details').click(function () {
+            uni_modal("Reservaton Details", "purchase_orders/view_details.php?id=" + $(this).attr('data-id'), 'mid-large')
+        })
+        $('.renew_data').click(function () {
+            _conf("Are you sure to renew this rent data?", "renew_rent", [$(this).attr('data-id')]);
+        })
+        $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
