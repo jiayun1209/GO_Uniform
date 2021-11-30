@@ -19,7 +19,18 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Admin</a>
+            <?php if ($_settings->userdata('type') == 1): ?>
+                <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Admin</a>
+            <?php endif; ?>
+            <?php if ($_settings->userdata('type') == 2): ?>
+                <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Manager</a>
+            <?php endif; ?>
+            <?php if ($_settings->userdata('type') == 3): ?>
+                <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Staff</a>
+            <?php endif; ?>
+            <?php if ($_settings->userdata('type') == 4): ?>
+                <a href="<?php echo base_url ?>" class="nav-link"><?php echo (!isMobileDevice()) ? $_settings->info('name') : $_settings->info('short_name'); ?> - Branches</a>
+            <?php endif; ?>
         </li>
     </ul>
     <!-- Right navbar links -->
@@ -65,12 +76,12 @@
             </div>
         </li>
         <li class="nav-item nav-item-alert">
-             <span style="display: inline-block;margin-right: 1em;">
+            <span style="display: inline-block;margin-right: 1em;">
                 <a class="btn" data-toggle="collapse" href="#alert" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <i class="fa fa-bell" style="color: #666"></i>
                 </a>
                 <span class="alert-count">
-                   0
+                    0
                 </span>
             </span>
             <div class="collapse" id="alert" style=" position: absolute; right: 1em; ">
@@ -88,15 +99,15 @@
 </nav>
 
 <script>
-    $(function(){
+    $(function () {
         $.ajax({
-            url:"api/alert/getList.php",
+            url: "api/alert/getList.php",
             type: "get",
-            success: function(response){
-                if(response != -1){
+            success: function (response) {
+                if (response != -1) {
                     var alertList = response;
-                    var alertHtml = alertList.map(function(alertItem){
-                                        return `<div class="alert-item">
+                    var alertHtml = alertList.map(function (alertItem) {
+                        return `<div class="alert-item">
                                                     <div class="title">
                                                         <a href="${alertItem.url}">${alertItem.alert_name}</a>
                                                     </div>
@@ -104,16 +115,16 @@
                                                         ${alertItem.description}
                                                     </div>
                                                 </div>`;
-                                    });
+                    });
                     $("#alert").find(".card-body").html(alertHtml);
                     $(".nav-item-alert").find(".alert-count").text(alertList.length);
-                    
+
                     OverlayScrollbars($("#alert").find(".card-body")[0]);
                 }
             }
         });
-        
-        
+
+
 
     })
 </script>

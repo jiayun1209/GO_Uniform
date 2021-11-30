@@ -1,14 +1,4 @@
 <?php
-$Array_account = array();
-$sql = "SELECT * FROM quotation";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = mysqli_fetch_array($result)) {
-        array_push($Array_account, $row);
-    }
-}
-echo '<script>var Array_account = ' . json_encode($Array_account) . ';</script>';
-
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT * from `quotation` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
@@ -61,21 +51,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['company_code'] ?> <?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
-                    </select>                                        
-                    <label for="pr_ID">PR ID</label>
-                    <select name="pr_ID" id="pr_ID" class="custom-select custom-select-lsm rounded-0 select0" onclick="select_id_check_qty() onchange ="select_id_check_qty()">
-                        <?php
-                        $sql = "SELECT p.*,d.* FROM purchase_requisitions p, purchase_requisitions_details d where p.id = d.pr_id AND p.status != 0";
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                            while ($row = mysqli_fetch_array($result)) {
-                                echo"<option value=" . $row["id"] . ">" . $row["pr_no"] . "</option>";
-                            }
-                        } else {
-                            echo '<script>alert("Invalid input !")</script>';
-                        }
-                        ?>
-                    </select>
+                    </select>   
                 </div> 
                 <div class="col-md-6 form-group">
                     <label for="q_ID">RFQ NO# <span class="po_err_msg text-danger"></span></label>
@@ -117,7 +93,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                                $rqry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.pr_id,p.quantity FROM `quotation` o , inventory i, purchase_requisitions_details p WHERE p.item_id = i.id AND p.pr_id = o.pr_ID AND o.pr_ID = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id'");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -128,18 +104,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="quantity"  value="<?php echo ($row['quantity']) ?>"/>
+                                            <input type="number" step="any" class="text-right w-100 border-0" id="quantity" name="qty[]"  value="<?php echo ($row['quantity']) ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
                                             <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
-                                        </td>                                        
+                                        </td>
                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
-                                        <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                     
+                                        <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
                                         </td>
-                                        <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
+                                       <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
                                     </tr>
                                     <?php
                                 endwhile;
@@ -190,7 +166,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="quantity"/>
+            <input type="number" step="any" class="text-right w-100 border-0" name="qty[]"/>
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
@@ -205,16 +181,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     </tr>
 </table>
 <script>
-    function select_id_check_qty() {
-        var i = 0;
-        while (Array_account) {
-            if (Array_account[i][0].toString() === document.getElementById("pr_ID").value) {
-                document.getElementById("quantity").value = Array_account[i][1].toString();
-            }
-            i++;
-        }
-    }
-    function rem_item(_this) {
+ function rem_item(_this) {
         _this.closest('tr').remove()
     }
     function calculate() {
@@ -270,8 +237,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
-                _item.find('input[name="pr_id[]"]').val(ui.pr.id)
-                _item.find('.qty').text(ui.qty)
             }
         })
     }
@@ -315,7 +280,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             e.preventDefault();
             var _this = $(this)
             $('.err-msg').remove();
-            $('[name="q_ID"]').removeClass('border-danger')
+            $('[name="po_no"]').removeClass('border-danger')
             if ($('#item-list .po-item').length <= 0) {
                 alert_toast(" Please add at least 1 item on the list.", 'warning')
                 return false;
@@ -346,7 +311,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         $("html, body").animate({scrollTop: 0}, "fast");
                         end_loader()
                         if (resp.status == 'po_failed') {
-                            $('[name="q_ID"]').addClass('border-danger').focus()
+                            $('[name="po_no"]').addClass('border-danger').focus()
                         }
                     } else {
                         alert_toast("An error occured", 'error');

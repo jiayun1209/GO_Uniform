@@ -38,7 +38,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <h3 class="card-title"><b><?php echo isset($id) ? "Update Purchase Order Details" : "New Purchase Order" ?></b> </h3>
         <div class="card-tools">
             <a href="?page=purchase_orders/create_with_quo" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span>  With Reference</a>
-                        <a href="?page=purchase_orders/create_with_template" class="btn btn-flat btn-info"><span class="fas fa-plus"></span>  With Template</a>
+            <a href="?page=purchase_orders/create_with_template" class="btn btn-flat btn-info"><span class="fas fa-plus"></span>  With Template</a>
         </div>
     </div>
     <div class="card-body">
@@ -60,7 +60,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?>
+                        <?php endwhile; ?><
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
@@ -144,7 +144,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <th class="p-1 text-right" colspan="6">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
-                            </tr>
+                            
                         </tfoot>
                     </table>
                     <div class="row">

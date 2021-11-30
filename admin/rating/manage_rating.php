@@ -29,7 +29,7 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
         </div> 
         <div class="form-group">
             <label for="po" class="control-label">Completed Purchase Order</label>  <br> 
-           <textarea name="po" id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
+           <textarea  id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
             <?php
             if (isset($vendor_ID)):
                 $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 4 and r.vendor_ID ='$vendor_ID'");
@@ -45,7 +45,7 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
         </div>
         <div class="form-group">
             <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
-            <textarea name="po" id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <textarea  id="po" cols="10" rows="6" class="form-control rounded-0" readonly>
             <?php
             if (isset($vendor_ID)):
                 $supplier_qry = $conn->query("SELECT r.*,p.* FROM rating r, purchase_order p WHERE r.vendor_ID = p.vendor_ID and p.status = 3 and r.vendor_ID ='$vendor_ID'");

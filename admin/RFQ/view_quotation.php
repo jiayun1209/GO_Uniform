@@ -43,7 +43,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <h3 class="card-title"><b><?php echo isset($id) ? "Quotation Details" : "New Quotation" ?></b></h3>
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
-            <a class="btn btn-sm btn-flat btn-default" href="?page=Quotation">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=rfq/pending_rfq">Back</a>
         </div>
     </div>
     <div class="card-body" id="out_print">
@@ -57,23 +57,9 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="col-6">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-                <h2 class="text-center"><b>RFQ</b></h2>
+                <h2 class="text-center"><b>QUOTATION</b></h2>
             </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col-6">
-                <p class="m-0"><b>Supplier Details</b></p>
-                <?php
-                $sup_qry = $conn->query("SELECT v.*,c.* FROM `vendor` v inner join company c on v.company_code = c.company_code where v.`vendor_ID` = '{$vendor_ID}' ");
-                $supplier = $sup_qry->fetch_array();
-                ?>
-                <div>
-                    <p class="m-0"><?php echo $supplier['company_code'] ?> - <?php echo $supplier['name'] ?></p>                 
-                    <p class="m-0"><?php echo $supplier['email'] ?></p>
-                    <p class="m-0"><?php echo $supplier['address'] ?></p>
-
-                </div>
-            </div>
+        </div>        
          <div class="col-6 row">
                 <div class="col-6">
                     <p  class="m-0"><b>RFQ. #:</b></p>

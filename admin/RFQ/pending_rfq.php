@@ -5,9 +5,9 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">List of Approved RFQ</h3>
+        <h3 class="card-title">List of Pending RFQ</h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-flat btn-default" href="?page=Quotation">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=rfq">Back</a>
         </div>
     </div>
     <div class="card-body">
@@ -39,7 +39,7 @@
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID where status='1' order by unix_timestamp(q.date_updated) ");
+                        $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID  = s.vendor_ID where status='0' order by unix_timestamp(q.date_updated) ");
                         while ($row = $qry->fetch_assoc()):
                             $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
                             $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
@@ -54,8 +54,8 @@
                                 <td class="text-center">
                                     <?php
                                     switch ($row['status']) {
-                                        case '1':
-                                            echo '<span class="badge badge-success">Approved</span>';
+                                        case '0':
+                                            echo '<span class="badge badge-secondary">Pending</span>';
                                             break;
                                       
                                     }
@@ -67,11 +67,9 @@
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" href="?page=Quotation/view_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>                                       
+                                        <a class="dropdown-item" href="?page=rfq/view_quotation&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-primary"></span> View</a>                                       
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="?page=Quotation/send_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send Quotation</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Delete</a>
+                                        <a class="dropdown-item" href="?page=rfq/send_rfq&id=<?php echo $row['id'] ?>"><span class="fa fa-envelope text-primary"></span> Send Quotation</a>                                       
                                     </div>
                                 </td>
                             </tr>

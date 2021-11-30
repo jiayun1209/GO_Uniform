@@ -39,66 +39,81 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
 </style>
 <div class="card card-outline card-info">
-    <div class="card-header">
+    <div class="card-header ml-5 mr-5 mt-3 mb-2">
         <div class="card-tools">
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
+        <div class="row date">
+            <label class="py-2">From: </label>
+            <div class="col-md-3 form-group">
+                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
+            </div>
+            <label class="px-2 py-2 text-center">To: </label>
+            <div class="col-md-3 form-group">
+                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
+            </div>
+        </div>
     </div>
 
-    <div class="card-body" id="out_print">
-        <div class="row"><h3 class="card-title">Purchase Order Outstanding Report</h3></div>
+
+    <div class="card-body ml-5 mr-5" id="out_print">
+        <div class="row"><h2 class="text-center"><b>PURCHASE ORDER OUTSTANDING REPORT</b></h2></div>
+
         <div class="row">
             <div class="col-9 d-flex align-items-center">
                 <div>
                     <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                    <p class="m-0"><?php echo $_settings->info('company_address') ?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_address') . " " . $_settings->info('company_address_1') . " " . $_settings->info('company_postcode') . " " . $_settings->info('company_city') ?></p>
                 </div>
             </div>
             <div class="col-3">
                 <center><img src="<?php echo validate_image($_settings->info('logo')) ?>" alt="" height="200px"></center>
-
+                <br><br>
             </div>
         </div>
 
-
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped" id="datatables">
             <colgroup>
                 <col width="5%">
                 <col width="15%">
                 <col width="15%">
                 <col width="20%">
                 <col width="10%">
+                <col width="20%">
                 <col width="15%">
-                <col width="10%">
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
-                    <th class="px-1 py-1 text-center">No.</th>
-                    <th class="px-1 py-1 text-left">Date Created</th>
-                    <th class="px-1 py-1 text-left">PO No.</th>
-                    <th class="px-1 py-1 text-left">Supplier Name</th>
-                    <th class="px-1 py-1 text-center">Items</th>
-                    <th class="px-1 py-1 text-right">Total Amount</th>
-                    <th class="px-1 py-1 text-center">Status</th>
+                    <th class="text-center">No.</th>
+                    <th class="text-left">Delivery Date</th>
+                    <th class="text-left">PO No.</th>
+                    <th class="text-left">Supplier Name</th>
+                    <th class="text-center">Items</th>
+                    <th class="text-right">Total Amount (RM)</th>
+                    <th class="text-center">Status</th>
+
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where `status` =0 order by unix_timestamp(po.date_updated)");
+                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status=1 order by unix_timestamp(po.date_updated) ");
                 while ($row = $qry->fetch_assoc()):
                     $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
-                        <td class=""><?php echo $row['po_no'] ?></td>
+                        <td class="text-left"><?php echo date("d-m-Y", strtotime($row['delivery_date'])); ?></td>
+                        <td class="text-left"><?php echo $row['po_no'] ?></td>
                         <td class="text-left"><?php echo $row['sname'] ?></td>
                         <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount']) ?></td>
+                        <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                         <td class="text-center">
                             <?php
                             switch ($row['status']) {
@@ -117,8 +132,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             }
                             ?>
                         </td>
-
-
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -171,5 +184,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 }, 300);
             }, 200);
         })
+    })
+    $(document).ready(function () {
+        $('.delete_data').click(function () {
+            _conf("Are you sure to delete this rent permanently?", "delete_rent", [$(this).attr('data-id')])
+        })
+        $('.view_details').click(function () {
+            uni_modal("Reservaton Details", "purchase_orders/view_details.php?id=" + $(this).attr('data-id'), 'mid-large')
+        })
+        $('.renew_data').click(function () {
+            _conf("Are you sure to renew this rent data?", "renew_rent", [$(this).attr('data-id')]);
+        })
+        $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>

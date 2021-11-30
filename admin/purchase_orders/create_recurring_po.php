@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT * from `purchase_order` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `purchase_order_template` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -42,14 +42,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="po_no">Template Name <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="delivery_date">Delivery Date</label>
-                    <input type="date" name="delivery_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
+                    <label for="tem_name">Template Name <span class="po_err_msg text-danger"></span></label>
+                    <input type="text" class="form-control form-control-sm rounded-0" id="tem_name" name="tem_name" required value="<?php echo isset($tem_name) ? $tem_name : '' ?>">
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier Name</label>
@@ -62,11 +59,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
                         <?php endwhile; ?>
                     </select>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
-                    <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
             </div>
             <div class="row">
@@ -95,7 +87,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tbody>
                             <?php
                             if (isset($id)):
-                                $order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_order_details` o inner join inventory i on o.item_id = i.id where o.`po_id` = '$id' ");
+                                $order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `purchase_order_tem_details` o inner join inventory i on o.item_id = i.id where o.`id` = '$id' ");
                                 echo $conn->error;
                                 while ($row = $order_items_qry->fetch_assoc()):
                                     ?>
@@ -151,14 +143,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <div class="col-md-6">
                             <label for="remarks" class="control-label">Remarks</label>
                             <textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="status" class="control-label">Status</label>
-                            <span class='form-control form-control-sm rounded-0'>Pending</span>
-                            <br>
-                            <label for="cancel_reason" class="control-label">Cancellation Reason</label>
-                            <textarea name="cancel_reason" disabled id="cancel_reason" cols="10" rows="2" class="form-control rounded-0"><?php echo isset($cancel_reason) ? $cancel_reason : '' ?></textarea>
-                            <small><i>Please enter relevant cancellation reason here.</i></small>
                         </div>
                     </div>
                 </div>
@@ -320,7 +304,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=save_po",
+                url: _base_url_ + "classes/Master.php?f=save_template",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
@@ -335,7 +319,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=purchase_orders/view_po&id=" + resp.id;
+                        location.href = "./?page=purchase_orders";
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)

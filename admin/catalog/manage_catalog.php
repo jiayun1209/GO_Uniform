@@ -31,18 +31,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
             <label for="description" class="control-label">Description</label>
             <textarea rows="3" name="description" id="description" class="form-control rounded-0" required><?php echo isset($description) ? $description :"" ?></textarea>
         </div>
-        <div class="form-group">
-            <label for="vendor_ID" class="control-label">Vendor ID</label>
-            <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
-						<option value="" disabled <?php echo !isset($vendor_ID) ? "selected" :'' ?>></option>
-						<?php 
-							$supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
-							while($row = $supplier_qry->fetch_assoc()):
-						?>
-						<option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-						<?php endwhile; ?>
-					</select>
-        </div>
+        
         
         
        

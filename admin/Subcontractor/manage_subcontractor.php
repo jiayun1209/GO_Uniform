@@ -8,7 +8,7 @@ if (isset($_POST['sendMailBtn'])) {
     $message = $_POST['message'];
     $message1 = $_POST['message'];
     $messages = "$message1";
-
+    $link = "http://localhost/GO_Uniform/SupplierSelfRegistration.php";
     $to = "$toEmail";
     $subject = "$subjectName";
     $headers = "MIME-Version: 1.0" . "\r\n";
@@ -27,7 +27,10 @@ if (isset($_POST['sendMailBtn'])) {
 			<span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">'.$message.'</span>
 				<div class="container">
                                 Hello, '.$toName.' <br/>
+                                    
                  '.$message.'<br/>
+                     If you are intent to join our family, welcome you apply your application at the link below. <br/>
+                                    '.$link.' <br/>
                     Regards<br/>
                   '.$fromEmail.'
 				</div>
@@ -41,8 +44,9 @@ if (isset($_POST['sendMailBtn'])) {
     $language = "Update when company registered !";
     $company_name = $_POST['toCName'];
     $registration_status = "invited";
+    $product = "Service";
     $query = mysqli_query($conn, "insert into company(company_code,company_name,address,currency,language) values('$company_code','$company_name','$address','$currency','$language')");
-    $query2 = mysqli_query($conn, "insert into subcontractor(name,company_code,email,registration_status,description) values('$name','$company_code','$to','$registration_status','$messages')"); 
+    $query2 = mysqli_query($conn, "insert into subcontractor(name,company_code,email,registration_status,description) values('$name','$company_code','$to','$registration_status','$product')"); 
     if ($query && $query2){
         echo "<script>alert('You are successfully invited');</script>";
         echo '<script>alert("Email sent successfully !")</script>';
@@ -67,9 +71,9 @@ if (isset($_POST['sendMailBtn'])) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Outsourcing : Invite</h3>
+        <h3 class="card-title">Invite Vendors</h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-flat btn-default" href="?page=subcontractor">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=suppliers">Back</a>
         </div>
     </div>
 <form action="" id="invite-form" method="post" class="form-invite">
