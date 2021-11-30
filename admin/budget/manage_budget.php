@@ -1,7 +1,7 @@
 <?php
 require_once('../../config.php');
 if (isset($_GET['budget_no']) && $_GET['budget_no'] != "") {
-    $qry = $conn->query("SELECT * from `budget_limit` where budget_no = '{$_GET['budget_no']}' ");
+    $qry = $conn->query("SELECT b.*, s.firstname, s.lastname from budget_limit b join staff s on b.staff_ID = s.id where b.budget_no = '{$_GET['budget_no']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = stripslashes($v);
@@ -24,12 +24,12 @@ if (isset($_GET['budget_no']) && $_GET['budget_no'] != "") {
     <input type="hidden" name="budget_no" value="<?php echo($budget_no) ? $budget_no : "" ?>" readonly>
     <div class="container-fluid">
         <div class="form-group">
-            <label for="staff_ID" class="control-label">Staff_ID</label>
-            <input type="text" name="staff_ID" id="staff_ID" class="form-control rounded-0" value="<?php echo isset($staff_ID) ? $staff_ID : " " ?>" readonly>
+            <label for="staff_name" class="control-label">Staff Name</label>
+            <input type="text" name="staff_name" id="staff_ID" class="form-control rounded-0" value="<?php echo $firstname." ".$lastname ?>" readonly>
         </div>
         <div class="form-group">
             <label for="amount" class="control-label">Amount</label>
-            <input type="text" name="" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : " " ?>" required>
+            <input type="text" name="amount" id="amount" class="form-control rounded-0" value="<?php echo isset($amount) ? $amount : " " ?>" required>
         </div>
         <div class="form-group">
             <label for="description" class="control-label">Description</label>

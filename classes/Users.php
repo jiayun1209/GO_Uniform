@@ -55,9 +55,11 @@ Class Users extends DBConnection {
 				foreach($_POST as $k => $v){
 					if($k != 'id'){
 						if(!empty($data)) $data .=" , ";
+                                                if($_SESSION["userdata"]["id"] == $id)
 						$this->settings->set_userdata($k,$v);
 					}
 				}
+                                
 				if(isset($fname) && isset($move))
 				$this->settings->set_userdata('avatar',$fname);
 

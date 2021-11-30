@@ -27,9 +27,10 @@ class Login extends DBConnection {
 
 			}
 			$this->settings->set_userdata('login_type',1);
-		return json_encode(array('status'=>'success'));
-		}else{
-		return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from staff where username = '$username' and password = md5('$password') "));
+                    return json_encode(array('status'=>'success'));
+		}
+                else{
+                    return json_encode(array('status'=>'incorrect','last_qry'=>"SELECT * from staff where username = '$username' and password = md5('$password') "));
 		}
 	}
 	public function logout(){
@@ -56,7 +57,9 @@ class Login extends DBConnection {
 		return json_encode($resp);
 	}
 }
+
 $action = !isset($_GET['f']) ? 'none' : strtolower($_GET['f']);
+
 $auth = new Login();
 switch ($action) {
 	case 'login':

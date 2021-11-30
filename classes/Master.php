@@ -772,27 +772,20 @@ Class Master extends DBConnection {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, array('budget_no'))) {
+            if (!in_array($k, array('budget_no', 'staff_name'))) {
                 $v = addslashes(trim($v));
                 if (!empty($data))
                     $data .= ",";
                 $data .= " `{$k}`='{$v}' ";
             }
         }
-        $check = $this->conn->query("SELECT * FROM `budget_limit` where `staff_ID` = '{$staff_ID}' " . (!empty($budget_no) ? " and budget_no != {$budget_no} " : "") . " ")->num_rows;
-        if ($this->capture_err())
-            return $this->capture_err();
-        if ($check > 0) {
-            $resp['status'] = 'failed';
-            $resp['msg'] = "The budget limit already set by the staff.";
-            return json_encode($resp);
-            exit;
-        }
+       
         if (empty($budget_no)) {
             $sql = "INSERT INTO `budget_limit` set {$data} ";
             $save = $this->conn->query($sql);
         } else {
             $sql = "UPDATE `budget_limit` set {$data} where budget_no = '{$budget_no}' ";
+//            echo $sql;die();
             $save = $this->conn->query($sql);
         }
         if ($save) {

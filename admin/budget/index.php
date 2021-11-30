@@ -26,8 +26,7 @@
                     <thead>
                         <tr class="bg-navy disabled">
                             <th>No</th>
-                            <th>Budget No</th>
-                            <th>Staff ID</th>
+                            <th>Staff Name</th>
                             <th>Amount</th>
                             <th>Description</th>
                             <th>Date Created</th>
@@ -38,14 +37,13 @@
                         <?php
                         $i = 1;
                         $cnt = 1;
-                        $qry = $conn->query("SELECT * from `budget_limit` order by (`budget_no`) asc ");
+                        $qry = $conn->query("SELECT b.*, s.firstname, s.lastname from budget_limit b join staff s on b.staff_ID = s.id order by b.budget_no asc ");
                         while ($row = $qry->fetch_assoc()):
                             ?>
                             <tr>
 
                                 <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
-                                <td><?php echo $row['budget_no'] ?></td>
-                                <td><?php echo $row['staff_ID'] ?></td>
+                                <td><?php echo $row['firstname']." ".$row['lastname'] ?></td>
                                 <td><?php echo $row['amount'] ?></td>
                                 <td><?php echo $row['description'] ?></td>
                                 <td class=""><?php echo $row['date_created'] ?></td>
