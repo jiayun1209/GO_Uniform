@@ -8,6 +8,7 @@ if (isset($_POST['sendMailBtn'])) {
     $message = $_POST['message'];
     $message1 = $_POST['message'];
     $messages = "$message1";
+    $link = "http://localhost/GO_Uniform/SupplierSelfRegistration.php";
     $to = "$toEmail";
     $subject = "$subjectName";
     $headers = "MIME-Version: 1.0" . "\r\n";
@@ -27,6 +28,8 @@ if (isset($_POST['sendMailBtn'])) {
 				<div class="container">
                                 Hello, '.$toName.' <br/>
                  '.$message.'<br/>
+                     If you are intent to join our family, welcome you apply your application at the link below. <br/>
+                                    '.$link.' <br/>
                     Regards<br/>
                   '.$fromEmail.'
 				</div>

@@ -32,15 +32,19 @@ if (isset($_POST['submit'])) {
     
     
     $sql_u = "SELECT * FROM vendor WHERE email='$supplierEmail'";
-    $sql_e = "SELECT * FROM subcontractor WHERE email='$supplierEmail'";
-    
     $res_u = mysqli_query($dbc, $sql_u);
-    $res_e = mysqli_query($dbc, $sql_e);
-
     if (mysqli_num_rows($res_u) > 0) {
         $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
         $checked = mysqli_query($dbc, "DELETE from vendor where email='$supplierEmail'");
-    } else if (mysqli_num_rows($res_e) > 0) {
+    }else {
+        $checkedCom = "";
+        $checked = "";
+    };
+    
+    $sql_e = "SELECT * FROM subcontractor WHERE email='$supplierEmail'";
+    $res_e = mysqli_query($dbc, $sql_e);
+    
+    if (mysqli_num_rows($res_e) > 0) {
         $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
         $checked = mysqli_query($dbc, "DELETE from subcontractor where email='$supplierEmail'");
     } else{
