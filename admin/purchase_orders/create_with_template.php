@@ -166,7 +166,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <th class="p-1 text-right" colspan="6">Total</th>
                                 <th class="p-1 text-right" id="total">0</th>
                             </tr>
-                            </tr>
                         </tfoot>
                     </table>
                     <div class="row">
