@@ -70,7 +70,7 @@
                                     ?>
                                 </td>
                                 <td align="center">
-                                    <a class="btn btn-sm btn-flat btn-info" href="?page=purchase_orders/send_po&id=<?php echo $row['id'] ?>"> <span class="fa fa-envelope text-light"></span></a>   
+                                    <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders/send_po&id=<?php echo $row['id'] ?>"> <span class="fa fa-envelope"></span></a>   
                                 </td>
                             </tr>
                         <?php endwhile; ?>
