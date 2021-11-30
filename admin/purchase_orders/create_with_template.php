@@ -43,15 +43,44 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="id">Template Name</label>
+
+
+<!--                    <select name="id" id="id" class="custom-select custom-select-sm rounded-0 select2">
+    <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                    <?php
+                    $q_qry = $conn->query("SELECT * FROM `purchase_order_template`");
+                    while ($r = $q_qry->fetch_assoc()):
+                        ?>
+            <option value="<?php echo $r['id'] ?>" <?php echo isset($id) && $id == $r['id'] ? 'selected' : '' ?>><?php echo $r['tem_name'] ?></option>
+                    <?php endwhile; ?>
+</select>-->
+
                     <select name="id" id="id" class="custom-select custom-select-sm rounded-0 select2">
-                        <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
+                        <option value=""> </option>
                         <?php
-                        $q_qry = $conn->query("SELECT * FROM `purchase_order_template`");
+                        $q_qry = $conn->query("SELECT * FROM purchase_order_template != 0");
                         while ($r = $q_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $r['id'] ?>" <?php echo isset($id) && $id == $r['id'] ? 'selected' : '' ?>><?php echo $r['tem_name'] ?></option>
                         <?php endwhile; ?>
                     </select>
+
+                    <select class="form-control" name="pr_ID" id="pid" onchange="select_id_check_qty()" required>
+                        <option value=""> </option>
+                        <?php
+                        $sql = "SELECT * FROM purchase_requisitions where status != 0 ";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo "<option value=" . $row["id"] . ">" . $row["pr_no"] . "</option>";
+                            }
+                        } else {
+                            echo '<script>alert("Invalid input !")</script>';
+                        }
+                        ?>
+                    </select>
+
+
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="delivery_date">Delivery Date</label>

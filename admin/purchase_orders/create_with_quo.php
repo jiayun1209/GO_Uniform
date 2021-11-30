@@ -1,6 +1,6 @@
 <?php
 $Array_account = array();
-$sql = "SELECT r.*, i.name,i.item_code,i.description,v.name FROM `rfq` r, `inventory` i, `quotation` q, `vendor` v where q.id = r.rfq_no and r.item_id = i.id and q.vendor_ID = v.vendor_ID";
+$sql = "SELECT r.*, i.name, i.item_code, i.description, v.name FROM `rfq` r, `inventory` i, `quotation` q, `vendor` v where q.id = r.rfq_no and r.item_id = i.id and q.vendor_ID = v.vendor_ID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_array($result)) {
@@ -56,7 +56,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <select name="id" id="qid" class="custom-select custom-select-sm rounded-0 select2 id" onchange="select_id_check_qty()" required>
                         <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
-                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status=1");
+                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status = 1");
                         while ($r = $q_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $r['id'] ?>"<?php echo isset($id) && $id == $r['id'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>

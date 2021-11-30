@@ -55,7 +55,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Purchase Quotation Comparison Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_quo"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 
@@ -71,7 +71,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Supplier Performance Rating Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_rating"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 
@@ -79,7 +79,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Supplier Price Performance Analysis Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_pricePerformance"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 

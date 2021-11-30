@@ -5,7 +5,7 @@
 <?php endif; ?>
 <?php
 if (isset($_GET['id']) && $_GET['id'] > 0) {
-    $qry = $conn->query("SELECT * from `purchase_order` where id = '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * from `inventory` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
         foreach ($qry->fetch_assoc() as $k => $v) {
             $$k = $v;
@@ -61,8 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 
 
     <div class="card-body ml-5 mr-5" id="out_print">
-        
-        <div class="row"><h2 class="text-center"><b>CANCELLED PURCHASE ORDER REPORT</b></h2></div>
+        <div class="row"><h2 class="text-center"><b>SUPPLIER PERFORMANCE RATING REPORT</b></h2></div>
 
         <div class="row">
             <div class="col-9 d-flex align-items-center">
@@ -81,42 +80,33 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <table class="table table-hover table-striped" id="datatables">
             <colgroup>
                 <col width="5%">
-                <col width="16%">
-                <col width="14%">
-                <col width="17%">
-                <col width="5%">
-                <col width="21%">
-                <col width="22%">
+                <col width="32%">
+                <col width="32%">
+                <col width="31%">
 
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
                     <th class="text-center">No.</th>
-                    <th class="text-left">Delivery Date</th>
-                    <th class="text-left">PO No.</th>
                     <th class="text-left">Supplier Name</th>
-                    <th class="text-center">Items</th>
-                    <th class="text-right">Total Amount (RM)</th>
-                    <th class="text-left">Cancellation Reason</th>
+                    <th class="text-left">Performance ID</th>
+                    <th class="text-left">Rating ID</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status=3 order by unix_timestamp(po.date_updated) ");
+                $qry = $conn->query("SELECT r.performance_id as rperID, r.rating_id as ratID, v.name as vname FROM `rating` r inner join `vendor` v on r.vendor_ID  = v.vendor_ID");
                 while ($row = $qry->fetch_assoc()):
-                    $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
+                    
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo date("d-m-Y", strtotime($row['delivery_date'])); ?></td>
-                        <td class="text-left"><?php echo $row['po_no'] ?></td>
-                        <td class="text-left"><?php echo $row['sname'] ?></td>
-                        <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
-                        <td class="text-left"><?php echo $row['cancel_reason'] ?></td>
+                        <td class="text-left"><?php echo $row['vname'] ?></td>
+                        <td class="text-left"><?php echo $row['rperID']?></td>
+                        <td class="text-left"><?php echo $row['ratID']?></td>
+                        
                     </tr>
                 <?php endwhile; ?>
             </tbody>
@@ -183,3 +173,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */

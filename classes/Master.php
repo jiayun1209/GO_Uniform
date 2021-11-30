@@ -515,7 +515,7 @@ Class Master extends DBConnection {
             if (empty($id))
                 $this->settings->set_flashdata('success', "Purchase Order successfully saved.");
             else
-                $this->settings->set_flashdata('success', "Purchase Order successfully updated.");
+                $this->settings->set_flashdata('success', "Purchase Order successfully updated111.");
         } else {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
