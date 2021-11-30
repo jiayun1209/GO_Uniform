@@ -200,9 +200,8 @@ if (isset($_POST['sendMailBtn'])) {
         <div class="card-header">
             <h3 class="card-title">Review Quotation</h3>
             <div class="card-tools">
-
                 <button class="btn btn-sm btn-flat btn-info" id="sendMailBtn" name="sendMailBtn" type="submit"><i class="fa fa-envelope"></i> Confirm & Send</button>
-
+                <br>
                 <br>
                 <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
                 <a class="btn btn-sm btn-flat btn-default" href="?page=RFQ/pending_rfq">Back</a>
@@ -237,18 +236,18 @@ if (isset($_POST['sendMailBtn'])) {
                         <th class="px-1 py-1 text-center">Email Address</th></tr>
                 </thead>
                 <tbody>
-<?php
-$rfq_qry = $conn->query("SELECT * from vendor ");
-while ($row = $rfq_qry->fetch_assoc()):
-    ?>
+                    <?php
+                    $rfq_qry = $conn->query("SELECT * from vendor ");
+                    while ($row = $rfq_qry->fetch_assoc()):
+                        ?>
                         <tr class=rfq-item" data-id="">
                             <td class="align-middle p-2 text-center"> <input type="checkbox" name="myCheck[]" value="<?php echo $row['email'] ?>" id="myCheck"> </td> 
                             <td class="align-middle p-2 text-center"><?php echo $row['company_code'] ?></td> 
                             <td class="align-middle p-2 text-center"><?php echo $row['vendor_ID'] ?> - <?php echo $row['name'] ?></td>     
                             <td class="align-middle p-2 text-center"><?php echo $row['email'] ?></td>  </tr>
-    <?php
-endwhile;
-?>
+                        <?php
+                    endwhile;
+                    ?>
                 </tbody>
             </table> 
             <div class="row mb-2">
@@ -286,13 +285,13 @@ endwhile;
                             </tr>
                         </thead>
                         <tbody>
-<?php
-if (isset($id)):
-    $rfq_qry = $conn->query("SELECT o.*,i.name, i.description, i.item_code FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
-    $total = 0;
-    while ($row = $rfq_qry->fetch_assoc()):
-        $total += ($row['quantity'] * $row['unit_price']);
-        ?>
+                            <?php
+                            if (isset($id)):
+                                $rfq_qry = $conn->query("SELECT o.*,i.name, i.description, i.item_code FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $total = 0;
+                                while ($row = $rfq_qry->fetch_assoc()):
+                                    $total += ($row['quantity'] * $row['unit_price']);
+                                    ?>
                                     <tr class=rfq-item" data-id="">
                                         <td class="align-middle p-2 text-center"><?php echo $row['quantity'] ?></td> 
                                         <td class="align-middle p-2 text-center"><?php echo $row['name'] ?></td>     
@@ -302,10 +301,10 @@ if (isset($id)):
                                         <td class="align-middle p-2 text-center total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
 
                                     </tr>
-        <?php
-    endwhile;
-endif;
-?>
+                                    <?php
+                                endwhile;
+                            endif;
+                            ?>
                         </tbody>
                         <tfoot>                       
                             <tr>
@@ -324,19 +323,19 @@ endif;
                         <div class="col-6">
                             <label for="status" class="control-label">Status</label>
                             <br>
-<?php
-switch ($status) {
-    case 1:
-        echo "<span class='py-2 px-4 btn-flat btn-success'>Approved</span>";
-        break;
-    case 2:
-        echo "<span class='py-2 px-4 btn-flat btn-danger'>Inactive</span>";
-        break;
-    default:
-        echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";
-        break;
-}
-?>
+                            <?php
+                            switch ($status) {
+                                case 1:
+                                    echo "<span class='py-2 px-4 btn-flat btn-success'>Approved</span>";
+                                    break;
+                                case 2:
+                                    echo "<span class='py-2 px-4 btn-flat btn-danger'>Inactive</span>";
+                                    break;
+                                default:
+                                    echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";
+                                    break;
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
