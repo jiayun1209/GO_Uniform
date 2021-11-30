@@ -87,7 +87,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Supplier Purchase Summary Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/sup_purchase_summary"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 

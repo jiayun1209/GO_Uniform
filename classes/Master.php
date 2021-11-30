@@ -515,7 +515,7 @@ Class Master extends DBConnection {
             if (empty($id))
                 $this->settings->set_flashdata('success', "Purchase Order successfully saved.");
             else
-                $this->settings->set_flashdata('success', "Purchase Order successfully updated111.");
+                $this->settings->set_flashdata('success', "Purchase Order successfully updated.");
         } else {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
@@ -1108,9 +1108,6 @@ switch ($action) {
         break;
     case 'save_po':
         echo $Master->save_po();
-        break;
-    case 'save_template':
-        echo $Master->save_template();
         break;
     case 'delete_po':
         echo $Master->delete_po();

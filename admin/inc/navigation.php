@@ -81,6 +81,14 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=category" class="nav-link nav-catalog">
+                                        <i class="nav-icon fas fa-book-open"></i>
+                                        <p>
+                                            Manage Category
+                                        </p>
+                                    </a>
+                                </li>
 
                                 <li class="nav-header"><b>Supplier Management</b></li>
                                 <li class="nav-item dropdown">

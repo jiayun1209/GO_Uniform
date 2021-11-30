@@ -77,6 +77,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             </div>
             <div class="col-6 row">
                 <div class="col-4">
+                    <p  class="m-0 text-center"><b>Quotation Number: </b></p>
+                    <p class="text-center"><?php if ($quotation_no==0) echo ''; else echo $quotation_no; ?>
+                </div>
+                <div class="col-4">
                     <p  class="m-0 text-center"><b>PO Number: </b></p>
                     <p class="text-center"><?php echo $po_no ?></p>
                 </div>

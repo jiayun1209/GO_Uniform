@@ -42,6 +42,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
+                    <label for="quotation_no">Quotation Number</label>
+                    <input type="text" disabled class="form-control form-control-sm rounded-0 bg-light" id="quotation_no" name="quotation_no" value="<?php if ($quotation_no==0) echo ''; else echo $quotation_no; ?>">
+                </div>
+                <div class="col-md-6 form-group">
                     <label for="delivery_date">Delivery Date</label>
                     <input type="date" name="delivery_date" id="delivery_date" class="text-center form-control form-control-sm rounded-0 delivery_date"  placeholder="Delivery Date" required value="<?php echo isset($delivery_date) ? $delivery_date : '' ?>">                               
                 </div>
@@ -61,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
-                    <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
+                    <input class="form-control form-control-sm rounded-0 bg-light" disabled="" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
             </div>
@@ -150,7 +154,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
-                            
+
                             <?php if ($_settings->userdata('type') == 3): ?>
                                 <?php
                                 switch ($status) {
@@ -169,7 +173,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 }
                                 ?>
                             <?php endif; ?>
-                           
+
                             <?php if ($_settings->userdata('type') == 2): ?>
                                 <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()"> 
                                     <option value="0" hidden="" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
