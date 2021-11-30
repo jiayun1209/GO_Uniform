@@ -231,7 +231,7 @@ Class Master extends DBConnection {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (in_array($k, array('discount_amount', 'tax_amount')))
+            if (in_array($k, array('quotation_no','discount_amount', 'tax_amount')))
                 $v = str_replace(',', '', $v);
             if (!in_array($k, array('id', 'q_ID')) && !is_array($_POST[$k])) {
                 $v = addslashes(trim($v));

@@ -52,14 +52,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="id">Quotation Number</label>
-                    <select name="id" id="qid" class="custom-select custom-select-sm rounded-0 select2 id" onchange="select_id_check_qty()" required>
+                    <label for="quotation_no">Quotation Number</label>
+                    <select name="quotation_no" id="quotation_no" class="custom-select custom-select-sm rounded-0 select2" onchange="select_id_check_qty()" required>
                         <option value="" disabled <?php echo!isset($id) ? "selected" : '' ?>></option>
                         <?php
-                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status = 1");
+                        $q_qry = $conn->query("SELECT * FROM `quotation` WHERE status='1'");
                         while ($r = $q_qry->fetch_assoc()):
                             ?>
-                            <option value="<?php echo $r['id'] ?>"<?php echo isset($id) && $id == $r['id'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
+                            <option value="<?php echo $r['id'] ?>"<?php echo isset($quotation_no) && $quotation_no == $r['id'] ? 'selected' : '' ?>><?php echo $r['q_ID'] ?></option>
                         <?php endwhile; ?>
                     </select>
                 </div>
@@ -69,9 +69,24 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
             </div>
             <div class="row">
+<!--                                                <div class="col-md-6 form-group">
+                                                    
+                                                    <label for="vendor_ID">Supplier Name <span class="po_err_msg text-danger"></span></label>
+                                                    <input type="text" id="vendor_ID" disabled name="vendor_ID" class="form-control form-control-sm rounded-0 vendor_ID" value="<?php echo isset($vendor_ID) ? $vendor_ID : '' ?>">
+                                                </div>-->
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier Name <span class="po_err_msg text-danger"></span></label>
-                    <input id="vendor_ID" disabled name="vendor_ID" class="form-control form-control-sm rounded-0" value="<?php echo isset($vendor_ID) ?>">
+                    <label for="vendor_ID">Supplier Name</label>
+                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2 vendor_ID">
+                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
+
+
+                        <?php
+                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
+                        while ($row = $supplier_qry->fetch_assoc()):
+                            ?>
+                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
+                        <?php endwhile; ?><
+                    </select>
                 </div>
 
                 <div class="col-md-6 form-group">
@@ -107,7 +122,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tbody>
                             <?php
                             if (isset($id)):
-                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.rfq_no,p.quantity FROM `purchase_order` o , `inventory` i, `rfq` p WHERE p.item_id = i.id AND p.rfq_no = o.quotation_no AND o.quotation_no = '$id' ");
+                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.rfq_no,p.quantity FROM `purchase_order` o , inventory i, rfq p WHERE p.item_id = i.id AND p.rfq_no = o.quotation_no AND o.quotation_no = '$id' ");
                                 echo $conn->error;
                                 while ($row = $order_items_qry->fetch_assoc()):
                                     ?>
@@ -119,10 +134,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <input type="number" class="text-center w-100 border-0" step="any" id="qty[]" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
                                         </td>
                                         <td class="align-middle p-1">
-                                            <input type="number" class="text-center w-100 border-0" name="item_id[]" value="<?php echo $row['item_id'] ?>" required/>
+                                            <input type="hidden" class="text-center w-100 border-0" name="item_id[]" value="<?php echo $row['item_id'] ?>" required/>
                                             <input type="text" class="text-center w-100 border-0 item_id" name="name[]" value="<?php echo $row['name'] ?>" required/>
                                         </td>
-                                                <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
+                                        <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
                                         <td class="align-middle p-1">
                                             <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
@@ -179,7 +194,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
-            <input type="text" name="name[]" class="text-center w-100 border-0" required/>
+            <input type="text" name="name[]" class="text-center w-100 border-0 item_id" required/>
         </td>
         <td class="align-middle p-1 item-code"></td>
         <td class="align-middle p-1 item-description"></td>
@@ -199,7 +214,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         }
         var totalsum = 0;
         for (i = 0; i < Array_account.length; i++) {
-            if (Array_account[i][0] === document.getElementById("qid").value) {
+            if (Array_account[i][0] === document.getElementById("quotation_no").value) {
                 var total = Array_account[i][3] * Array_account[i][2];
                 var vname = Array_account[i][7];
                 document.getElementById("vendor_ID").value = vname;
@@ -357,7 +372,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 },
                 success: function (resp) {
                     if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=purchase_orders";
+                        location.href = "./?page=purchase_orders/view_po&id=" + resp.id;
                     } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
                         var el = $('<div>')
                         el.addClass("alert alert-danger err-msg").text(resp.msg)
