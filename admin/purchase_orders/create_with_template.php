@@ -1,6 +1,6 @@
 <?php
 $Array_account = array();
-$sql = "SELECT p.*, i.name,i.item_code,i.description,v.name FROM `purchase_order_template` p, `purchase_order_tem_details` po, `inventory` i,`vendor` v where p.tem_id = po.tem_id and po.item_id = i.id and p.vendor_ID = v.vendor_ID";
+$sql = "SELECT po.*, i.name,i.item_code,i.description,v.name FROM `purchase_order_template` p, `purchase_order_tem_details` po, `inventory` i,`vendor` v where p.tem_id = po.tem_id and po.item_id = i.id and p.vendor_ID = v.vendor_ID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_array($result)) {
@@ -117,7 +117,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tbody>
                             <?php
                             if (isset($id)):
-                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.rfq_no,p.quantity FROM `purchase_order_template` o , inventory i, purchase_order_tem_details p WHERE p.item_id = i.id AND p.tem_id = o.id AND o.id = '$id' ");
+                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.tem_id,p.quantity FROM `purchase_order` o , inventory i, purchase_order_tem_details p WHERE p.item_id = i.id AND p.tem_id = o.tem_id AND o.tem_id = '$id' ");
                                 echo $conn->error;
                                 while ($row = $order_items_qry->fetch_assoc()):
                                     ?>
@@ -298,7 +298,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _item.find('.item_id').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: base_url + "classes/Master.php?f=search_items",
+                    url: _base_url_ + "classes/Master.php?f=search_items",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -322,7 +322,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _name.find('.vendor_ID').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: base_url + "classes/Master.php?f=search_name",
+                    url: _base_url_ + "classes/Master.php?f=search_name",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -388,7 +388,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: base_url + "classes/Master.php?f=save_po",
+                url: _base_url_ + "classes/Master.php?f=save_po",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

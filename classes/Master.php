@@ -231,7 +231,7 @@ Class Master extends DBConnection {
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (in_array($k, array('quotation_no','discount_amount', 'tax_amount')))
+            if (in_array($k, array('discount_amount', 'tax_amount')))
                 $v = str_replace(',', '', $v);
             if (!in_array($k, array('id', 'q_ID')) && !is_array($_POST[$k])) {
                 $v = addslashes(trim($v));
@@ -1108,6 +1108,9 @@ switch ($action) {
         break;
     case 'save_po':
         echo $Master->save_po();
+        break;
+    case 'save_template':
+        echo $Master->save_template();
         break;
     case 'delete_po':
         echo $Master->delete_po();
