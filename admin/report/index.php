@@ -55,7 +55,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Purchase Quotation Comparison Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_quo"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_quotation"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 
@@ -63,7 +63,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Total Purchase by Vendor Analysis Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/view_vendor_analysis"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 
@@ -87,7 +87,7 @@
                             <td class="text-center"><?php echo $i++; ?></td>
                             <td class="">Supplier Purchase Summary Report</td>
                             <td align="center">
-                                <a class="btn btn-sm btn-flat btn-default" href="?page=report"><span class="fa fa-eye"></span> View</a>        
+                                <a class="btn btn-sm btn-flat btn-default" href="?page=report/sup_purchase_summary"><span class="fa fa-eye"></span> View</a>        
                             </td>
                         </tr>
 

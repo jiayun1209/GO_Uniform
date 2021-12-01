@@ -1,6 +1,6 @@
 <?php
 $Array_account = array();
-$sql = "SELECT p.*, i.name,i.item_code,i.description,v.name FROM `purchase_order_template` p, `purchase_order_tem_details` po, `inventory` i,`vendor` v where p.tem_id = po.tem_id and po.item_id = i.id and p.vendor_ID = v.vendor_ID";
+$sql = "SELECT po.*, i.name,i.item_code,i.description,v.vendor_ID,v.name, p.discount_percentage, p.discount_amount, p.tax_percentage, p.tax_amount FROM `purchase_order_template` p, `purchase_order_tem_details` po, `inventory` i,`vendor` v where p.tem_id = po.tem_id and po.item_id = i.id and p.vendor_ID = v.vendor_ID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_array($result)) {
@@ -69,21 +69,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
             </div>
             <div class="row">
-<!--                <div class="col-md-6 form-group">
-                    <label for="name">Supplier Name  <span class="po_err_msg text-danger"></span></label>
-                    <span class='form-control form-control-sm rounded-0'></span>   
-                </div>-->
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2 vendor_ID">
-                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
-                        <?php
-                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
-                        while ($row = $supplier_qry->fetch_assoc()):
-                            ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?><
-                    </select>
+                    <label for="name">Supplier Name <span class="po_err_msg text-danger"></span></label>
+                    <input type="hidden" id="vendor_ID" name="vendor_ID" class="form-control form-control-sm rounded-0 vendor_ID bg-light" value="<?php echo isset($vendor_ID) ? $vendor_ID : '' ?>">
+                    <input type="text" id="name" name="name" class="form-control form-control-sm rounded-0 vendor_ID bg-light">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
@@ -117,7 +106,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <tbody>
                             <?php
                             if (isset($id)):
-                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.rfq_no,p.quantity FROM `purchase_order_template` o , inventory i, purchase_order_tem_details p WHERE p.item_id = i.id AND p.tem_id = o.id AND o.id = '$id' ");
+                                $order_items_qry = $conn->query("SELECT o.*, i.item_code,i.name,i.description,i.id,p.item_id,p.tem_id,p.quantity FROM `purchase_order` o , inventory i, purchase_order_tem_details p WHERE p.item_id = i.id AND p.tem_id = o.tem_id AND o.tem_id = '$id' ");
                                 echo $conn->error;
                                 while ($row = $order_items_qry->fetch_assoc()):
                                     ?>
@@ -220,11 +209,16 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             document.getElementById("item-list").deleteRow(1);
         }
         var totalsum = 0;
-        for (i = 0; i < Array_account.length; i++) {
+        for (i = 0; i < Array_account.length;
+                i++
+                ) {
             if (Array_account[i][0] === document.getElementById("tem_id").value) {
                 var total = Array_account[i][3] * Array_account[i][2];
-                var vname = Array_account[i][7];
-                document.getElementById("vendor_ID").value = vname;
+                var vid = Array_account[i][7];
+                var vname = Array_account[i][8];
+
+                document.getElementById("vendor_ID").value = vid;
+                document.getElementById("name").value = vname;
                 totalsum += total;
 
                 var tr = '<tr class="po-item" data-id="">';
@@ -297,7 +291,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _item.find('.item_id').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: base_url + "classes/Master.php?f=search_items",
+                    url: _base_url_ + "classes/Master.php?f=search_items",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -321,7 +315,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         _name.find('.vendor_ID').autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: base_url + "classes/Master.php?f=search_name",
+                    url: _base_url_ + "classes/Master.php?f=search_name",
                     method: 'POST',
                     data: {q: request.term},
                     dataType: 'json',
@@ -387,7 +381,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: base_url + "classes/Master.php?f=save_po",
+                url: _base_url_ + "classes/Master.php?f=save_po",
                 data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,
