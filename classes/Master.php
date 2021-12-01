@@ -495,9 +495,6 @@ Class Master extends DBConnection {
         if (empty($id)) {
             $sql = "INSERT INTO `purchase_order` set {$data} ";
         }
-        elseif (!empty($id)&& $status=1){
-            $sql = "UPDATE `purchase_order` set status = 4 where id = '{$id}'";
-        }
         else {
             $sql = "UPDATE `purchase_order` set {$data} where id = '{$id}' ";
         }
