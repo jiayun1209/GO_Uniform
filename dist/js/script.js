@@ -33,21 +33,20 @@ $(document).ready(function(){
 			data:$(this).serialize(),
 			error:err=>{
 				console.log(err)
-
 			},
 			success:function(resp){
 				if(resp){
-					resp = JSON.parse(resp)
-					if(resp.status == 'success'){
-						location.replace(_base_url_+'admin');
-					}else if(resp.status == 'incorrect'){
-						var _frm = $('#login-frm')
-						var _msg = "<div class='alert alert-danger text-white err_msg'><i class='fa fa-exclamation-triangle'></i> Incorrect username or password</div>"
-						_frm.prepend(_msg)
-						_frm.find('input').addClass('is-invalid')
-						$('[name="username"]').focus()
-					}
-						end_loader()
+                                    resp = JSON.parse(resp)
+                                    if(resp.status == 'success'){
+                                            location.replace(_base_url_+'admin');
+                                    }else if(resp.status == 'incorrect'){
+                                            var _frm = $('#login-frm')
+                                            var _msg = "<div class='alert alert-danger text-white err_msg'><i class='fa fa-exclamation-triangle'></i> Incorrect username or password</div>"
+                                            _frm.prepend(_msg)
+                                            _frm.find('input').addClass('is-invalid')
+                                            $('[name="username"]').focus()
+                                    }
+                                            end_loader()
 				}
 			}
 		})

@@ -52,7 +52,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             ?>
                             <option value="<?php echo $row['id'] ?>" <?php echo isset($id) && $id == $row['id'] ? 'selected' : '' ?>><?php echo $row['username'] ?> <?php echo $row['lastname'] ?></option>
                         <?php endwhile; ?>
-                            
+
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
@@ -137,12 +137,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             <small><i>Leave this blank for staff.</i></small>
                             <textarea name="remarks" id="remarks" cols="10" rows="6" class="form-control rounded-0"><?php echo isset($remarks) ? $remarks : '' ?></textarea>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label for="status" class="control-label">Status</label>
                             <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()">
                                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                            
+
                             </select>                          
                         </div>
 
@@ -211,6 +211,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('[name="tax_amount"]').val(parseFloat(tax_amount).toLocaleString("en-US"))
         $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
         $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
+        
+        return _total - discount_amount;
     }
 
     function _autocomplete(_item) {
@@ -246,6 +248,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         }
     }
     $(document).ready(function () {
+        $("#staff_id").val(<?php echo $_SESSION["userdata"]["id"]?>).change();
         $('#add_row').click(function () {
             var tr = $('#item-clone tr').clone()
             $('#item-list tbody').append(tr)
@@ -284,37 +287,51 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             }
             start_loader();
             $.ajax({
-                url: _base_url_ + "classes/Master.php?f=save_pr",
-                data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
+                url: _base_url_ + "admin/api/pr/getStaffRemainBudget.php",
+                data: {staffID: $("#staff_id").val()},
                 type: 'POST',
-                dataType: 'json',
-                error: err => {
-                    console.log(err)
-                    alert_toast("An error occured", 'error');
-                    end_loader();
-                },
-                success: function (resp) {
-                    if (typeof resp == 'object' && resp.status == 'success') {
-                        location.href = "./?page=purchase_r/view_pr&id=" + resp.id;
-                    } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
-                        var el = $('<div>')
-                        el.addClass("alert alert-danger err-msg").text(resp.msg)
-                        _this.prepend(el)
-                        el.show('slow')
-                        $("html, body").animate({scrollTop: 0}, "fast");
-                        end_loader()
-                        if (resp.status == 'po_failed') {
-                            $('[name="pr_no"]').addClass('border-danger').focus()
-                        }
-                    } else {
-                        alert_toast("An error occured", 'error');
-                        end_loader();
-                        console.log(resp)
+                success: function (remainBudget) {
+                    var total = calculate();
+                    if(total > remainBudget){
+                         alert_toast("Total Exceed Budget!", 'error');
+                         end_loader();
+                         return;
                     }
+                    
+                    $.ajax({
+                        url: _base_url_ + "classes/Master.php?f=save_pr",
+                        data: new FormData(e.currentTarget),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        method: 'POST',
+                        type: 'POST',
+                        dataType: 'json',
+                        error: err => {
+                            console.log(err)
+                            alert_toast("An error occured", 'error');
+                            end_loader();
+                        },
+                        success: function (resp) {
+                            if (typeof resp == 'object' && resp.status == 'success') {
+                                location.href = "./?page=purchase_r/view_pr&id=" + resp.id;
+                            } else if ((resp.status == 'failed' || resp.status == 'po_failed') && !!resp.msg) {
+                                var el = $('<div>')
+                                el.addClass("alert alert-danger err-msg").text(resp.msg)
+                                _this.prepend(el)
+                                el.show('slow')
+                                $("html, body").animate({scrollTop: 0}, "fast");
+                                end_loader()
+                                if (resp.status == 'po_failed') {
+                                    $('[name="pr_no"]').addClass('border-danger').focus()
+                                }
+                            } else {
+                                alert_toast("An error occured", 'error');
+                                end_loader();
+                                console.log(resp)
+                            }
+                        }
+                    })
                 }
             })
         })

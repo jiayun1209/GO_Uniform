@@ -256,7 +256,6 @@ class SimpleXLSX {
 		}
 		// Cut end of central directory
 		/*		$aE = explode("\x50\x4b\x05\x06", $vZ);
-
 				if (count($aE) == 1) {
 					$this->error('Unknown format');
 					return false;
@@ -839,7 +838,6 @@ class SimpleXLSX {
 		/*
 		if ( $ref !== '' ) { // 0.6.8
 			$index = $this->getIndex( $ref );
-
 			return [ $index[0] + 1, $index[1] + 1 ];
 		}
 		*/

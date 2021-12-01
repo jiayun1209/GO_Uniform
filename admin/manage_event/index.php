@@ -17,9 +17,9 @@
                     <colgroup>
                         
                         <col width="5%">
-                        <col width="5%">					
-                        <col width="18%">
-                        <col width="12%">
+                        					
+                        <col width="20%">
+                        <col width="15%">
                         <col width="10%">
                         <col width="10%">					
                         <col width="10%">
@@ -28,7 +28,7 @@
                     <thead>
                         <tr class="bg-navy disabled">
                              <th>No</th>
-                            <th>ID</th>
+                            
                             <th>Title</th>
                             <th>Description</th>
                             <th>Start Date</th>
@@ -49,7 +49,7 @@
                             <tr>
                                 
                                 <td class="text-center"><?php echo htmlentities($cnt++); ?></td>
-                                 <td><?php echo $row['id'] ?></td>
+                                
                                 <td><?php echo $row['title'] ?></td>
                                 <td><?php echo $row['description'] ?></td>
                                 <td class=""><?php echo $row['start_date'] ?></td>

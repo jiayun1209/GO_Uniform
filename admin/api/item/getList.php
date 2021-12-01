@@ -6,7 +6,7 @@
 
 	if($isAuthorize)
     {
-        $sql = "select i.*, c.description name from inventory i join catalog c on c.id = i.catalog_ID";
+        $sql = "select i.*, c.description catalog_name from inventory i join catalog c on c.id = i.catalog_ID";
         
         $stmt = $pdo->prepare($sql);
         

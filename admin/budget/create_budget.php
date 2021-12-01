@@ -1,13 +1,5 @@
 <?php
 require_once('../../config.php');
-if (isset($_GET['budget_no']) && $_GET['budget_no'] != "") {
-    $qry = $conn->query("SELECT * from `budget_limit` where budget_no = '{$_GET['budget_no']}' ");
-    if ($qry->num_rows > 0) {
-        foreach ($qry->fetch_assoc() as $k => $v) {
-            $$k = stripslashes($v);
-        }
-    }
-}
 ?>
 <style>
     span.select2-selection.select2-selection--single {
@@ -24,16 +16,16 @@ if (isset($_GET['budget_no']) && $_GET['budget_no'] != "") {
     <input type="hidden" name="budget_no" value="" readonly>
     <div class="container-fluid">
         
-        <div class="form-group"> <label class="control-label" for="basicinput">Staff ID</label>
+        <div class="form-group"> <label class="control-label" for="basicinput">Staff Name</label>
             <div class="controls">
                 <select name="staff_ID" class="custom-select custom-select-sm rounded-0 select3"  required>
-                    <option value="">Select Staff ID</option> 
+                    <option value="">Select Staff Name</option> 
                     <?php
-                    $query = mysqli_query($conn, "select * from staff");
+                    $query = mysqli_query($conn, "select s.id,s.firstname, s.lastname from staff s left join budget_limit b on s.id = b.staff_ID where b.staff_ID is null");
                     while ($row = mysqli_fetch_array($query)) {
                         ?>
 
-                        <option value="<?php echo $row['id']; ?>"><?php echo $row['id']; ?></option>
+                        <option value="<?php echo $row['id']; ?>"><?php echo $row['firstname']." ".$row['lastname']; ?></option>
                     <?php } ?>
                 </select>
             </div>
