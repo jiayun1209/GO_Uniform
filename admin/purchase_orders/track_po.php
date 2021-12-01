@@ -7,7 +7,8 @@
     <div class="card-header">
         <h3 class="card-title"><b>Tracking & Monitoring Purchase Orders</b></h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Back</a>
+            <a href="?page=report/view_outstanding" class="btn btn-sm btn btn-flat btn-primary"><span class="fas fa-search"></span>  Outstanding PO Report</a>
+            <a href="?page=purchase_orders" class="btn btn-sm btn-flat btn-default" > Back</a>
         </div>
     </div>
     <div class="card-body">
@@ -33,20 +34,20 @@
                             <th class="px-1 py-1 text-center">Items</th>
                             <th class="px-1 py-1 text-right">Total Amount (RM)</th>
                             <th class="px-1 py-1 text-center">Status</th>
-                            <th class="px-1 py-1 text-center">Email Supplier</th>
+                            <th class="px-1 py-1 text-center">Notify Supplier</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $i = 1;
-                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status='1' order by unix_timestamp(po.date_updated) ");
+                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status='4' order by unix_timestamp(po.date_updated) ");
                         while ($row = $qry->fetch_assoc()):
                             $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
                             $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
                             ?>
                             <tr>
                                 <td class="text-center"><?php echo $i++; ?></td>
-                                <td class=""><?php echo date("M d,Y H:i", strtotime($row['date_created'])); ?></td>
+                                <td class=""><?php echo date("d-m-Y H:i", strtotime($row['date_created'])); ?></td>
                                 <td class=""><?php echo $row['po_no'] ?></td>
                                 <td class="text-left"><?php echo $row['sname'] ?></td>
                                 <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
@@ -55,22 +56,28 @@
                                     <?php
                                     switch ($row['status']) {
                                         case '1':
-                                            echo '<span class="badge badge-success">Approved</span>';
+                                            echo '<span class="badge badge-success text-center">Approved</span>';
                                             break;
                                         case '2':
-                                            echo '<span class="badge badge-danger">Rejected</span>';
+                                            echo '<span class="badge badge-danger text-center">Rejected</span>';
                                             break;
                                         case '3':
-                                            echo '<span class="badge badge-warning text-danger">Cancelled</span>';
+                                            echo '<span class="badge badge-warning text-danger text-center">Cancelled</span>';
+                                            break;
+                                        case '4':
+                                            echo '<span class="badge badge-info text-center">Sent</span>';
+                                            break;
+                                        case '5':
+                                            echo '<span class="badge badge-success text-center">Sent</span>';
                                             break;
                                         default:
-                                            echo '<span class="badge badge-secondary">Pending</span>';
+                                            echo '<span class="badge badge-secondary text-center">Pending</span>';
                                             break;
                                     }
                                     ?>
                                 </td>
                                 <td align="center">
-                                    <a class="btn btn-sm btn-flat btn-info" href="?page=purchase_orders/send_po&id=<?php echo $row['id'] ?>"> <span class="fa fa-envelope text-light"></span></a>   
+                                    <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders/reminder&id=<?php echo $row['id'] ?>"> <span class="fa fa-envelope"></span></a>   
                                 </td>
                             </tr>
                         <?php endwhile; ?>

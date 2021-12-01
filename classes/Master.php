@@ -494,7 +494,11 @@ Class Master extends DBConnection {
 
         if (empty($id)) {
             $sql = "INSERT INTO `purchase_order` set {$data} ";
-        } else {
+        }
+        elseif (!empty($id)&& $status=1){
+            $sql = "UPDATE `purchase_order` set status = 4 where id = '{$id}'";
+        }
+        else {
             $sql = "UPDATE `purchase_order` set {$data} where id = '{$id}' ";
         }
         $save = $this->conn->query($sql);
@@ -535,6 +539,18 @@ Class Master extends DBConnection {
         }
         return json_encode($resp);
     }
+//    function update_data() {
+//        extract($_POST);
+//        $sql="UPDATE `purchase_order` set status = 4 where id = '{$id}'";
+//        if ($sql) {
+//            $resp['status'] = 'success';
+//            $this->settings->set_flashdata('success', "Purchase Order Status successfully updated to Sent.");
+//        } else {
+//            $resp['status'] = 'failed';
+//            $resp['error'] = $this->conn->error;
+//        }
+//        return json_encode($resp);
+//    }
 
     function save_template() {
         extract($_POST);

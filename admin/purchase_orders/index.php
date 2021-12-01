@@ -58,16 +58,22 @@
                                     <?php
                                     switch ($row['status']) {
                                         case '1':
-                                            echo '<span class="badge badge-success">Approved</span>';
+                                            echo '<span class="badge badge-success text-center">Approved</span>';
                                             break;
                                         case '2':
-                                            echo '<span class="badge badge-danger">Rejected</span>';
+                                            echo '<span class="badge badge-danger text-center">Rejected</span>';
                                             break;
                                         case '3':
-                                            echo '<span class="badge badge-warning text-danger">Cancelled</span>';
+                                            echo '<span class="badge badge-warning text-danger text-center">Cancelled</span>';
+                                            break;
+                                        case '4':
+                                            echo '<span class="badge badge-info text-center">Sent</span>';
+                                            break;
+                                        case '5':
+                                            echo '<span class="badge badge-primary text-center">Completed</span>';
                                             break;
                                         default:
-                                            echo '<span class="badge badge-secondary">Pending</span>';
+                                            echo '<span class="badge badge-secondary text-center">Pending</span>';
                                             break;
                                     }
                                     ?>

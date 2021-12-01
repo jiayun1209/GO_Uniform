@@ -182,6 +182,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                             case 3:
                                 echo "<span class='py-2 px-4 btn-flat btn-warning text-danger'>Cancelled</span>";
                                 break;
+                            case 4:
+                                echo "<span class='py-2 px-4 btn-flat btn-info'>Sent</span>";
+                                break;
+                            case 5:
+                                echo "<span class='py-2 px-4 btn-flat btn-success'>Completed</span>";
+                                break;
                             default:
                                 echo "<span class='py-2 px-4 btn-flat btn-secondary'>Pending</span>";
                                 break;

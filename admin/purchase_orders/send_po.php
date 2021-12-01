@@ -261,18 +261,16 @@ function sendEmail($pdf, $enquirydata) {
     }
 </style>
 
-<div class="card card-outline card-info">
-    <div class="card-header">
-        <h3 class="card-title"><b><?php echo isset($id) ? "Purchase Order Details" : "Review Purchase Order" ?></b></h3>
-        <div class="card-tools">
-            <button class="btn btn-sm btn-flat btn-info" id="sendMailBtn" name="sendMailBtn" type="submit"><i class="fa fa-envelope"></i> Confirm to Send</button>
-
-
-            <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Cancel</a>
-            </form>
+<form action="" id="email-form" method="post" class="form-mail">
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title"><b><?php echo isset($id) ? "Purchase Order Details" : "Review Purchase Order" ?></b></h3>
+            <div class="card-tools">
+                <button class="btn btn-sm btn-flat btn-info" id="sendMailBtn" name="sendMailBtn" type="submit"><i class="fa fa-envelope"></i> Confirm to Send</button>
+                <a class="btn btn-sm btn-flat btn-default" href="?page=purchase_orders">Cancel</a>
+            </div>
         </div>
-    </div>
-    <form action="" id="email-form" method="post" class="form-mail">
+
         <div class="card-body" id="out_print">
             <div class="row">
                 <div class="col-6 d-flex align-items-center">
@@ -404,8 +402,8 @@ function sendEmail($pdf, $enquirydata) {
                 </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 <table class="d-none" id="item-clone">
     <tr class="po-item" data-id="">
         <td class="align-middle p-1 text-center">
@@ -452,4 +450,5 @@ function sendEmail($pdf, $enquirydata) {
             }, 200);
         })
     })
+
 </script>

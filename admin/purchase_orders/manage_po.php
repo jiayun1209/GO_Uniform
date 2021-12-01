@@ -43,7 +43,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="quotation_no">Quotation Number</label>
-                    <input type="text" disabled class="form-control form-control-sm rounded-0 bg-light" id="quotation_no" name="quotation_no" value="<?php if ($quotation_no==0) echo ''; else echo $quotation_no; ?>">
+                    <input type="text" disabled class="form-control form-control-sm rounded-0 bg-light" id="quotation_no" name="quotation_no" value="<?php
+                    if ($quotation_no == 0)
+                        echo '';
+                    else
+                        echo $quotation_no;
+                    ?>">
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="delivery_date">Delivery Date</label>
@@ -60,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?>
+<?php endwhile; ?>
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
@@ -167,6 +172,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     case 3:
                                         echo "<span class='form-control form-control-sm rounded-0'>Cancelled</span>";
                                         break;
+                                    case 4:
+                                        echo "<span class='form-control form-control-sm rounded-0'>Sent</span>";
+                                        break;
+                                    case 5:
+                                        echo "<span class='form-control form-control-sm rounded-0'>Completed</span>";
+                                        break;
                                     default:
                                         echo "<span class='form-control form-control-sm rounded-0'>Pending</span>";
                                         break;
@@ -174,14 +185,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 ?>
                             <?php endif; ?>
 
-                            <?php if ($_settings->userdata('type') == 2): ?>
+<?php if ($_settings->userdata('type') == 2): ?>
                                 <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()"> 
                                     <option value="0" hidden="" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                    <?php if ($status == 0): ?>
+    <?php if ($status == 0): ?>
                                         <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                         <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
                                     <?php endif; ?>
-                                    <?php if ($status == 1): ?>
+    <?php if ($status == 1): ?>
                                         <option value="1" disabled="" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                         <option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
                                     <?php endif; ?>
@@ -191,8 +202,17 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <?php if ($status == 3): ?>
                                         <option value="3" disabled="" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
                                     <?php endif; ?>
+    <?php if ($status == 4): ?>
+                                        <option value="4" disabled="" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>Sent</option>
+                                        <option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Completed</option>
+                                <?php endif; ?>
+                                                                        <?php if ($status == 5): ?>
+                                    <option value="5" disabled=""  <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Completed</option>
+                                <?php endif; ?>
                                 </select>
-                            <?php endif; ?>
+
+<?php endif; ?>
+
                             <br>
                             <label for="cancel_reason" class="control-label">Cancellation Reason</label>
                             <textarea name="cancel_reason" disabled id="cancel_reason" cols="10" rows="2" class="form-control rounded-0"><?php echo isset($cancel_reason) ? $cancel_reason : '' ?></textarea>
