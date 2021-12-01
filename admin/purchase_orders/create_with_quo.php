@@ -1,6 +1,6 @@
 <?php
 $Array_account = array();
-$sql = "SELECT r.*, i.name, i.item_code, i.description, v.name FROM `rfq` r, `inventory` i, `quotation` q, `vendor` v where q.id = r.rfq_no and r.item_id = i.id and q.vendor_ID = v.vendor_ID";
+$sql = "SELECT r.*, i.name, i.item_code, i.description, v.vendor_ID,v.name FROM `rfq` r, `inventory` i, `quotation` q, `vendor` v where q.id = r.rfq_no and r.item_id = i.id and q.vendor_ID = v.vendor_ID";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = mysqli_fetch_array($result)) {
@@ -69,26 +69,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
             </div>
             <div class="row">
-<!--                                                <div class="col-md-6 form-group">
-                                                    
-                                                    <label for="vendor_ID">Supplier Name <span class="po_err_msg text-danger"></span></label>
-                                                    <input type="text" id="vendor_ID" disabled name="vendor_ID" class="form-control form-control-sm rounded-0 vendor_ID" value="<?php echo isset($vendor_ID) ? $vendor_ID : '' ?>">
-                                                </div>-->
                 <div class="col-md-6 form-group">
-                    <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2 vendor_ID">
-                        <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
-
-
-                        <?php
-                        $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
-                        while ($row = $supplier_qry->fetch_assoc()):
-                            ?>
-                            <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-                        <?php endwhile; ?><
-                    </select>
+                    <label for="name">Supplier Name <span class="po_err_msg text-danger"></span></label>
+                    <input type="hidden" id="vendor_ID" name="vendor_ID" class="form-control form-control-sm rounded-0 vendor_ID bg-light" value="<?php echo isset($vendor_ID) ? $vendor_ID : '' ?>">
+                    <input type="text" id="name" name="name" class="form-control form-control-sm rounded-0 vendor_ID bg-light">
                 </div>
-
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
                     <input type="text" class="form-control form-control-sm rounded-0" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
@@ -216,8 +201,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         for (i = 0; i < Array_account.length; i++) {
             if (Array_account[i][0] === document.getElementById("quotation_no").value) {
                 var total = Array_account[i][3] * Array_account[i][2];
-                var vname = Array_account[i][7];
-                document.getElementById("vendor_ID").value = vname;
+                var vid = Array_account[i][7];
+                var vname = Array_account[i][8];
+                
+                document.getElementById("vendor_ID").value = vid;
+                document.getElementById("name").value = vname;
                 totalsum += total;
 
                 var tr = '<tr class="po-item" data-id="">';

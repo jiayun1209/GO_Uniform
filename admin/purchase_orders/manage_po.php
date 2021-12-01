@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </div>
                 <div class="col-md-6 form-group">
                     <label for="po_no">PO Number <span class="po_err_msg text-danger"></span></label>
-                    <input class="form-control form-control-sm rounded-0 bg-light" disabled="" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
+                    <input class="form-control form-control-sm rounded-0 bg-light" id="po_no" name="po_no" value="<?php echo isset($po_no) ? $po_no : '' ?>">
                     <small><i>Leave this blank to Automatically Generate upon saving.</i></small>
                 </div>
             </div>
