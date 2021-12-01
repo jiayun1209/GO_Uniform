@@ -5,7 +5,7 @@
 <?php endif;?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">List of Items</h3>
+		<h3 class="card-title">List of Inventory</h3>
 		<div class="card-tools">
 			<a id="btn-import" class="btn btn-flat btn-primary">
                 <span class="fas fa-file-import"></span>
