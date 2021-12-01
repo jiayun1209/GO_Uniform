@@ -1,17 +1,17 @@
 <?php
-    $stmt = $conn->query("SELECT * FROM general_setting where meta_field ='theme_colour'");
-    $backgroundColor = $stmt->fetch_array()["meta_value"];
+$stmt = $conn->query("SELECT * FROM general_setting where meta_field ='theme_colour'");
+$backgroundColor = $stmt->fetch_array()["meta_value"];
 ?>
 
 <style>
-    
-.main-sidebar.bg-navy{
-    background-color: #<?php echo $backgroundColor;?> !important;
-}
 
-.main-sidebar .brand-link{
-    background-color: rgba(171,171,171, 0.63) !important;
-}
+    .main-sidebar.bg-navy{
+        background-color: #<?php echo $backgroundColor; ?> !important;
+    }
+
+    .main-sidebar .brand-link{
+        background-color: rgba(171,171,171, 0.63) !important;
+    }
 </style>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-secondary bg-navy elevation-4 sidebar-no-expand">
@@ -93,6 +93,14 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=category" class="nav-link nav-catalog">
+                                        <i class="nav-icon fas fa-book-open"></i>
+                                        <p>
+                                            Manage Category
+                                        </p>
+                                    </a>
+                                </li>
 
                                 <li class="nav-header"><b>Supplier Management</b></li>
                                 <li class="nav-item dropdown">
@@ -103,7 +111,7 @@
                                         </p>
                                     </a>
                                 </li>
-                               
+
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=Subcontractor" class="nav-link nav-Subcontractor">
                                         <i class="nav-icon fas fa-truck-loading"></i>
@@ -112,7 +120,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=contract_mgm" class="nav-link nav-contract_mgm">
                                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -143,10 +151,10 @@
                             <?php endif; ?>
 
                             <?php if ($_settings->userdata('type') == 1): ?>
-                               
+
                                 <li class="nav-header"><b>System Initialization</b></li>
 
-                                 <li class="nav-item dropdown">
+                                <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
                                         <i class="nav-icon fas fa-building"></i>
                                         <p>
@@ -154,7 +162,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=setting" class="nav-link nav-">
                                         <i class="nav-icon fas fa-cogs"></i>
@@ -163,16 +171,14 @@
                                         </p>
                                     </a>
                                 </li>
-
-                              <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-manage_event">
-                                        <i class="nav-icon fas fa-calendar-alt"></i>
+                                 <li class="nav-item dropdown">
+                                    <a href="http://localhost/GO_Uniform/admin/operation_calendar/index.php"  class="nav-link nav-">
+                                        <i class="nav-icon fas fa-calendar"></i>
                                         <p>
-                                            Operation Calendar
+                                            Operation Calendar 
                                         </p>
                                     </a>
                                 </li>
-                                
                                 <li class="nav-header"><b>Setups</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
@@ -199,12 +205,21 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=items" class="nav-link nav-items">
                                         <i class="nav-icon fas fa-boxes"></i>
                                         <p>
                                             Inventory
+                                        </p>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=manage_event" class="nav-link nav-manage_event">
+                                        <i class="nav-icon fas fa-calendar-alt"></i>
+                                        <p>
+                                            Operation Calendar
                                         </p>
                                     </a>
                                 </li>
@@ -217,7 +232,7 @@
                                         </p>
                                     </a>
                                 </li>
-                                
+
                                 <li class="nav-header"><b>Alert Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=alert" class="nav-link nav-alert_v">
@@ -263,7 +278,15 @@
                                             Request for Quotation   
                                         </p>
                                     </a>
-                                </li>                               
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=Quotation" class="nav-link nav-Quotation">
+                                        <i class="nav-icon fas fa-file-alt"></i>
+                                        <p>
+                                            Maintain Quotation   
+                                        </p>
+                                    </a>
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=rating" class="nav-link nav-rating">
                                         <i class="nav-icon fas fa-star-half-alt"></i>

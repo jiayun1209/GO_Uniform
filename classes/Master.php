@@ -332,8 +332,14 @@ Class Master extends DBConnection {
         }
         if (empty($id)) {
             $sql = "INSERT INTO `inventory` set {$data} ";
+            
+            $alert = new Alert();
+            $alert->add_alert_group("Inventory", "New Inventory", 1, 1, "http://localhost/GO_Uniform/admin/?page=items");
         } else {
             $sql = "UPDATE `inventory` set {$data} where id = '{$id}' ";
+            
+            $alert = new Alert();
+        $alert->add_alert_group("Inventory", "Updated Inventory", 1, 1, "http://localhost/GO_Uniform/admin/?page=items");
         }
         $save = $this->conn->query($sql);
         if ($save) {
@@ -744,16 +750,22 @@ Class Master extends DBConnection {
         if (empty($id)) {
             $sql = "INSERT INTO `events` set {$data} ";
             $save = $this->conn->query($sql);
+            
+              $alert = new Alert();
+        $alert->add_alert_group("Operation Calendar", "New Operation Calendar", 1, 1, "http://localhost/GO_Uniform/admin/?page=manage_event");
         } else {
             $sql = "UPDATE `events` set {$data} where id = '{$id}' ";
             $save = $this->conn->query($sql);
+            
+              $alert = new Alert();
+        $alert->add_alert_group("Operation Calendar", "Updated Operation Calendar", 1, 1, "http://localhost/GO_Uniform/admin/?page=manage_event");
         }
         if ($save) {
             $resp['status'] = 'success';
             if (empty($id))
-                $this->settings->set_flashdata('success', "New Events successfully saved.");
+                $this->settings->set_flashdata('success', "New Operation Calendar successfully saved.");
             else
-                $this->settings->set_flashdata('success', "Events successfully updated.");
+                $this->settings->set_flashdata('success', "Operation Calendar successfully updated.");
         } else {
             $resp['status'] = 'failed';
             $resp['err'] = $this->conn->error . "[{$sql}]";
