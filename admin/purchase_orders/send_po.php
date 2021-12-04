@@ -197,7 +197,7 @@ function sendEmail($pdf, $enquirydata) {
     }
 
     $emailbody .= '';
-    $emailbody .= '</br></br></br>Good day to you supplier ' . $enquirydata['First Name'] . ', as attached is the Purchase Order from GO Uniform Sdn Bhd.';
+    $emailbody .= '</br></br></br>Good day to you supplier ' . $enquirydata['Supplier'] . ', as attached is the Purchase Order from GO Uniform Sdn Bhd.';
     $emailbody .= '';
     $emailbody .= '</br></br>Kindly inform us the estimated time for the goods arrived by email. </br></br>Thank you!';
     $emailbody .= '';

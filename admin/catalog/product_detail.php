@@ -419,4 +419,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         image.src = URL.createObjectURL(event.target.files[0]);
     };
 </script>
-

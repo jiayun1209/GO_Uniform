@@ -116,24 +116,30 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
                         <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                         <td class="text-center">
-                            <?php
-                            switch ($row['status']) {
-                                case '1':
-                                    echo '<span class="badge badge-success">Approved</span>';
-                                    break;
-                                case '2':
-                                    echo '<span class="badge badge-danger">Rejected</span>';
-                                    break;
-                                case '3':
-                                    echo '<span class="badge badge-warning text-danger">Cancelled</span>';
-                                    break;
-                                default:
-                                    echo '<span class="badge badge-secondary">Pending</span>';
-                                    break;
-                            }
-                            ?>
-                        </td>
-                    </tr>
+                                <?php
+                                switch ($row['status']) {
+                                    case '1':
+                                        echo '<span class="badge badge-success text-center">Approved</span>';
+                                        break;
+                                    case '2':
+                                        echo '<span class="badge badge-danger text-center">Rejected</span>';
+                                        break;
+                                    case '3':
+                                        echo '<span class="badge badge-warning text-danger text-center">Cancelled</span>';
+                                        break;
+                                    case '4':
+                                        echo '<span class="badge badge-info text-center">Sent</span>';
+                                        break;
+                                    case '5':
+                                        echo '<span class="badge badge-primary text-center">Completed</span>';
+                                        break;
+                                    default:
+                                        echo '<span class="badge badge-secondary text-center">Pending</span>';
+                                        break;
+                                }
+                                ?>
+                            </td>
+                        </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>

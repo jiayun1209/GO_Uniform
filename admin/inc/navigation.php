@@ -280,14 +280,6 @@ $backgroundColor = $stmt->fetch_array()["meta_value"];
                                     </a>
                                 </li>
                                 <li class="nav-item dropdown">
-                                    <a href="<?php echo base_url ?>admin/?page=Quotation" class="nav-link nav-Quotation">
-                                        <i class="nav-icon fas fa-file-alt"></i>
-                                        <p>
-                                            Maintain Quotation   
-                                        </p>
-                                    </a>
-                                </li>
-                                <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=rating" class="nav-link nav-rating">
                                         <i class="nav-icon fas fa-star-half-alt"></i>
                                         <p>

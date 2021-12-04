@@ -102,7 +102,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status=1 order by unix_timestamp(po.date_updated) ");
+                $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID  = s.vendor_ID where status=4 order by unix_timestamp(po.date_updated) ");
                 while ($row = $qry->fetch_assoc()):
                     $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
                     $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -113,21 +113,27 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <td class="text-left"><?php echo $row['po_no'] ?></td>
                         <td class="text-left"><?php echo $row['sname'] ?></td>
                         <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
+                        <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
                         <td class="text-center">
                             <?php
                             switch ($row['status']) {
                                 case '1':
-                                    echo '<span class="badge badge-success">Approved</span>';
+                                    echo '<span class="badge badge-success text-center">Approved</span>';
                                     break;
                                 case '2':
-                                    echo '<span class="badge badge-danger">Rejected</span>';
+                                    echo '<span class="badge badge-danger text-center">Rejected</span>';
                                     break;
                                 case '3':
-                                    echo '<span class="badge badge-warning text-danger">Cancelled</span>';
+                                    echo '<span class="badge badge-warning text-danger text-center">Cancelled</span>';
+                                    break;
+                                case '4':
+                                    echo '<span class="badge badge-info text-center">Sent</span>';
+                                    break;
+                                case '5':
+                                    echo '<span class="badge badge-primary text-center">Completed</span>';
                                     break;
                                 default:
-                                    echo '<span class="badge badge-secondary">Pending</span>';
+                                    echo '<span class="badge badge-secondary text-center">Pending</span>';
                                     break;
                             }
                             ?>
