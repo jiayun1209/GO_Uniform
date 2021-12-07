@@ -33,6 +33,9 @@ if (isset($_POST['submit'])) {
     
     $sql_u = "SELECT * FROM vendor WHERE email='$supplierEmail'";
     $res_u = mysqli_query($dbc, $sql_u);
+    $sql_e = "SELECT * FROM subcontractor WHERE email='$supplierEmail'";
+    $res_e = mysqli_query($dbc, $sql_e);
+    
     if (mysqli_num_rows($res_u) > 0) {
         $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
         $checked = mysqli_query($dbc, "DELETE from vendor where email='$supplierEmail'");
@@ -40,17 +43,25 @@ if (isset($_POST['submit'])) {
         $checkedCom = "";
         $checked = "";
     };
-    
-    $sql_e = "SELECT * FROM subcontractor WHERE email='$supplierEmail'";
-    $res_e = mysqli_query($dbc, $sql_e);
-    
-    if (mysqli_num_rows($res_e) > 0) {
+        
+        
+        if (mysqli_num_rows($res_e) > 0){
         $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
         $checked = mysqli_query($dbc, "DELETE from subcontractor where email='$supplierEmail'");
-    } else{
+    }else {
         $checkedCom = "";
         $checked = "";
-    }
+    };
+    
+    
+    
+  //  if (mysqli_num_rows($res_e) > 0) {
+    //    $checkedCom = mysqli_query($dbc, "DELETE from company where company_name = '$companyName' ");
+      //  $checked = mysqli_query($dbc, "DELETE from subcontractor where email='$supplierEmail'");
+  //  } else{
+    //    $checkedCom = "";
+      //  $checked = "";
+  //  }
     
     if ($checkedCom && $checked) {
     echo "<script>alert('Checked existing db');</script>";
