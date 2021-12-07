@@ -71,9 +71,9 @@ if (isset($_POST['sendMailBtn'])) {
 </style>
 <div class="card card-outline card-info">
     <div class="card-header">
-        <h3 class="card-title">Invite Vendors</h3>
+        <h3 class="card-title">Invite Subcontractor</h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-flat btn-default" href="?page=suppliers">Back</a>
+            <a class="btn btn-sm btn-flat btn-default" href="?page=Subcontractor">Back</a>
         </div>
     </div>
 <form action="" id="invite-form" method="post" class="form-invite">
@@ -103,4 +103,3 @@ if (isset($_POST['sendMailBtn'])) {
     </div> <br/>
     <button type="submit" name="sendMailBtn" class="btn btn-lg btn-primary btn-block text-uppercase" >Send Email</button>
 </form>
- 
