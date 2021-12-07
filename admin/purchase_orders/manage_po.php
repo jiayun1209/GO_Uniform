@@ -65,7 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         while ($row = $supplier_qry->fetch_assoc()):
                             ?>
                             <option value="<?php echo $row['vendor_ID'] ?>" <?php echo isset($vendor_ID) && $vendor_ID == $row['vendor_ID'] ? 'selected' : '' ?>><?php echo $row['name'] ?></option>
-<?php endwhile; ?>
+                        <?php endwhile; ?>
                     </select>
                 </div>
                 <div class="col-md-6 form-group">
@@ -185,14 +185,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 ?>
                             <?php endif; ?>
 
-<?php if ($_settings->userdata('type') == 2): ?>
+                            <?php if ($_settings->userdata('type') == 2): ?>
                                 <select name="status" id="status" class="form-control form-control-sm rounded-0" onchange="displayCancellation()"> 
                                     <option value="0" hidden="" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-    <?php if ($status == 0): ?>
+                                    <?php if ($status == 0): ?>
                                         <option value="1" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                         <option value="2" <?php echo isset($status) && $status == 2 ? 'selected' : '' ?>>Rejected</option>
                                     <?php endif; ?>
-    <?php if ($status == 1): ?>
+                                    <?php if ($status == 1): ?>
                                         <option value="1" disabled="" <?php echo isset($status) && $status == 1 ? 'selected' : '' ?>>Approved</option>
                                         <option value="3" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
                                     <?php endif; ?>
@@ -202,16 +202,16 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                     <?php if ($status == 3): ?>
                                         <option value="3" disabled="" <?php echo isset($status) && $status == 3 ? 'selected' : '' ?>>Cancelled</option>
                                     <?php endif; ?>
-    <?php if ($status == 4): ?>
+                                    <?php if ($status == 4): ?>
                                         <option value="4" disabled="" <?php echo isset($status) && $status == 4 ? 'selected' : '' ?>>Sent</option>
                                         <option value="5" <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Completed</option>
-                                <?php endif; ?>
-                                                                        <?php if ($status == 5): ?>
-                                    <option value="5" disabled=""  <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Completed</option>
-                                <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if ($status == 5): ?>
+                                        <option value="5" disabled=""  <?php echo isset($status) && $status == 5 ? 'selected' : '' ?>>Completed</option>
+                                    <?php endif; ?>
                                 </select>
 
-<?php endif; ?>
+                            <?php endif; ?>
 
                             <br>
                             <label for="cancel_reason" class="control-label">Cancellation Reason</label>

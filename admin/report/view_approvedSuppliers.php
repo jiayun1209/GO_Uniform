@@ -44,19 +44,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
-        <div class="row date">
-            <label class="py-2">From: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
-            </div>
-            <label class="px-2 py-2 text-center">To: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
-            </div>
-            <div class="form-group">
-                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
     </div>
 
 
