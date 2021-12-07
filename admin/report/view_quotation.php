@@ -1,3 +1,6 @@
+<?php
+$con = mysqli_connect("localhost", "root", "", "go");
+?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
@@ -44,21 +47,35 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
-        <div class="row date">
-            <label class="py-2">From: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
-            </div>
-            <label class="px-2 py-2 text-center">To: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
-            </div>
-            <div class="form-group">
-                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
-    </div>
+        <form action="" method="post">
+            <div class="row date">
+                <label class="py-2 text-left">From: </label>
+                <div class="col-md-3 form-group">
+                    <input type="date" name="start_date" class="text-center form-control"  placeholder="Start Date">                               
+                </div>
+                <label class="px-2 py-2 text-center">To: </label>
+                <div class="col-md-3 form-group">
+                    <input type="date" name="end_date" class="text-center form-control"  placeholder="End Date">                               
+                </div>
 
+            </div>
+            <div class="row">
+                <label class="py-2 text-left">Status: </label>
+                <div class="col-md-3 form-group">
+                    <select name="status" id="status" class="text-center form-control">
+                        <option value="3">All</option>
+                        <option value="0">Pending</option>
+                        <option value="1">Approved</option>
+                        <option value="2">Rejected</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" name="submitBtn" class="btn btn-sm btn-flat btn-primary text-center form-control"><i class="fa fa-search"></i> Search</button>
+                </div>                 
+            </div>
+
+        </form> 
+    </div>
 
     <div class="card-body ml-5 mr-5" id="out_print">
         <div class="row"><h2 class="text-center"><b>PURCHASE QUOTATION COMPARISON REPORT</b></h2></div>
@@ -91,7 +108,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <thead>
                 <tr class="bg-navy disabled">
                     <th class="text-center">No.</th>
-                    <th class="text-left">Delivery Date</th>
+                    <th class="text-left">Date Created</th>
                     <th class="text-left">Quotation No.</th>
                     <th class="text-left">Supplier Name</th>
                     <th class="text-center">Items</th>
@@ -101,42 +118,87 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </tr>
             </thead>
             <tbody>
-                <?php
-                $i = 1;
-                $qry = $conn->query("SELECT po.*,q.id as quo_id, s.name as sname FROM `purchase_order` po,`quotation` q, `vendor` s where po.vendor_ID  = s.vendor_ID and s.vendor_ID = q.vendor_ID and po.quotation_no = q.id order by unix_timestamp(po.date_updated) ");
-                while ($row = $qry->fetch_assoc()):
-                    $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['quo_id']}'")->num_rows;
-                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['quo_id']}'")->fetch_array()['total'];
-                    ?>
-                    <tr>
-                        <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo date("d-m-Y", strtotime($row['delivery_date'])); ?></td>
-                        <td class="text-left"><?php echo $row['quo_id'] ?></td>
-                        <td class="text-left"><?php echo $row['sname'] ?></td>
-                        <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                        <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
-                        <td class="text-center">
-                            <?php
-                            switch ($row['status']) {
-                                case '1':
-                                    echo '<span class="badge badge-success">Approved</span>';
-                                    break;
-                                case '2':
-                                    echo '<span class="badge badge-danger">Rejected</span>';
-                                    break;
-                                case '3':
-                                    echo '<span class="badge badge-warning text-danger">Cancelled</span>';
-                                    break;
-                                default:
-                                    echo '<span class="badge badge-secondary">Pending</span>';
-                                    break;
-                            }
+                 <?php
+                if (isset($_POST['submitBtn'])) {
+                    if($_POST['start_date']!=''){
+                        $start = $_POST['start_date'];
+                    }else{
+                        $start = '2021-01-01';
+                    }
+                    
+                    if($_POST['end_date']!=''){
+                        $end = $_POST['end_date'];
+                    }else{
+                        $end = '2021-12-31';
+                    }
+                    
+                    $status = $_POST['status'];
+                    $i = 1;
+                    if ($status == 3) {
+                        $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID = s.vendor_ID where q.date_created between '$start' and ' $end' order by date_created");
+                        while ($row = $qry->fetch_assoc()):
+                            $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
+                            $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
                             ?>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
+                            <tr>
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td class="text-left"><?php echo date("d-m-Y", strtotime($row['date_created'])); ?></td>
+                                <td class="text-left"><?php echo $row['q_ID'] ?></td>
+                                <td class="text-left"><?php echo $row['sname']?></td>
+                                <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                                <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
+                                <td class="text-center">
+                                    <?php
+                                    switch ($row['status']) {
+                                        case '1':
+                                            echo '<span class="badge badge-success text-center">Approved</span>';
+                                            break;
+                                        case '2':
+                                            echo '<span class="badge badge-danger text-center">Rejected</span>';
+                                            break;
+                                        default:
+                                            echo '<span class="badge badge-secondary text-center">Pending</span>';
+                                            break;
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php endwhile;
+                    } ?>
+                    <?php
+                    $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID = s.vendor_ID where q.date_created between '$start' and ' $end' and q.status = '$status'");
+                        while ($row = $qry->fetch_assoc()):
+                            $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
+                            $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
+                            ?>
+                            <tr>
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td class="text-left"><?php echo date("d-m-Y", strtotime($row['date_created'])); ?></td>
+                                <td class="text-left"><?php echo $row['q_ID'] ?></td>
+                                <td class="text-left"><?php echo $row['sname']?></td>
+                                <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                                <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
+                                <td class="text-center">
+                                    <?php
+                                    switch ($row['status']) {
+                                        case '1':
+                                            echo '<span class="badge badge-success text-center">Approved</span>';
+                                            break;
+                                        case '2':
+                                            echo '<span class="badge badge-danger text-center">Rejected</span>';
+                                            break;
+                                        default:
+                                            echo '<span class="badge badge-secondary text-center">Pending</span>';
+                                            break;
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php endwhile;
+                    } ?>
             </tbody>
         </table>
+        <div id="chart_div" class="col-9 d-flex align-items-center" style="width: 1450px; height: 600px;"></div>
     </div>
 </div>
 
@@ -199,3 +261,32 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ["Quotation No", "Total Amount (RM)"],
+<?php
+$sql = "SELECT q.q_ID, sum(r.unit_price*r.quantity) as total from quotation q, rfq r where q.id=r.rfq_no group by q.q_ID";
+$fire = mysqli_query($con, $sql);
+while ($result = $fire->fetch_assoc()) {
+    echo "['" . $result['q_ID'] . "'," . $result['total'] . "],";
+}
+?>
+        ]);
+
+        var options = {
+            title: 'Quotation Comparison by Total Amount (RM)',
+            hAxis: {title: 'Quotation No', titleTextStyle: {color: '#333'}},
+            vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
+

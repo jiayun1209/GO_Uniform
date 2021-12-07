@@ -136,7 +136,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     $status = $_POST['status'];
                     $i = 1;
                     if ($status == 6) {
-                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID = s.vendor_ID where po.delivery_date between '$start' and ' $end'");
+                        $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID = s.vendor_ID where po.delivery_date between '$start' and ' $end' order by delivery_date");
                         while ($row = $qry->fetch_assoc()):
                             $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
                             $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
@@ -176,7 +176,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <?php endwhile;
                     } ?>
                     <?php
-                    $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID = s.vendor_ID where po.delivery_date between '$start' and ' $end' and po.status = '$status'");
+                    $qry = $conn->query("SELECT po.*, s.name as sname FROM `purchase_order` po inner join `vendor` s on po.vendor_ID = s.vendor_ID where po.delivery_date between '$start' and ' $end' and po.status = '$status' order by po.delivery_date");
                         while ($row = $qry->fetch_assoc()):
                             $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
                             $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];

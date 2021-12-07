@@ -1,3 +1,6 @@
+<?php
+$con = mysqli_connect("localhost", "root", "", "go");
+?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
@@ -44,19 +47,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
-        <div class="row date">
-            <label class="py-2">From: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
-            </div>
-            <label class="px-2 py-2 text-center">To: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
-            </div>
-            <div class="form-group">
-                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
     </div>
 
 
@@ -80,43 +70,43 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <table class="table table-hover table-striped" id="datatables">
             <colgroup>
                 <col width="5%">
-                <col width="19%">
-                <col width="19%">
-                <col width="19%">
-                <col width="19%">
-                <col width="19%">
+                <col width="35%">
+                <col width="15%">
+                <col width="20%">
+                <col width="25%">
 
             </colgroup>
             <thead>
                 <tr class="bg-navy disabled">
                     <th class="text-center">No.</th>
-                    <th class="text-left">Supplier ID</th>
-                    <th class="text-left">Supplier Name</th>
-                    <th class="text-left">Item ID</th>
+                    <th class="text-left">Supplier (Offers The Lowest Price)</th>
+                    <th class="text-left">Item Code</th>
                     <th class="text-left">Item Name</th>
-                    <th class="text-left">Price</th>
+                    <th class="text-right">Price Per Unit (RM)</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT v.vendor_ID as vendorID, v.name as vname, i.id as itemID, i.item_code as itemCode, i.price as itemPrice FROM `vendor` v inner join `inventory` i on v.vendor_ID  = i.vendor_ID");
+                $qry = $conn->query("SELECT i.item_code, i.name, s.vendor_ID, s.name as sname, min(r.unit_price) as price_given from quotation q, rfq r, vendor s, inventory i where q.id = r.rfq_no and q.vendor_ID=s.vendor_ID and r.item_id = i.id group by i.item_code order by i.item_code asc, r.unit_price desc");
                 while ($row = $qry->fetch_assoc()):
                     
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo $row['vendorID'] ?></td>
-                        <td class="text-left"><?php echo $row['vname'] ?></td>
-                        <td class="text-left"><?php echo $row['itemID'] ?></td>
-                        <td class="text-left"><?php echo $row['itemCode']?></td>
-                        <td class="text-left"><?php echo $row['itemPrice']?></td>
+                        <td class="text-left"><?php echo $row['vendor_ID']." - ".$row['sname'] ?></td>
+                        <td class="text-left"><?php echo $row['item_code'] ?></td>
+                        <td class="text-left"><?php echo $row['name'] ?></td>
+                        <td class="text-right"><?php echo $row['price_given'] ?></td>
                         
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <div id="piechart" style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;"></div>
+        <div id="piechart1" style="width: 900px; height: 500px;margin-left: auto; margin-right: auto;"></div>
+        <div id="piechart2" style="width: 900px; height: 500px;margin-left: auto; margin-right: auto;"></div>
     </div>
 </div>
 
@@ -179,12 +169,83 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Rating Stars', 'Count of Suppliers'],
 <?php
+$sql = "SELECT s.name as sname, min(r.unit_price) as price_offered from vendor s, inventory i, quotation q, rfq r where r.rfq_no = q.id and r.item_id = i.id and q.vendor_ID = s.vendor_ID and i.item_code = 'IC0001' group by s.vendor_ID";
+$fire = mysqli_query($con, $sql);
+while ($result = $fire->fetch_assoc()) {
+    echo "['" . $result['sname'] . "'," . $result['price_offered'] . "],";
+}
+?>
+        ]);
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+        var options = {
+            title: 'Unit Price Offered by Suppliers - Item: IC0001'
+        };
 
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Rating Stars', 'Count of Suppliers'],
+<?php
+$sql = "SELECT s.name as sname, min(r.unit_price) as price_offered from vendor s, inventory i, quotation q, rfq r where r.rfq_no = q.id and r.item_id = i.id and q.vendor_ID = s.vendor_ID and i.item_code = 'IC0002' group by s.vendor_ID";
+$fire = mysqli_query($con, $sql);
+while ($result = $fire->fetch_assoc()) {
+    echo "['" . $result['sname'] . "'," . $result['price_offered'] . "],";
+}
+?>
+        ]);
+
+        var options = {
+            title: 'Unit Price Offered by Suppliers - Item: IC0002'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
+
+        chart.draw(data, options);
+    }
+</script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Rating Stars', 'Count of Suppliers'],
+<?php
+$sql = "SELECT s.name as sname, min(r.unit_price) as price_offered from vendor s, inventory i, quotation q, rfq r where r.rfq_no = q.id and r.item_id = i.id and q.vendor_ID = s.vendor_ID and i.item_code = 'IC0003' group by s.vendor_ID";
+$fire = mysqli_query($con, $sql);
+while ($result = $fire->fetch_assoc()) {
+    echo "['" . $result['sname'] . "'," . $result['price_offered'] . "],";
+}
+?>
+        ]);
+
+        var options = {
+            title: 'Unit Price Offered by Suppliers - Item: IC0003'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+        chart.draw(data, options);
+    }
+</script>
 

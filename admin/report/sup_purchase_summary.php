@@ -1,3 +1,6 @@
+<?php
+$con = mysqli_connect("localhost", "root", "", "go");
+?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
@@ -44,19 +47,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
-        <div class="row date">
-            <label class="py-2">From: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
-            </div>
-            <label class="px-2 py-2 text-center">To: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
-            </div>
-            <div class="form-group">
-                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
     </div>
 
 
@@ -97,20 +87,19 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT po.*, s.vendor_ID as vendorID, s.name as sname FROM `purchase_order` po, `vendor` s WHERE s.vendor_ID = po.vendor_ID");
+                $qry = $conn->query("SELECT sum(p.unit_price*p.quantity) as total_amount, count(po.id) as total_transactions, s.name as sname FROM purchase_order_details p, purchase_order po, vendor s where po.vendor_ID = s.vendor_ID and p.po_id = po.id and po.status = 4 group by po.vendor_ID");
                 while ($row = $qry->fetch_assoc()):
-                    $row['item_count'] = $conn->query("SELECT * FROM purchase_order_details where po_id = '{$row['id']}'")->num_rows;
-                    $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM purchase_order_details where po_id = '{$row['id']}'")->fetch_array()['total'];
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
                         <td class="text-left"><?php echo $row['sname'] ?></td>
-                        <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                        <td class="text-center"><?php echo number_format($row['total_transactions']) ?></td>
                         <td class="text-right"><?php echo number_format($row['total_amount'],2) ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+        <div id="piechart" style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;"></div>
     </div>
 </div>
 
@@ -173,3 +162,30 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Supplier', 'Count of Purchases Orders Placed'],
+          <?php
+          $sql = "SELECT count(po.id) as count,s.name as sname FROM purchase_order_details p, purchase_order po, vendor s where po.vendor_ID = s.vendor_ID and p.po_id = po.id and po.status = 4 group by po.vendor_ID";
+          $fire = mysqli_query($con, $sql);
+          while ($result = $fire->fetch_assoc()){
+              echo "['".$result['sname']."',".$result['count']."],";
+          }
+          ?>
+        ]);
+
+        var options = {
+          title: 'Count of Purchase Orders Placed For Vendors'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>

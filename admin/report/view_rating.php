@@ -1,3 +1,6 @@
+<?php
+$con = mysqli_connect("localhost", "root", "", "go");
+?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
@@ -44,19 +47,25 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-flat btn-success" id="print" type="button"><i class="fa fa-print"></i> Print</button>
             <a class="btn btn-sm btn-flat btn-default" href="?page=report">Back</a>
         </div>
-        <div class="row date">
-            <label class="py-2">From: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="start_date" id="start_date" class="text-center form-control start_date"  placeholder="Start Date" value="<?php echo isset($start_date) ? $start_date : '' ?>">                               
+        <form action="" method="post">
+            <div class="row">
+                <label class="py-2 text-left">Filter by Rating: </label>
+                <div class="col-md-3 form-group">
+                    <select name="point" id="point" class="text-center form-control">
+                        <option value="6">All</option>
+                        <option value="0">0 Star</option>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="5">5 Stars</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" name="submitBtn" class="btn btn-sm btn-flat btn-primary text-center form-control"><i class="fa fa-search"></i> Search</button>
+                </div>                 
             </div>
-            <label class="px-2 py-2 text-center">To: </label>
-            <div class="col-md-3 form-group">
-                <input type="date" name="end_date" id="end_date" class="text-center form-control end_date"  placeholder="End Date" value="<?php echo isset($end_date) ? $end_date : '' ?>">                               
-            </div>
-            <div class="form-group">
-                <button class="btn btn-sm btn-flat btn-primary text-center form-control" id="search" name="search" type="button"><i class="fa fa-search"></i> Search</button>
-            </div>
-        </div>
+        </form>
     </div>
 
 
@@ -89,28 +98,50 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <tr class="bg-navy disabled">
                     <th class="text-center">No.</th>
                     <th class="text-left">Supplier Name</th>
-                    <th class="text-left">Performance ID</th>
-                    <th class="text-left">Rating ID</th>
+                    <th class="text-center">Stars Rated for Supplier</th>
+                    <th class="text-left">Remarks</th>
 
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $i = 1;
-                $qry = $conn->query("SELECT r.performance_id as rperID, r.rating_id as ratID, v.name as vname FROM `rating` r inner join `vendor` v on r.vendor_ID  = v.vendor_ID");
-                while ($row = $qry->fetch_assoc()):
-                    
+                if (isset($_POST['submitBtn'])) {
+                    $point = $_POST['point'];
+                    $i = 1;
+                    if ($point == 6) {
+                        $qry = $conn->query("SELECT s.name as sname, p.point, p.remarks from vendor s, rating_measurement p, rating r where p.performance_ID = r.performance_ID and r.vendor_ID = s.vendor_ID");
+                        while ($row = $qry->fetch_assoc()):
+                            ?>
+                            <tr>
+                                <td class="text-center"><?php echo $i++; ?></td>
+                                <td class="text-left"><?php echo $row['sname'] ?></td>
+                                <td class="text-center"><?php echo $row['point'] ?></td>
+                                <td class="text-left"><?php echo $row['remarks'] ?></td>
+
+                            </tr>
+
+                        <?php
+                        endwhile;
+                    }
                     ?>
-                    <tr>
-                        <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo $row['vname'] ?></td>
-                        <td class="text-left"><?php echo $row['rperID']?></td>
-                        <td class="text-left"><?php echo $row['ratID']?></td>
-                        
-                    </tr>
-                <?php endwhile; ?>
+                    <?php
+                    $qry = $conn->query("SELECT s.name as sname, p.point, p.remarks from vendor s, rating_measurement p, rating r where p.performance_ID = r.performance_ID and r.vendor_ID = s.vendor_ID and p.point = '$point'");
+                    while ($row = $qry->fetch_assoc()):
+                        ?>
+                        <tr>
+                            <td class="text-center"><?php echo $i++; ?></td>
+                            <td class="text-left"><?php echo $row['sname'] ?></td>
+                            <td class="text-center"><?php echo $row['point'] ?></td>
+                            <td class="text-left"><?php echo $row['remarks'] ?></td>
+
+                        </tr>
+                    <?php
+                    endwhile;
+                }
+                ?> 
             </tbody>
         </table>
+        <div id="piechart" style="width: 900px; height: 500px; margin-left: auto; margin-right: auto;"></div>
     </div>
 </div>
 
@@ -173,10 +204,31 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
-<?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Rating Stars', 'Count of Suppliers'],
+<?php
+$sql = "SELECT count(s.vendor_ID) as vendor_count, p.point from vendor s, rating_measurement p, rating r where p.performance_ID = r.performance_ID and r.vendor_ID = s.vendor_ID group by p.performance_ID";
+$fire = mysqli_query($con, $sql);
+while ($result = $fire->fetch_assoc()) {
+    echo "['" . $result['point'] . "'," . $result['vendor_count'] . "],";
+}
+?>
+        ]);
+
+        var options = {
+            title: 'Suppliers Count Based On Rating'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+</script>

@@ -1,3 +1,6 @@
+<?php
+$con = mysqli_connect("localhost","root","","go");
+?>
 <?php if ($_settings->chk_flashdata('success')): ?>
     <script>
         alert_toast("<?php echo $_settings->flashdata('success') ?>", 'success')
@@ -139,6 +142,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 ?>
             </tbody>
         </table>
+        
     </div>
 </div>
 
@@ -201,3 +205,4 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('.table th,.table td').addClass('px-3 py-2 align-middle')
     })
 </script>
+
