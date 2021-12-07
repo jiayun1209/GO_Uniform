@@ -91,15 +91,14 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 $i = 1;
                 $qry = $conn->query("SELECT i.item_code, i.name, s.vendor_ID, s.name as sname, min(r.unit_price) as price_given from quotation q, rfq r, vendor s, inventory i where q.id = r.rfq_no and q.vendor_ID=s.vendor_ID and r.item_id = i.id group by i.item_code order by i.item_code asc, r.unit_price desc");
                 while ($row = $qry->fetch_assoc()):
-                    
                     ?>
                     <tr>
                         <td class="text-center"><?php echo $i++; ?></td>
-                        <td class="text-left"><?php echo $row['vendor_ID']." - ".$row['sname'] ?></td>
+                        <td class="text-left"><?php echo $row['vendor_ID'] . " - " . $row['sname'] ?></td>
                         <td class="text-left"><?php echo $row['item_code'] ?></td>
                         <td class="text-left"><?php echo $row['name'] ?></td>
                         <td class="text-right"><?php echo $row['price_given'] ?></td>
-                        
+
                     </tr>
                 <?php endwhile; ?>
             </tbody>

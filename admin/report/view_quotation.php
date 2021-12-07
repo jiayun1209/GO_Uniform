@@ -118,20 +118,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 </tr>
             </thead>
             <tbody>
-                 <?php
+                <?php
                 if (isset($_POST['submitBtn'])) {
-                    if($_POST['start_date']!=''){
+                    if ($_POST['start_date'] != '') {
                         $start = $_POST['start_date'];
-                    }else{
+                    } else {
                         $start = '2021-01-01';
                     }
-                    
-                    if($_POST['end_date']!=''){
+
+                    if ($_POST['end_date'] != '') {
                         $end = $_POST['end_date'];
-                    }else{
+                    } else {
                         $end = '2021-12-31';
                     }
-                    
+
                     $status = $_POST['status'];
                     $i = 1;
                     if ($status == 3) {
@@ -144,7 +144,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 <td class="text-center"><?php echo $i++; ?></td>
                                 <td class="text-left"><?php echo date("d-m-Y", strtotime($row['date_created'])); ?></td>
                                 <td class="text-left"><?php echo $row['q_ID'] ?></td>
-                                <td class="text-left"><?php echo $row['sname']?></td>
+                                <td class="text-left"><?php echo $row['sname'] ?></td>
                                 <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
                                 <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
                                 <td class="text-center">
@@ -164,38 +164,40 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                 </td>
                             </tr>
                         <?php endwhile;
-                    } ?>
+                    }
+                    ?>
                     <?php
                     $qry = $conn->query("SELECT q.*, s.name as sname FROM `quotation` q inner join `vendor` s on q.vendor_ID = s.vendor_ID where q.date_created between '$start' and ' $end' and q.status = '$status'");
-                        while ($row = $qry->fetch_assoc()):
-                            $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
-                            $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
-                            ?>
-                            <tr>
-                                <td class="text-center"><?php echo $i++; ?></td>
-                                <td class="text-left"><?php echo date("d-m-Y", strtotime($row['date_created'])); ?></td>
-                                <td class="text-left"><?php echo $row['q_ID'] ?></td>
-                                <td class="text-left"><?php echo $row['sname']?></td>
-                                <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
-                                <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
-                                <td class="text-center">
-                                    <?php
-                                    switch ($row['status']) {
-                                        case '1':
-                                            echo '<span class="badge badge-success text-center">Approved</span>';
-                                            break;
-                                        case '2':
-                                            echo '<span class="badge badge-danger text-center">Rejected</span>';
-                                            break;
-                                        default:
-                                            echo '<span class="badge badge-secondary text-center">Pending</span>';
-                                            break;
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
-                        <?php endwhile;
-                    } ?>
+                    while ($row = $qry->fetch_assoc()):
+                        $row['item_count'] = $conn->query("SELECT * FROM rfq where rfq_no = '{$row['id']}'")->num_rows;
+                        $row['total_amount'] = $conn->query("SELECT sum(quantity * unit_price) as total FROM rfq where rfq_no = '{$row['id']}'")->fetch_array()['total'];
+                        ?>
+                        <tr>
+                            <td class="text-center"><?php echo $i++; ?></td>
+                            <td class="text-left"><?php echo date("d-m-Y", strtotime($row['date_created'])); ?></td>
+                            <td class="text-left"><?php echo $row['q_ID'] ?></td>
+                            <td class="text-left"><?php echo $row['sname'] ?></td>
+                            <td class="text-center"><?php echo number_format($row['item_count']) ?></td>
+                            <td class="text-right"><?php echo number_format($row['total_amount'], 2) ?></td>
+                            <td class="text-center">
+                                <?php
+                                switch ($row['status']) {
+                                    case '1':
+                                        echo '<span class="badge badge-success text-center">Approved</span>';
+                                        break;
+                                    case '2':
+                                        echo '<span class="badge badge-danger text-center">Rejected</span>';
+                                        break;
+                                    default:
+                                        echo '<span class="badge badge-secondary text-center">Pending</span>';
+                                        break;
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                    <?php endwhile;
+                }
+                ?>
             </tbody>
         </table>
         <div id="chart_div" class="col-9 d-flex align-items-center" style="width: 1450px; height: 600px;"></div>
