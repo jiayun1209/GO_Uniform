@@ -53,7 +53,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <div>
                     <p class="m-0"><?php echo $_settings->info('company_name') ?></p>
                     <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                    <p class="m-0"><?php echo $_settings->info('company_address'). " " .$_settings->info('company_address_1')." ".$_settings->info('company_postcode')." ".$_settings->info('company_city')?></p>
+                    <p class="m-0"><?php echo $_settings->info('company_address'). " " .$_settings->info('company_address_1')." ".$_settings->info('company_postcode')." ".$_settings->info('company_city')." Pulau Pinang"?></p>
                 </div>
             </div>
             <div class="col-6">

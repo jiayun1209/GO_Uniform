@@ -27,6 +27,10 @@ $order_items_qry = $conn->query("SELECT o.*, i.item_code, i.name, i.description 
 $row = $order_items_qry->fetch_assoc();
 $comp_name = $_settings->info('company_name');
 $comp_add = $_settings->info('company_address');
+$comp_add1 = $_settings->info('company_address_1');
+$comp_postcode = $_settings->info('company_postcode');
+$comp_city = $_settings->info('company_city');
+$comp_state = "Pulau Pinang";
 $comp_img = $_settings->info('logo');
 $name = $supplier["name"];
 $sup_code = $supplier['company_code'];
@@ -76,7 +80,7 @@ $data .= //Add data
                 <div>
                     <p class="m-0">' . $comp_name . '</p>
                     <p class="m-0">' . $fromEmail . '</p>
-                    <p class="m-0">' . $comp_add . '</p>
+                    <p class="m-0">' . $comp_add . ' ' . $comp_add1 . ' ' . $comp_postcode . ' ' . $comp_city . ' ' . $comp_state . '</p>
                 </div>
             </div>
             <div class="col-6">
@@ -177,7 +181,6 @@ $pdf = $mpdf->Output('', 'S');
 //Grab enquiry data
 $enquirydata = [
     'First Name' => $comp_name,
-    'Last Name' => $comp_add,
     'Email' => $fromEmail,
     'SupplierEmail' => $toEmail,
     'Supplier' => $name
@@ -191,10 +194,6 @@ if (isset($_POST['sendMailBtn'])) {
 function sendEmail($pdf, $enquirydata) {
     $emailbody = '';
     $emailbody .= '<h1>New Purchase Order from ' . $enquirydata['First Name'] . '</h1>';
-
-    foreach ($enquirydata as $title => $data) {
-        $emailbody .= '<strong>' . $data . '</br>';
-    }
 
     $emailbody .= '';
     $emailbody .= '</br></br></br>Good day to you supplier ' . $enquirydata['Supplier'] . ', as attached is the Purchase Order from GO Uniform Sdn Bhd.';
@@ -278,7 +277,7 @@ function sendEmail($pdf, $enquirydata) {
                     <div>
                         <p class="m-0" name="fromEmail" id="fromEmail"><?php echo $_settings->info('company_name') ?></p>
                         <p class="m-0"><?php echo $_settings->info('company_email') ?></p>
-                        <p class="m-0"><?php echo $_settings->info('company_address') . " " . $_settings->info('company_address_1') . " " . $_settings->info('company_postcode') . " " . $_settings->info('company_city') ?></p>
+                        <p class="m-0"><?php echo $_settings->info('company_address') . " " . $_settings->info('company_address_1') . " " . $_settings->info('company_postcode') . " " . $_settings->info('company_city') . " Pulau Pinang" ?></p>
                     </div>
                 </div>
                 <div class="col-6">
