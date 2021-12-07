@@ -87,7 +87,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <tbody>
                 <?php
                 $i = 1;
-                $qry = $conn->query("SELECT sum(p.unit_price*p.quantity) as total_amount, count(po.id) as total_transactions, s.name as sname FROM purchase_order_details p, purchase_order po, vendor s where po.vendor_ID = s.vendor_ID and p.po_id = po.id and po.status = 4 group by po.vendor_ID");
+                $qry = $conn->query("SELECT sum(p.unit_price*p.quantity) as total_amount, count(po.id) as total_transactions, s.name as sname FROM purchase_order_details p, purchase_order po, vendor s where po.vendor_ID = s.vendor_ID and p.po_id = po.id and po.status = 4 group by po.vendor_ID order by total_amount desc");
                 while ($row = $qry->fetch_assoc()):
                     ?>
                     <tr>
