@@ -203,7 +203,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 var total = Array_account[i][3] * Array_account[i][2];
                 var vid = Array_account[i][7];
                 var vname = Array_account[i][8];
-                
+
                 document.getElementById("vendor_ID").value = vid;
                 document.getElementById("name").value = vname;
                 totalsum += total;
@@ -381,5 +381,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         })
 
 
+    })
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var elements = document.getElementsByTagName("select");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].oninvalid = function (e) {
+                e.target.setCustomValidity("");
+                if (!e.target.validity.valid) {
+                    e.target.setCustomValidity("Please select a quotation number.");
+                }
+            };
+            elements[i].oninput = function (e) {
+                e.target.setCustomValidity("");
+            };
+        }
     })
 </script>
