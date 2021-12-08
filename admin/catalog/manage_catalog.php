@@ -8,6 +8,25 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         }
     }
 }
+else {
+    $sql = "SELECT catalog_ID FROM `catalog` ORDER BY catalog_ID DESC LIMIT 1";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = mysqli_fetch_array($result)) {
+            $latestnum = ((int) substr($row['catalog_ID'], 1)) + 1;
+            if ($latestnum < 10) {
+                $newid = "M000{$latestnum}";
+            } else if ($latestnum < 100) {
+                $newid = "M00{$latestnum}";
+            } else if ($latestnum < 1000) {
+                $newid = "M0{$latestnum}";
+            } else if ($latestnum < 10000) {
+                $newid = "M{$latestnum}";
+            }
+            break;
+        }
+    }
+}
 ?>
 <style>
     span.select2-selection.select2-selection--single {
@@ -25,7 +44,13 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
     <div class="container-fluid">
         <div class="form-group">
             <label for="catalog_ID" class="control-label">Catalog ID</label>
-            <input type="text" name="catalog_ID" id="item_code" class="form-control rounded-0" value="<?php echo isset($catalog_ID) ? $catalog_ID :"" ?>" required>
+            <input class="form-control"  value="<?php
+                                                            if (isset($catalog_ID)) {
+                                                                echo $current_data["catalog_ID"];
+                                                            } else {
+                                                                echo $newid;
+                                                            }
+                                                            ?>" name="catalog_ID" required>
         </div>
         <div class="form-group">
             <label for="description" class="control-label">Description</label>
