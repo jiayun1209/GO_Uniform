@@ -46,11 +46,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                     <input type="text" class="form-control form-control-sm rounded-0" id="tem_name" name="tem_name" required value="<?php echo isset($tem_name) ? $tem_name : '' ?>">
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-md-6 form-group">
                     <label for="vendor_ID">Supplier Name</label>
-                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2">
+                    <select name="vendor_ID" id="vendor_ID" class="custom-select custom-select-sm rounded-0 select2" required>
                         <option value="" disabled <?php echo!isset($vendor_ID) ? "selected" : '' ?>></option>
                         <?php
                         $supplier_qry = $conn->query("SELECT * FROM `vendor` WHERE registration_status!=0 order by `name` asc");
@@ -96,7 +96,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
                                         </td>
                                         <td class="align-middle p-0 text-center">
-                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>"/>
+                                            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" value="<?php echo $row['quantity'] ?>" required/>
                                         </td>
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
@@ -105,7 +105,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>
                                         <td class="align-middle p-1">
-                                            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>"/>
+                                            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]"  value="<?php echo ($row['unit_price']) ?>" required/>
                                         </td>
                                         <td class="align-middle p-1 text-right total-price"><?php echo number_format($row['quantity'] * $row['unit_price']) ?></td>
                                     </tr>
@@ -160,7 +160,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <button class="btn btn-sm btn-danger py-0" type="button" onclick="rem_item($(this))"><i class="fa fa-times"></i></button>
         </td>
         <td class="align-middle p-0 text-center">
-            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]"/>
+            <input type="number" class="text-center w-100 border-0" step="any" name="qty[]" required/>
         </td>
         <td class="align-middle p-1">
             <input type="hidden" name="item_id[]">
@@ -169,7 +169,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <td class="align-middle p-1 item-code"></td>
         <td class="align-middle p-1 item-description"></td>
         <td class="align-middle p-1">
-            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0"/>
+            <input type="number" step="any" class="text-right w-100 border-0" name="unit_price[]" value="0" required/>
         </td>
         <td class="align-middle p-1 text-right total-price">0</td>
     </tr>
@@ -338,7 +338,20 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 }
             })
         })
+    })
 
-
+    document.addEventListener("DOMContentLoaded", function () {
+        var elements = document.getElementsByName("vendor_ID");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].oninvalid = function (e) {
+                e.target.setCustomValidity("");
+                if (!e.target.validity.valid) {
+                    e.target.setCustomValidity("Please select a supplier.");
+                }
+            };
+            elements[i].oninput = function (e) {
+                e.target.setCustomValidity("");
+            };
+        }
     })
 </script>
