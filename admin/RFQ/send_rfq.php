@@ -237,7 +237,7 @@ if (isset($_POST['sendMailBtn'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $rfq_qry = $conn->query("SELECT * from vendor ");
+                    $rfq_qry = $conn->query("SELECT * from vendor where registration_status = '1'");
                     while ($row = $rfq_qry->fetch_assoc()):
                         ?>
                         <tr class=rfq-item" data-id="">

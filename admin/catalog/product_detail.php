@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
             break;
         }
     } else {
-        echo '<script>alert("Error !\nPlease try again");window.location.href = "product_detail.php";</script>';
+        echo '<script>alert("Error !\nPlease try again");window.location.href = "?page=catalog/product_detail";</script>';
     }
 } else {
     $sql = "SELECT item_code FROM `inventory` ORDER BY item_code DESC LIMIT 1";

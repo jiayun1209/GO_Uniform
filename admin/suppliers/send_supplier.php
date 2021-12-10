@@ -21,7 +21,7 @@ $comp_add = $_settings->info('company_address');
 $comp_img = $_settings->info('logo');
 $name = $toEmail = $supplier["name"];
 $sup_code = $supplier['company_code'];
-$status = $_settings->info('registration_status');
+$status = $supplier['registration_status'];
 if ($status == '1') {
     $newstatus = "Congratulation, Your application is *Approved*!";
 } else {

@@ -56,7 +56,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         <p  class="m-0"><b>PR No. #</b></p>
                         <?php
                         if (isset($id)):
-                            $q_qry = $conn->query("SELECT * FROM `purchase_requisitions` where id = '$id'");
+                            $q_qry = $conn->query("SELECT p.id, p.pr_no,q.pr_ID FROM `purchase_requisitions` p, quotation q where q.pr_ID = p.id AND q.id = '$id'");
                             while ($row = $q_qry->fetch_assoc()):
                                 ?>
                                 <?php echo ($row['pr_no']) ?>    
@@ -106,7 +106,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                         </thead>
                         <tbody> <?php
                             if (isset($id)):
-                               $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
+                                $rqry = $conn->query("SELECT o.*, i.item_code, i.name, i.description FROM `rfq` o inner join inventory i on o.item_id = i.id where o.`rfq_no` = '$id' ");
                                 echo $conn->error;
                                 $total = 0;
                                 while ($row = $rqry->fetch_assoc()):
@@ -122,7 +122,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                                         <td class="align-middle p-1">
                                             <input type="hidden" name="item_id[]" value="<?php echo $row['item_id'] ?>">
                                             <input type="text" class="text-center w-100 border-0 item_id" value="<?php echo $row['name'] ?>" required/>
-                                        </td>                                        
+                                        </td>                                      
                                         <td class="align-middle p-1 item-code text-center"><?php echo $row['item_code'] ?></td>
                                         <td class="align-middle p-1 item-description"><?php echo $row['description'] ?></td>                                     
                                         <td class="align-middle p-1">
@@ -228,7 +228,6 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         $('#sub_total').text(parseFloat(_total).toLocaleString("en-US"))
         $('#total').text(parseFloat(_total - discount_amount).toLocaleString("en-US"))
     }
-
     function _autocomplete(_item) {
         _item.find('.item_id').autocomplete({
             source: function (request, response) {
@@ -250,12 +249,10 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 _item.find('input[name="item_id[]"]').val(ui.item.id)
                 _item.find('.item-code').text(ui.item.item_code)
                 _item.find('.item-description').text(ui.item.description)
-                _item.find('input[name="pr_id[]"]').val(ui.pr.id)
-                _item.find('.qty').text(ui.qty)
             }
         })
     }
-    function displayCancellation() {
+        function displayCancellation() {
         var status = document.getElementById("status");
         if (status.value == "3") {
             document.getElementById("cancel_reason").disabled = false;

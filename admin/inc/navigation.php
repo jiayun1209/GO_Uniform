@@ -84,7 +84,7 @@ $backgroundColor = $stmt->fetch_array()["meta_value"];
                                         </p>
                                     </a>
                                 </li>
-                                <li class="nav-header"><b>Sourcing Management</b></li>
+                                <li class="nav-header"><b>Catalog Management</b></li>
                                 <li class="nav-item dropdown">
                                     <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
                                         <i class="nav-icon fas fa-book-open"></i>
@@ -203,6 +203,16 @@ $backgroundColor = $stmt->fetch_array()["meta_value"];
                                         <i class="nav-icon fas fa-boxes"></i>
                                         <p>
                                             Inventory
+                                        </p>
+                                    </a>
+                                </li>
+                                
+                                <li class="nav-header"><b>Catalog Management</b></li>
+                                <li class="nav-item dropdown">
+                                    <a href="<?php echo base_url ?>admin/?page=catalog" class="nav-link nav-catalog">
+                                        <i class="nav-icon fas fa-book-open"></i>
+                                        <p>
+                                            Manage Catalog
                                         </p>
                                     </a>
                                 </li>

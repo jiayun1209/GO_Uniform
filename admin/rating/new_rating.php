@@ -51,12 +51,12 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
         </div>
         <div class="form-group" border-style: dotted>
             <label for="po" class="control-label">Completed Purchase Order</label>  <br>     
-            <textarea type= "text" class="form-control" id="po" cols="10" rows="6" placeholder="" readOnly/>
+            <textarea type= "text" class="form-control" id="po" cols="10" rows="6" placeholder="" name="po" readOnly/>
             </textarea>    
         </div>   
         <div class="form-group" border-style: dotted>
-            <label for="po" class="control-label">Cancelled Purchase Order</label>  <br> 
-            <textarea type= "text"  id="po_no" cols="10" rows="6" class="form-control rounded-0" readonly>
+            <label for="po_no" class="control-label">Cancelled Purchase Order</label>  <br> 
+            <textarea type= "text"  id="po_no" cols="10" rows="6" class="form-control rounded-0" name="po_no" readonly>
             </textarea> 
         </div>    
         <div class="form-group">
@@ -76,15 +76,15 @@ if (isset($_GET['vendor_ID']) && $_GET['vendor_ID'] != "") {
     function select_id_check_name() {
         var str = "";
         for (i = 0; i < Array_account.length; i++) {
-            if (Array_account[i][3] === document.getElementById("vendor_ID").value && Array_account[i][9] === '4') {
-                str += Array_account[i][1].toString() + " " + Array_account[i][8].toString() + '\r\n';
+            if (Array_account[i][4] === document.getElementById("vendor_ID").value && Array_account[i][10] === '5') {
+                str += Array_account[i][1].toString() + " " + Array_account[i][9].toString() + '\r\n';
             }
         }
         document.getElementById("po").value = str;
         var str = "";
         for (i = 0; i < Array_account.length; i++) {
-            if (Array_account[i][3] === document.getElementById("vendor_ID").value && Array_account[i][9] === '3') {
-                str += Array_account[i][1].toString() + " " + Array_account[i][13].toString() + '\r\n';
+            if (Array_account[i][4] === document.getElementById("vendor_ID").value && Array_account[i][10] === '3') {
+                str += Array_account[i][1].toString() + " " + Array_account[i][14].toString() + '\r\n';
             }
         }
         document.getElementById("po_no").value = str;
